@@ -1,10 +1,10 @@
-lexer grammar flaskLexer;
+lexer grammar templateLexer;
 
 @header{
   package antlr;
 }
 
-import commonTokens, keywordsHtml;
+import templateFragments;
 
 // Default mode (Currently HTML mode, may be changed later)
 HTML_TEXT: ~[<]+;
@@ -81,6 +81,5 @@ mode CSS_PROP_VALUES;
    CSS_PROP_SEMICOLON: SEMICOLON -> popMode;
    CSS_PROP_VALUES_WS: [ \t\r\n]+ -> skip;
 
-fragment ID: [a-zA-Z] [a-zA-Z0-9\-_:.]*;
-fragment CSS_PROP_NAME: [a-zA-Z@] [a-zA-Z\-]*;
-fragment CSS_PROP_VAL_FRAG: HASH? [a-zA-Z0-9]+;
+
+

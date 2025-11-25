@@ -1,4 +1,4 @@
-// Generated from C:/Users/Admin/Desktop/New folder (2)/flask_compiler/grammars/flaskParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/Admin/Desktop/New folder (2)/flask_compiler/grammars/templateParser.g4 by ANTLR 4.13.2
  package antlr; 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -6,264 +6,264 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * This class provides an empty implementation of {@link flaskParserListener},
+ * This class provides an empty implementation of {@link templateParserListener},
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
 @SuppressWarnings("CheckReturnValue")
-public class flaskParserBaseListener implements flaskParserListener {
+public class templateParserBaseListener implements templateParserListener {
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDocument(flaskParser.DocumentContext ctx) { }
+	@Override public void enterDocument(templateParser.DocumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDocument(flaskParser.DocumentContext ctx) { }
+	@Override public void exitDocument(templateParser.DocumentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterElement(flaskParser.ElementContext ctx) { }
+	@Override public void enterElement(templateParser.ElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitElement(flaskParser.ElementContext ctx) { }
+	@Override public void exitElement(templateParser.ElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAtrribute(flaskParser.AtrributeContext ctx) { }
+	@Override public void enterContent(templateParser.ContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAtrribute(flaskParser.AtrributeContext ctx) { }
+	@Override public void exitContent(templateParser.ContentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHtmlStyleAttr(flaskParser.HtmlStyleAttrContext ctx) { }
+	@Override public void enterOpenTag(templateParser.OpenTagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHtmlStyleAttr(flaskParser.HtmlStyleAttrContext ctx) { }
+	@Override public void exitOpenTag(templateParser.OpenTagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInlineStyleProp(flaskParser.InlineStylePropContext ctx) { }
+	@Override public void enterCloseTag(templateParser.CloseTagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInlineStyleProp(flaskParser.InlineStylePropContext ctx) { }
+	@Override public void exitCloseTag(templateParser.CloseTagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInlineStylePropValues(flaskParser.InlineStylePropValuesContext ctx) { }
+	@Override public void enterSelfClosingTag(templateParser.SelfClosingTagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInlineStylePropValues(flaskParser.InlineStylePropValuesContext ctx) { }
+	@Override public void exitSelfClosingTag(templateParser.SelfClosingTagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStyleElement(flaskParser.StyleElementContext ctx) { }
+	@Override public void enterAtrribute(templateParser.AtrributeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStyleElement(flaskParser.StyleElementContext ctx) { }
+	@Override public void exitAtrribute(templateParser.AtrributeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOpenStyleTag(flaskParser.OpenStyleTagContext ctx) { }
+	@Override public void enterAttrValue(templateParser.AttrValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOpenStyleTag(flaskParser.OpenStyleTagContext ctx) { }
+	@Override public void exitAttrValue(templateParser.AttrValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCloseStyleTag(flaskParser.CloseStyleTagContext ctx) { }
+	@Override public void enterHtmlStyleAttr(templateParser.HtmlStyleAttrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCloseStyleTag(flaskParser.CloseStyleTagContext ctx) { }
+	@Override public void exitHtmlStyleAttr(templateParser.HtmlStyleAttrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterContent(flaskParser.ContentContext ctx) { }
+	@Override public void enterInlineStyleProp(templateParser.InlineStylePropContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitContent(flaskParser.ContentContext ctx) { }
+	@Override public void exitInlineStyleProp(templateParser.InlineStylePropContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOpenTag(flaskParser.OpenTagContext ctx) { }
+	@Override public void enterInlineStylePropValues(templateParser.InlineStylePropValuesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOpenTag(flaskParser.OpenTagContext ctx) { }
+	@Override public void exitInlineStylePropValues(templateParser.InlineStylePropValuesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCloseTag(flaskParser.CloseTagContext ctx) { }
+	@Override public void enterStyleElement(templateParser.StyleElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCloseTag(flaskParser.CloseTagContext ctx) { }
+	@Override public void exitStyleElement(templateParser.StyleElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSelfClosingTag(flaskParser.SelfClosingTagContext ctx) { }
+	@Override public void enterOpenStyleTag(templateParser.OpenStyleTagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSelfClosingTag(flaskParser.SelfClosingTagContext ctx) { }
+	@Override public void exitOpenStyleTag(templateParser.OpenStyleTagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAttrValue(flaskParser.AttrValueContext ctx) { }
+	@Override public void enterCloseStyleTag(templateParser.CloseStyleTagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAttrValue(flaskParser.AttrValueContext ctx) { }
+	@Override public void exitCloseStyleTag(templateParser.CloseStyleTagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCssBlockDecl(flaskParser.CssBlockDeclContext ctx) { }
+	@Override public void enterCssBlockDecl(templateParser.CssBlockDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCssBlockDecl(flaskParser.CssBlockDeclContext ctx) { }
+	@Override public void exitCssBlockDecl(templateParser.CssBlockDeclContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCSS_SELECTOR_ID(flaskParser.CSS_SELECTOR_IDContext ctx) { }
+	@Override public void enterCSS_SELECTOR_ID(templateParser.CSS_SELECTOR_IDContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCSS_SELECTOR_ID(flaskParser.CSS_SELECTOR_IDContext ctx) { }
+	@Override public void exitCSS_SELECTOR_ID(templateParser.CSS_SELECTOR_IDContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCSS_SELECTOR_CLASS(flaskParser.CSS_SELECTOR_CLASSContext ctx) { }
+	@Override public void enterCSS_SELECTOR_CLASS(templateParser.CSS_SELECTOR_CLASSContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCSS_SELECTOR_CLASS(flaskParser.CSS_SELECTOR_CLASSContext ctx) { }
+	@Override public void exitCSS_SELECTOR_CLASS(templateParser.CSS_SELECTOR_CLASSContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCSS_SELECTOR_ELEMENT(flaskParser.CSS_SELECTOR_ELEMENTContext ctx) { }
+	@Override public void enterCSS_SELECTOR_ELEMENT(templateParser.CSS_SELECTOR_ELEMENTContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCSS_SELECTOR_ELEMENT(flaskParser.CSS_SELECTOR_ELEMENTContext ctx) { }
+	@Override public void exitCSS_SELECTOR_ELEMENT(templateParser.CSS_SELECTOR_ELEMENTContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCssBlock(flaskParser.CssBlockContext ctx) { }
+	@Override public void enterCssBlock(templateParser.CssBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCssBlock(flaskParser.CssBlockContext ctx) { }
+	@Override public void exitCssBlock(templateParser.CssBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaration(flaskParser.DeclarationContext ctx) { }
+	@Override public void enterDeclaration(templateParser.DeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaration(flaskParser.DeclarationContext ctx) { }
+	@Override public void exitDeclaration(templateParser.DeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlkPropVal(flaskParser.BlkPropValContext ctx) { }
+	@Override public void enterBlkPropVal(templateParser.BlkPropValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBlkPropVal(flaskParser.BlkPropValContext ctx) { }
+	@Override public void exitBlkPropVal(templateParser.BlkPropValContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
