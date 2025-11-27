@@ -4,44 +4,28 @@ options {tokenVocab=jinjaLexer;}
 
 start: jinjaCode+ EOF;
 
-jinjaCode: jinjaExpr
-         | jinjaStmnt
+jinjaCode: jinjaStmnt
          ;
 
 jinjaExpr: JIN_EXPR_START jinjaContent* JIN_EXPR_END;
 
 jinjaContent: JIN_TEXT;
 
-jinjaStmnt: JIN_STMNT_START controlStmnt* JIN_STMNT_END;
+jinjaStmnt: ifStatment;
 
-controlStmnt: ifStatment
-            ;
-
-ifStatment: JIN_STMNT_IF condition+
+ifStatment: JIN_STMNT_START JIN_STMNT_IF condition JIN_CONDITION_END
           ;
 
-condition: value
-         | logical
-         | comparison
-         | testing
+condition: multiValueCondition
+         | singleValueCondition
          ;
 
-value: CONDTITION_VALUE;
+singleValueCondition: conditionDeclaration;
+multiValueCondition: conditionDeclaration (conditionLogicalOperator conditionDeclaration)+;
 
-logical: value logicalOperator value;
-logicalOperator: JIN_LOG_AND | JIN_LOG_OR | JIN_LOG_NOT;
+conditionDeclaration: JIN_CONDITION_NOT? JIN_CONDITION_VALUE conditionOperator?;
 
-comparison: value comparisonOperator value;
+conditionOperator: (conditionComparisionOperator JIN_CONDITION_VALUE ) | (JIN_CONDITION_IS JIN_TEST_VALUE);
 
-comparisonOperator: JIN_COMP_EQ | JIN_COMP_NEQ | JIN_COMP_GT
-                  | JIN_COMP_GE | JIN_COMP_LT | JIN_COMP_LE
-                  | JIN_COMP_IN | JIN_COMP_NIN
-                  ;
-testing: JIN_LOG_NOT? value testingOperator JIN_LOG_NOT? value;
-
-testingOperator: JIN_TEST_IS | JIN_TEST_DEFINED | JIN_TEST_UNDEFINED
-               | JIN_TEST_NONE | JIN_TEST_NUMBER | JIN_TEST_FILE
-               | JIN_TEST_SAMEAS | JIN_TEST_SEQUENCE | JIN_TEST_MAPPING
-               | JIN_TEST_EVEN | JIN_TEST_ODD | JIN_TEST_LOWER
-               | JIN_TEST_UPPER
-               ;
+conditionLogicalOperator: JIN_CONDITION_AND | JIN_CONDITION_OR;
+conditionComparisionOperator: JIN_CONDITION_COMPARISION_OPERATOR;
