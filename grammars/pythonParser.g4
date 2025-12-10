@@ -1,6 +1,6 @@
 parser grammar pythonParser;
 
-options { tokenVocab = untitledLexer; }
+options { tokenVocab = pythonLexer; }
 
 program : statement* EOF ;
 

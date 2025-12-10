@@ -133,7 +133,12 @@ STR_END     : ['"] -> popMode ;
 
 mode STR3;
 STR3_CONTENT : (.|[\r\n])*? ;
-STR3_END     : '\'\'\'' | '"""' {popMode();} ;
+STR3_END
+    : '\'\'\'' -> popMode
+    ;
+STR3_END2
+    : '"""' -> popMode
+    ;
 
 mode FSTR;
 FSTR_CONTENT : ~['"\\{]+ ;
@@ -147,4 +152,9 @@ FSTR_EXPR_END     : '}' -> popMode ;
 
 mode FSTR3;
 FSTR3_CONTENT : (.|[\r\n])*? ;
-FSTR3_END     : '\'\'\'' | '"""' {popMode();} ;
+FSTR3_END
+    : '\'\'\'' -> popMode
+    ;
+FSTR3_END2
+    : '"""' -> popMode
+    ;
