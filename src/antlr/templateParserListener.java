@@ -1,4 +1,4 @@
-// Generated from C:/Users/Admin/Desktop/New folder (2)/flask_compiler/grammars/templateParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/Admin/Desktop/compiler project/flask_compiler/grammars/templateParser.g4 by ANTLR 4.13.2
  package antlr; 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -8,95 +8,515 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface templateParserListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link templateParser#document}.
+	 * Enter a parse tree produced by {@link templateParser#template}.
 	 * @param ctx the parse tree
 	 */
-	void enterDocument(templateParser.DocumentContext ctx);
+	void enterTemplate(templateParser.TemplateContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#document}.
+	 * Exit a parse tree produced by {@link templateParser#template}.
 	 * @param ctx the parse tree
 	 */
-	void exitDocument(templateParser.DocumentContext ctx);
+	void exitTemplate(templateParser.TemplateContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#element}.
+	 * Enter a parse tree produced by {@link templateParser#jinjaBlock}.
 	 * @param ctx the parse tree
 	 */
-	void enterElement(templateParser.ElementContext ctx);
+	void enterJinjaBlock(templateParser.JinjaBlockContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#element}.
+	 * Exit a parse tree produced by {@link templateParser#jinjaBlock}.
 	 * @param ctx the parse tree
 	 */
-	void exitElement(templateParser.ElementContext ctx);
+	void exitJinjaBlock(templateParser.JinjaBlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#content}.
+	 * Enter a parse tree produced by {@link templateParser#ifBlock}.
 	 * @param ctx the parse tree
 	 */
-	void enterContent(templateParser.ContentContext ctx);
+	void enterIfBlock(templateParser.IfBlockContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#content}.
+	 * Exit a parse tree produced by {@link templateParser#ifBlock}.
 	 * @param ctx the parse tree
 	 */
-	void exitContent(templateParser.ContentContext ctx);
+	void exitIfBlock(templateParser.IfBlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#openTag}.
+	 * Enter a parse tree produced by {@link templateParser#ifStatmentStart}.
 	 * @param ctx the parse tree
 	 */
-	void enterOpenTag(templateParser.OpenTagContext ctx);
+	void enterIfStatmentStart(templateParser.IfStatmentStartContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#openTag}.
+	 * Exit a parse tree produced by {@link templateParser#ifStatmentStart}.
 	 * @param ctx the parse tree
 	 */
-	void exitOpenTag(templateParser.OpenTagContext ctx);
+	void exitIfStatmentStart(templateParser.IfStatmentStartContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#closeTag}.
+	 * Enter a parse tree produced by {@link templateParser#ifBody}.
 	 * @param ctx the parse tree
 	 */
-	void enterCloseTag(templateParser.CloseTagContext ctx);
+	void enterIfBody(templateParser.IfBodyContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#closeTag}.
+	 * Exit a parse tree produced by {@link templateParser#ifBody}.
 	 * @param ctx the parse tree
 	 */
-	void exitCloseTag(templateParser.CloseTagContext ctx);
+	void exitIfBody(templateParser.IfBodyContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#selfClosingTag}.
+	 * Enter a parse tree produced by {@link templateParser#ifStatmentEnd}.
 	 * @param ctx the parse tree
 	 */
-	void enterSelfClosingTag(templateParser.SelfClosingTagContext ctx);
+	void enterIfStatmentEnd(templateParser.IfStatmentEndContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#selfClosingTag}.
+	 * Exit a parse tree produced by {@link templateParser#ifStatmentEnd}.
 	 * @param ctx the parse tree
 	 */
-	void exitSelfClosingTag(templateParser.SelfClosingTagContext ctx);
+	void exitIfStatmentEnd(templateParser.IfStatmentEndContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#atrribute}.
+	 * Enter a parse tree produced by {@link templateParser#elifBlock}.
 	 * @param ctx the parse tree
 	 */
-	void enterAtrribute(templateParser.AtrributeContext ctx);
+	void enterElifBlock(templateParser.ElifBlockContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#atrribute}.
+	 * Exit a parse tree produced by {@link templateParser#elifBlock}.
 	 * @param ctx the parse tree
 	 */
-	void exitAtrribute(templateParser.AtrributeContext ctx);
+	void exitElifBlock(templateParser.ElifBlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#attrValue}.
+	 * Enter a parse tree produced by {@link templateParser#elseBlock}.
 	 * @param ctx the parse tree
 	 */
-	void enterAttrValue(templateParser.AttrValueContext ctx);
+	void enterElseBlock(templateParser.ElseBlockContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#attrValue}.
+	 * Exit a parse tree produced by {@link templateParser#elseBlock}.
 	 * @param ctx the parse tree
 	 */
-	void exitAttrValue(templateParser.AttrValueContext ctx);
+	void exitElseBlock(templateParser.ElseBlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#htmlStyleAttr}.
+	 * Enter a parse tree produced by {@link templateParser#subconitionBody}.
 	 * @param ctx the parse tree
 	 */
-	void enterHtmlStyleAttr(templateParser.HtmlStyleAttrContext ctx);
+	void enterSubconitionBody(templateParser.SubconitionBodyContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#htmlStyleAttr}.
+	 * Exit a parse tree produced by {@link templateParser#subconitionBody}.
 	 * @param ctx the parse tree
 	 */
-	void exitHtmlStyleAttr(templateParser.HtmlStyleAttrContext ctx);
+	void exitSubconitionBody(templateParser.SubconitionBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void enterCondition(templateParser.ConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void exitCondition(templateParser.ConditionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#singleClauseCondition}.
+	 * @param ctx the parse tree
+	 */
+	void enterSingleClauseCondition(templateParser.SingleClauseConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#singleClauseCondition}.
+	 * @param ctx the parse tree
+	 */
+	void exitSingleClauseCondition(templateParser.SingleClauseConditionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#multiClauseCondition}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiClauseCondition(templateParser.MultiClauseConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#multiClauseCondition}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiClauseCondition(templateParser.MultiClauseConditionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#conditionOperand}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditionOperand(templateParser.ConditionOperandContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#conditionOperand}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditionOperand(templateParser.ConditionOperandContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#conditionOperandTest}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditionOperandTest(templateParser.ConditionOperandTestContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#conditionOperandTest}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditionOperandTest(templateParser.ConditionOperandTestContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#binaryLogicalOperator}.
+	 * @param ctx the parse tree
+	 */
+	void enterBinaryLogicalOperator(templateParser.BinaryLogicalOperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#binaryLogicalOperator}.
+	 * @param ctx the parse tree
+	 */
+	void exitBinaryLogicalOperator(templateParser.BinaryLogicalOperatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#conditionComparisionOperator}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditionComparisionOperator(templateParser.ConditionComparisionOperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#conditionComparisionOperator}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditionComparisionOperator(templateParser.ConditionComparisionOperatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#forBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterForBlock(templateParser.ForBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#forBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitForBlock(templateParser.ForBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#forStatementStart}.
+	 * @param ctx the parse tree
+	 */
+	void enterForStatementStart(templateParser.ForStatementStartContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#forStatementStart}.
+	 * @param ctx the parse tree
+	 */
+	void exitForStatementStart(templateParser.ForStatementStartContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#iterationStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterIterationStatement(templateParser.IterationStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#iterationStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitIterationStatement(templateParser.IterationStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#loopVariables}.
+	 * @param ctx the parse tree
+	 */
+	void enterLoopVariables(templateParser.LoopVariablesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#loopVariables}.
+	 * @param ctx the parse tree
+	 */
+	void exitLoopVariables(templateParser.LoopVariablesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#iterable}.
+	 * @param ctx the parse tree
+	 */
+	void enterIterable(templateParser.IterableContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#iterable}.
+	 * @param ctx the parse tree
+	 */
+	void exitIterable(templateParser.IterableContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#forStatementEnd}.
+	 * @param ctx the parse tree
+	 */
+	void enterForStatementEnd(templateParser.ForStatementEndContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#forStatementEnd}.
+	 * @param ctx the parse tree
+	 */
+	void exitForStatementEnd(templateParser.ForStatementEndContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#forBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterForBody(templateParser.ForBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#forBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitForBody(templateParser.ForBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#extendsBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterExtendsBlock(templateParser.ExtendsBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#extendsBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitExtendsBlock(templateParser.ExtendsBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#inheritBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterInheritBlock(templateParser.InheritBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#inheritBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitInheritBlock(templateParser.InheritBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#inheritBlockStart}.
+	 * @param ctx the parse tree
+	 */
+	void enterInheritBlockStart(templateParser.InheritBlockStartContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#inheritBlockStart}.
+	 * @param ctx the parse tree
+	 */
+	void exitInheritBlockStart(templateParser.InheritBlockStartContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#inheritBlockEnd}.
+	 * @param ctx the parse tree
+	 */
+	void enterInheritBlockEnd(templateParser.InheritBlockEndContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#inheritBlockEnd}.
+	 * @param ctx the parse tree
+	 */
+	void exitInheritBlockEnd(templateParser.InheritBlockEndContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#inheritBlockBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterInheritBlockBody(templateParser.InheritBlockBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#inheritBlockBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitInheritBlockBody(templateParser.InheritBlockBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#jinjaExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterJinjaExpression(templateParser.JinjaExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#jinjaExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitJinjaExpression(templateParser.JinjaExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#jinjaExprStart}.
+	 * @param ctx the parse tree
+	 */
+	void enterJinjaExprStart(templateParser.JinjaExprStartContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#jinjaExprStart}.
+	 * @param ctx the parse tree
+	 */
+	void exitJinjaExprStart(templateParser.JinjaExprStartContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#jinjaExprEnd}.
+	 * @param ctx the parse tree
+	 */
+	void enterJinjaExprEnd(templateParser.JinjaExprEndContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#jinjaExprEnd}.
+	 * @param ctx the parse tree
+	 */
+	void exitJinjaExprEnd(templateParser.JinjaExprEndContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#jinjaExprBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterJinjaExprBody(templateParser.JinjaExprBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#jinjaExprBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitJinjaExprBody(templateParser.JinjaExprBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#jinjaFilter}.
+	 * @param ctx the parse tree
+	 */
+	void enterJinjaFilter(templateParser.JinjaFilterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#jinjaFilter}.
+	 * @param ctx the parse tree
+	 */
+	void exitJinjaFilter(templateParser.JinjaFilterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#jinjaId}.
+	 * @param ctx the parse tree
+	 */
+	void enterJinjaId(templateParser.JinjaIdContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#jinjaId}.
+	 * @param ctx the parse tree
+	 */
+	void exitJinjaId(templateParser.JinjaIdContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#idMember}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdMember(templateParser.IdMemberContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#idMember}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdMember(templateParser.IdMemberContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#dictKey}.
+	 * @param ctx the parse tree
+	 */
+	void enterDictKey(templateParser.DictKeyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#dictKey}.
+	 * @param ctx the parse tree
+	 */
+	void exitDictKey(templateParser.DictKeyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#objAttr}.
+	 * @param ctx the parse tree
+	 */
+	void enterObjAttr(templateParser.ObjAttrContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#objAttr}.
+	 * @param ctx the parse tree
+	 */
+	void exitObjAttr(templateParser.ObjAttrContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#funcParamList}.
+	 * @param ctx the parse tree
+	 */
+	void enterFuncParamList(templateParser.FuncParamListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#funcParamList}.
+	 * @param ctx the parse tree
+	 */
+	void exitFuncParamList(templateParser.FuncParamListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#funcParamId}.
+	 * @param ctx the parse tree
+	 */
+	void enterFuncParamId(templateParser.FuncParamIdContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#funcParamId}.
+	 * @param ctx the parse tree
+	 */
+	void exitFuncParamId(templateParser.FuncParamIdContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#funcParam}.
+	 * @param ctx the parse tree
+	 */
+	void enterFuncParam(templateParser.FuncParamContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#funcParam}.
+	 * @param ctx the parse tree
+	 */
+	void exitFuncParam(templateParser.FuncParamContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#htmlElem}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlElem(templateParser.HtmlElemContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#htmlElem}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlElem(templateParser.HtmlElemContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#htmlElemBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlElemBody(templateParser.HtmlElemBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#htmlElemBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlElemBody(templateParser.HtmlElemBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#htmlOpenTag}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlOpenTag(templateParser.HtmlOpenTagContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#htmlOpenTag}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlOpenTag(templateParser.HtmlOpenTagContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#htmlCloseTag}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlCloseTag(templateParser.HtmlCloseTagContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#htmlCloseTag}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlCloseTag(templateParser.HtmlCloseTagContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#htmlSelfClosingTag}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlSelfClosingTag(templateParser.HtmlSelfClosingTagContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#htmlSelfClosingTag}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlSelfClosingTag(templateParser.HtmlSelfClosingTagContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#htmlTagAttr}.
+	 * @param ctx the parse tree
+	 */
+	void enterHtmlTagAttr(templateParser.HtmlTagAttrContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#htmlTagAttr}.
+	 * @param ctx the parse tree
+	 */
+	void exitHtmlTagAttr(templateParser.HtmlTagAttrContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#booleanAttr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBooleanAttr(templateParser.BooleanAttrContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#booleanAttr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBooleanAttr(templateParser.BooleanAttrContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#attrWithUnquotedVal}.
+	 * @param ctx the parse tree
+	 */
+	void enterAttrWithUnquotedVal(templateParser.AttrWithUnquotedValContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#attrWithUnquotedVal}.
+	 * @param ctx the parse tree
+	 */
+	void exitAttrWithUnquotedVal(templateParser.AttrWithUnquotedValContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#attrWithQuotedVal}.
+	 * @param ctx the parse tree
+	 */
+	void enterAttrWithQuotedVal(templateParser.AttrWithQuotedValContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#attrWithQuotedVal}.
+	 * @param ctx the parse tree
+	 */
+	void exitAttrWithQuotedVal(templateParser.AttrWithQuotedValContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#jinjaAttrVal}.
+	 * @param ctx the parse tree
+	 */
+	void enterJinjaAttrVal(templateParser.JinjaAttrValContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#jinjaAttrVal}.
+	 * @param ctx the parse tree
+	 */
+	void exitJinjaAttrVal(templateParser.JinjaAttrValContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#styleAttr}.
+	 * @param ctx the parse tree
+	 */
+	void enterStyleAttr(templateParser.StyleAttrContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#styleAttr}.
+	 * @param ctx the parse tree
+	 */
+	void exitStyleAttr(templateParser.StyleAttrContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link templateParser#inlineStyleProp}.
 	 * @param ctx the parse tree
@@ -118,35 +538,35 @@ public interface templateParserListener extends ParseTreeListener {
 	 */
 	void exitInlineStylePropValues(templateParser.InlineStylePropValuesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#styleElement}.
+	 * Enter a parse tree produced by {@link templateParser#htmlStyleElem}.
 	 * @param ctx the parse tree
 	 */
-	void enterStyleElement(templateParser.StyleElementContext ctx);
+	void enterHtmlStyleElem(templateParser.HtmlStyleElemContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#styleElement}.
+	 * Exit a parse tree produced by {@link templateParser#htmlStyleElem}.
 	 * @param ctx the parse tree
 	 */
-	void exitStyleElement(templateParser.StyleElementContext ctx);
+	void exitHtmlStyleElem(templateParser.HtmlStyleElemContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#openStyleTag}.
+	 * Enter a parse tree produced by {@link templateParser#htmlStyleElemOpenTag}.
 	 * @param ctx the parse tree
 	 */
-	void enterOpenStyleTag(templateParser.OpenStyleTagContext ctx);
+	void enterHtmlStyleElemOpenTag(templateParser.HtmlStyleElemOpenTagContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#openStyleTag}.
+	 * Exit a parse tree produced by {@link templateParser#htmlStyleElemOpenTag}.
 	 * @param ctx the parse tree
 	 */
-	void exitOpenStyleTag(templateParser.OpenStyleTagContext ctx);
+	void exitHtmlStyleElemOpenTag(templateParser.HtmlStyleElemOpenTagContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#closeStyleTag}.
+	 * Enter a parse tree produced by {@link templateParser#htmlStyleElemCloseTag}.
 	 * @param ctx the parse tree
 	 */
-	void enterCloseStyleTag(templateParser.CloseStyleTagContext ctx);
+	void enterHtmlStyleElemCloseTag(templateParser.HtmlStyleElemCloseTagContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#closeStyleTag}.
+	 * Exit a parse tree produced by {@link templateParser#htmlStyleElemCloseTag}.
 	 * @param ctx the parse tree
 	 */
-	void exitCloseStyleTag(templateParser.CloseStyleTagContext ctx);
+	void exitHtmlStyleElemCloseTag(templateParser.HtmlStyleElemCloseTagContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link templateParser#cssBlockDecl}.
 	 * @param ctx the parse tree
@@ -158,41 +578,99 @@ public interface templateParserListener extends ParseTreeListener {
 	 */
 	void exitCssBlockDecl(templateParser.CssBlockDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code CSS_SELECTOR_ID}
-	 * labeled alternative in {@link templateParser#selector}.
+	 * Enter a parse tree produced by the {@code CSS_SEL_ID}
+	 * labeled alternative in {@link templateParser#cssSel}.
 	 * @param ctx the parse tree
 	 */
-	void enterCSS_SELECTOR_ID(templateParser.CSS_SELECTOR_IDContext ctx);
+	void enterCSS_SEL_ID(templateParser.CSS_SEL_IDContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code CSS_SELECTOR_ID}
-	 * labeled alternative in {@link templateParser#selector}.
+	 * Exit a parse tree produced by the {@code CSS_SEL_ID}
+	 * labeled alternative in {@link templateParser#cssSel}.
 	 * @param ctx the parse tree
 	 */
-	void exitCSS_SELECTOR_ID(templateParser.CSS_SELECTOR_IDContext ctx);
+	void exitCSS_SEL_ID(templateParser.CSS_SEL_IDContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code CSS_SELECTOR_CLASS}
-	 * labeled alternative in {@link templateParser#selector}.
+	 * Enter a parse tree produced by the {@code CSS_SEL_CLASS}
+	 * labeled alternative in {@link templateParser#cssSel}.
 	 * @param ctx the parse tree
 	 */
-	void enterCSS_SELECTOR_CLASS(templateParser.CSS_SELECTOR_CLASSContext ctx);
+	void enterCSS_SEL_CLASS(templateParser.CSS_SEL_CLASSContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code CSS_SELECTOR_CLASS}
-	 * labeled alternative in {@link templateParser#selector}.
+	 * Exit a parse tree produced by the {@code CSS_SEL_CLASS}
+	 * labeled alternative in {@link templateParser#cssSel}.
 	 * @param ctx the parse tree
 	 */
-	void exitCSS_SELECTOR_CLASS(templateParser.CSS_SELECTOR_CLASSContext ctx);
+	void exitCSS_SEL_CLASS(templateParser.CSS_SEL_CLASSContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code CSS_SELECTOR_ELEMENT}
-	 * labeled alternative in {@link templateParser#selector}.
+	 * Enter a parse tree produced by the {@code CSS_SEL_ELEM}
+	 * labeled alternative in {@link templateParser#cssSel}.
 	 * @param ctx the parse tree
 	 */
-	void enterCSS_SELECTOR_ELEMENT(templateParser.CSS_SELECTOR_ELEMENTContext ctx);
+	void enterCSS_SEL_ELEM(templateParser.CSS_SEL_ELEMContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code CSS_SELECTOR_ELEMENT}
-	 * labeled alternative in {@link templateParser#selector}.
+	 * Exit a parse tree produced by the {@code CSS_SEL_ELEM}
+	 * labeled alternative in {@link templateParser#cssSel}.
 	 * @param ctx the parse tree
 	 */
-	void exitCSS_SELECTOR_ELEMENT(templateParser.CSS_SELECTOR_ELEMENTContext ctx);
+	void exitCSS_SEL_ELEM(templateParser.CSS_SEL_ELEMContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code CSS_SEL_PSEUDO_CLASS}
+	 * labeled alternative in {@link templateParser#cssSel}.
+	 * @param ctx the parse tree
+	 */
+	void enterCSS_SEL_PSEUDO_CLASS(templateParser.CSS_SEL_PSEUDO_CLASSContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CSS_SEL_PSEUDO_CLASS}
+	 * labeled alternative in {@link templateParser#cssSel}.
+	 * @param ctx the parse tree
+	 */
+	void exitCSS_SEL_PSEUDO_CLASS(templateParser.CSS_SEL_PSEUDO_CLASSContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#cssSelWithState}.
+	 * @param ctx the parse tree
+	 */
+	void enterCssSelWithState(templateParser.CssSelWithStateContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#cssSelWithState}.
+	 * @param ctx the parse tree
+	 */
+	void exitCssSelWithState(templateParser.CssSelWithStateContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code CSS_SEL_SINGLE}
+	 * labeled alternative in {@link templateParser#cssSelectors}.
+	 * @param ctx the parse tree
+	 */
+	void enterCSS_SEL_SINGLE(templateParser.CSS_SEL_SINGLEContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CSS_SEL_SINGLE}
+	 * labeled alternative in {@link templateParser#cssSelectors}.
+	 * @param ctx the parse tree
+	 */
+	void exitCSS_SEL_SINGLE(templateParser.CSS_SEL_SINGLEContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code CSS_SEL_DESCENDENT}
+	 * labeled alternative in {@link templateParser#cssSelectors}.
+	 * @param ctx the parse tree
+	 */
+	void enterCSS_SEL_DESCENDENT(templateParser.CSS_SEL_DESCENDENTContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CSS_SEL_DESCENDENT}
+	 * labeled alternative in {@link templateParser#cssSelectors}.
+	 * @param ctx the parse tree
+	 */
+	void exitCSS_SEL_DESCENDENT(templateParser.CSS_SEL_DESCENDENTContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code CSS_SEL_GROUP}
+	 * labeled alternative in {@link templateParser#cssSelectors}.
+	 * @param ctx the parse tree
+	 */
+	void enterCSS_SEL_GROUP(templateParser.CSS_SEL_GROUPContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CSS_SEL_GROUP}
+	 * labeled alternative in {@link templateParser#cssSelectors}.
+	 * @param ctx the parse tree
+	 */
+	void exitCSS_SEL_GROUP(templateParser.CSS_SEL_GROUPContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link templateParser#cssBlock}.
 	 * @param ctx the parse tree
@@ -204,23 +682,23 @@ public interface templateParserListener extends ParseTreeListener {
 	 */
 	void exitCssBlock(templateParser.CssBlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#declaration}.
+	 * Enter a parse tree produced by {@link templateParser#cssPropDecl}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaration(templateParser.DeclarationContext ctx);
+	void enterCssPropDecl(templateParser.CssPropDeclContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#declaration}.
+	 * Exit a parse tree produced by {@link templateParser#cssPropDecl}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaration(templateParser.DeclarationContext ctx);
+	void exitCssPropDecl(templateParser.CssPropDeclContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#blkPropVal}.
+	 * Enter a parse tree produced by {@link templateParser#cssBlockPropVal}.
 	 * @param ctx the parse tree
 	 */
-	void enterBlkPropVal(templateParser.BlkPropValContext ctx);
+	void enterCssBlockPropVal(templateParser.CssBlockPropValContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#blkPropVal}.
+	 * Exit a parse tree produced by {@link templateParser#cssBlockPropVal}.
 	 * @param ctx the parse tree
 	 */
-	void exitBlkPropVal(templateParser.BlkPropValContext ctx);
+	void exitCssBlockPropVal(templateParser.CssBlockPropValContext ctx);
 }
