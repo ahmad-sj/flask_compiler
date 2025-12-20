@@ -23,9 +23,19 @@ lexer grammar pythonLexer;
     RETURN  : 'return';
     IMPORT  : 'import';
 
-
+     //operator
     EQUAL :'=';
-    NOTQUAL:'!=';
+    NOTEQUAL:'!=';
+    EQUALEQUAL   : '==';
+    LESSTHAN      : '<';
+    GREATERTHAN     : '>';
+    LESSOREQUAL      : '<=';
+    GREATEROREQUAL      : '>=';
+    PLUS    : '+';
+    MINUS   : '-';
+    STAR    : '*';
+    SLASH   : '/';
+    PERCENT : '%';
     COLON :':';
     COMMA : ',';
     DOT : '.';
@@ -52,3 +62,22 @@ DIGIT : [0-9] ;
  //Comment
  COMMENT : '#' ~[\r\n]* -> skip;
 
+
+TRUE    : 'True';
+FALSE   : 'False';
+NONE    : 'None';
+AND     : 'and';
+OR      : 'or';
+NOT     : 'not';
+
+
+// Brackets
+
+OPEND_NORMAL_BRAKET :'(';
+CLOSED_NORMAL_BRAKET:')';
+
+OPEND_SQUAR_BRAKET:'[';
+CLOSED_SQUAR_BRAKET:']';
+
+OPEN_CURLY_BRAKET:'{';
+CLOSED_CURLY_BRAKET:'}';
