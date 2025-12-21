@@ -23,6 +23,12 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitJinjaBlock(templateParser.JinjaBlockContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link templateParser#templateText}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTemplateText(templateParser.TemplateTextContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link templateParser#ifBlock}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -215,11 +221,11 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitJinjaId(templateParser.JinjaIdContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#idMember}.
+	 * Visit a parse tree produced by {@link templateParser#varMember}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIdMember(templateParser.IdMemberContext ctx);
+	T visitVarMember(templateParser.VarMemberContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link templateParser#dictKey}.
 	 * @param ctx the parse tree
@@ -251,29 +257,41 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFuncParam(templateParser.FuncParamContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#htmlElem}.
+	 * Visit a parse tree produced by {@link templateParser#htmlElement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHtmlElem(templateParser.HtmlElemContext ctx);
+	T visitHtmlElement(templateParser.HtmlElementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#htmlElemBody}.
+	 * Visit a parse tree produced by {@link templateParser#htmlRegularElement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHtmlElemBody(templateParser.HtmlElemBodyContext ctx);
+	T visitHtmlRegularElement(templateParser.HtmlRegularElementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#htmlOpenTag}.
+	 * Visit a parse tree produced by {@link templateParser#htmlStartTag}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHtmlOpenTag(templateParser.HtmlOpenTagContext ctx);
+	T visitHtmlStartTag(templateParser.HtmlStartTagContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#htmlCloseTag}.
+	 * Visit a parse tree produced by {@link templateParser#htmlElementBody}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHtmlCloseTag(templateParser.HtmlCloseTagContext ctx);
+	T visitHtmlElementBody(templateParser.HtmlElementBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#htmlEndTag}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlEndTag(templateParser.HtmlEndTagContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#htmlSelfClosingElement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHtmlSelfClosingElement(templateParser.HtmlSelfClosingElementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link templateParser#htmlSelfClosingTag}.
 	 * @param ctx the parse tree
@@ -322,12 +340,6 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitInlineStyleProp(templateParser.InlineStylePropContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#inlineStylePropValues}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitInlineStylePropValues(templateParser.InlineStylePropValuesContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link templateParser#htmlStyleElem}.
 	 * @param ctx the parse tree

@@ -17,10 +17,10 @@ J_STMNT_START: '{%' -> pushMode(J_STMNT_MODE);
 J_COMMENT: '{#' (~[#])* '#}' -> skip;
 
 
-CLOSE_TAG_START: '</' -> pushMode(CLOSE_TAG);
+CLOSE_TAG_START: '</' -> pushMode(END_TAG_MODE);
 HTML_COMMENT: '<!--' .*? '-->' -> skip;
 DOCTYPE: '<!DOCTYPE html>' -> skip;
-OPEN_TAG_START: '<' -> pushMode(OPEN_TAG);
+START_TAG_OPEN: '<' -> pushMode(START_TAG_MODE);
 
 
 //NORMAL_TEXT: [a-zA-Z0-9"'.()/!,-]+;
@@ -154,56 +154,56 @@ mode J_FUNC_MODE;
 
 
 //HTML Modes
-mode OPEN_TAG;
-   OPEN_STYLE: 'style' -> pushMode(OPEN_STYLE_TAG);
-   OPEN_TAG_NAME: HTML_TAG_NAME -> pushMode(INSIDE_TAG);
-   OPEN_TAG_WS: [ \t\r\n]+ -> skip;
+mode START_TAG_MODE;
+   STYLE_TAG_START_NAME: 'style' -> pushMode(STYLE_START_TAG_MODE);
+   START_TAG_NAME: HTML_TAG_NAME -> pushMode(INSIDE_START_TAG_MODE);
+   START_TAG_WS: [ \t\r\n]+ -> skip;
 
-mode CLOSE_TAG;
-   CLOSE_TAG_NAME: HTML_TAG_NAME;
-   CLOSE_TAG_END: RAB -> popMode;
-   CLOSE_TAG_WS: [ \t\r\n]+ -> skip;
+mode END_TAG_MODE;
+   END_TAG_NAME: HTML_TAG_NAME;
+   END_TAG_CLOSE: RAB -> popMode;
+   END_TAG_MODE_WS: [ \t\r\n]+ -> skip;
 
-mode OPEN_STYLE_TAG;
-   OPEN_STYLE_END: RAB -> pushMode(CSS_BLK);
-   OPEN_STYLE_TAG_WS: [ \t\r\n]+ -> skip;
+mode STYLE_START_TAG_MODE;
+   STYLE_TAG_START_CLOSE: RAB -> pushMode(CSS_BLK);
+   STYLE_START_TAG_MODE_WS: [ \t\r\n]+ -> skip;
 
-mode CLOSE_STYLE_TAG;
-   CLOSE_STYLE: 'style';
-   CLOSE_STYLE_END: RAB -> mode(DEFAULT_MODE);
-   CLOSE_STYLE_TAG_WS: [ \t\r\n]+ -> skip;
+mode STYLE_END_TAG_MODE;
+   STYLE_END_TAG_NAME: 'style';
+   STYLE_END_TAG_CLOSE: RAB -> mode(DEFAULT_MODE);
+   STYLE_END_TAG_MODE_WS: [ \t\r\n]+ -> skip;
 
-mode INSIDE_TAG;
+mode INSIDE_START_TAG_MODE;
     STYLE_ATTR: 'style' -> pushMode(CSS_INLINE);
-    ATTR_NAME: [a-zA-Z][a-zA-Z-]* -> pushMode(ATTR);
-    INSIDE_TAG_J_EXPR_START: '{{' -> pushMode(J_EXPR_MODE);
-    INSIDE_TAG_CLOSE: '>' -> popMode, popMode; // also add self closing tag end
-    SELF_CLOSING_TAG_END: '/>' -> popMode, popMode; // also add self closing tag end
-    INSIDE_TAG_WS: [ \t\r\n]+ -> skip;
+    ATTR_NAME: [a-zA-Z][a-zA-Z-]*;
+    ATTR_EQ: EQ -> pushMode(ATTR_VAL);
+    INSIDE_START_TAG_J_EXPR_OPEN: '{{' -> pushMode(J_EXPR_MODE);
+    START_TAG_CLOSE: '>' -> popMode, popMode; // also add self closing tag end
+    SELF_CLOSING_TAG_CLOSE: '/>' -> popMode, popMode; // also add self closing tag end
+    INSIDE_START_TAG_MODE_WS: [ \t\r\n]+ -> skip;
 
-mode ATTR;
-   ATTR_EQ: EQ -> pushMode(ATTR_VAL);
-   BOOL_ATTR_TAG_END: RAB -> popMode, popMode, popMode;
-   BOOL_ATTR_SELF_CLOSING_TAG_END: '/>' -> popMode, popMode, popMode;
-   ATTR_WS: [ \t\r\n]+ -> skip;
+//mode ATTR_MODE;
+//   BOOL_ATTR_TAG_CLOSE: RAB -> popMode, popMode, popMode;
+//   BOOL_ATTR_SELF_CLOSING_TAG_END: '/>' -> popMode, popMode, popMode;
+//   ATTR_WS: [ \t\r\n]+ -> skip;
 
 mode ATTR_VAL;
     ATTR_DQUOTE_START: '"' -> pushMode(ATTR_VAL_QOUTED);
-    ATTR_VALUE_UNQUOTED: ~[ \t\r\n>{}"'=/]+ -> popMode, popMode;
+    ATTR_VALUE_UNQUOTED: ~[ \t\r\n>{}"'=/]+ -> popMode;
     ATTR_VAL_WS: [ \t\r\n]+ -> skip;
 
 mode ATTR_VAL_QOUTED;
     ATTR_VAL_J_EXPR_START: '{{' -> pushMode(J_EXPR_MODE);
-    ATTR_VAL_TEXT: [a-zA-Z0-9-=., ]+;
-    ATTR_DQUOTE_END: '"' -> popMode, popMode, popMode;
-    ATTR_VAL_QOUTED_WS: [ \t\r\n]+ -> skip;
+    ATTR_VAL_TEXT: [a-zA-Z0-9-=.]+;
+    ATTR_DQUOTE_END: '"' -> popMode, popMode;
+    ATTR_VAL_QOUTED_WS: [ \t\r\n,]+ -> skip;
 
 
 // ==========================================================================================
 
 //CSS Modes
 mode CSS_BLK;
-   CLOSE_STYLE_START: '</' -> mode(CLOSE_STYLE_TAG);
+   CLOSE_STYLE_START: '</' -> mode(STYLE_END_TAG_MODE);
    CSS_SEL_ID: HASH CSS_ID;
    CSS_SEL_CLASS: DOT [a-zA-Z\-_] [a-zA-Z0-9\-_]*;
    CSS_SEL_ELEM: HTML_TAG_NAME;

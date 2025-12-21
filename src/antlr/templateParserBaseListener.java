@@ -41,6 +41,18 @@ public class templateParserBaseListener implements templateParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTemplateText(templateParser.TemplateTextContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTemplateText(templateParser.TemplateTextContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIfBlock(templateParser.IfBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -425,13 +437,13 @@ public class templateParserBaseListener implements templateParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIdMember(templateParser.IdMemberContext ctx) { }
+	@Override public void enterVarMember(templateParser.VarMemberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIdMember(templateParser.IdMemberContext ctx) { }
+	@Override public void exitVarMember(templateParser.VarMemberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -497,49 +509,73 @@ public class templateParserBaseListener implements templateParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHtmlElem(templateParser.HtmlElemContext ctx) { }
+	@Override public void enterHtmlElement(templateParser.HtmlElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHtmlElem(templateParser.HtmlElemContext ctx) { }
+	@Override public void exitHtmlElement(templateParser.HtmlElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHtmlElemBody(templateParser.HtmlElemBodyContext ctx) { }
+	@Override public void enterHtmlRegularElement(templateParser.HtmlRegularElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHtmlElemBody(templateParser.HtmlElemBodyContext ctx) { }
+	@Override public void exitHtmlRegularElement(templateParser.HtmlRegularElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHtmlOpenTag(templateParser.HtmlOpenTagContext ctx) { }
+	@Override public void enterHtmlStartTag(templateParser.HtmlStartTagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHtmlOpenTag(templateParser.HtmlOpenTagContext ctx) { }
+	@Override public void exitHtmlStartTag(templateParser.HtmlStartTagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHtmlCloseTag(templateParser.HtmlCloseTagContext ctx) { }
+	@Override public void enterHtmlElementBody(templateParser.HtmlElementBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHtmlCloseTag(templateParser.HtmlCloseTagContext ctx) { }
+	@Override public void exitHtmlElementBody(templateParser.HtmlElementBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterHtmlEndTag(templateParser.HtmlEndTagContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHtmlEndTag(templateParser.HtmlEndTagContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterHtmlSelfClosingElement(templateParser.HtmlSelfClosingElementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHtmlSelfClosingElement(templateParser.HtmlSelfClosingElementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -636,18 +672,6 @@ public class templateParserBaseListener implements templateParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitInlineStyleProp(templateParser.InlineStylePropContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInlineStylePropValues(templateParser.InlineStylePropValuesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInlineStylePropValues(templateParser.InlineStylePropValuesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

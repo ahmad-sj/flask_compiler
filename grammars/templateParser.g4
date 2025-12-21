@@ -5,7 +5,7 @@ options {tokenVocab=templateLexer;}
 @header{ package antlr; }
 
 template
-    : extendsBlock? (htmlElem | jinjaBlock*) EOF
+    : extendsBlock? (htmlElement | jinjaBlock*) EOF
     ;
 
 jinjaBlock
@@ -14,13 +14,15 @@ jinjaBlock
     | forBlock
     ;
 
+templateText: NORMAL_TEXT;
+
 // conditional rules
 ifBlock: ifStatmentStart ifBody? ifStatmentEnd;
 
 ifStatmentStart: J_STMNT_START J_STMNT_IF condition (J_ID_END | J_CONDITION_END);
 
 ifBody
-    : (ifBlock | elifBlock | forBlock | jinjaExpression | htmlElem | NORMAL_TEXT)+ elseBlock?
+    : (ifBlock | elifBlock | forBlock | jinjaExpression | htmlElement | templateText)+ elseBlock?
     | elseBlock
     ;
 
@@ -32,7 +34,7 @@ elseBlock: J_STMNT_START J_STMNT_ELSE J_CONDITION_ELSE_END subconitionBody?;
 
 // body for elif / else block
 subconitionBody
-    : (ifBlock | forBlock | jinjaExpression | htmlElem | NORMAL_TEXT)+
+    : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+
     ;
 
 condition
@@ -44,7 +46,7 @@ singleClauseCondition: J_CONDITION_NOT? conditionOperand (conditionComparisionOp
 multiClauseCondition: J_CONDITION_NOT? singleClauseCondition (binaryLogicalOperator singleClauseCondition)+;
 
 conditionOperand
-    : J_CONDITION_VAR_NAME (idMember | funcParamList)?
+    : J_CONDITION_VAR_NAME (varMember | funcParamList)?
     | J_CONDITION_PRIMITIVE
     ;
 conditionOperandTest: J_COND_ID_IS J_TEST_VALUE;
@@ -70,12 +72,12 @@ iterationStatement: loopVariables J_LOOP_KEYWORD iterable;
 
 loopVariables: J_LOOP_VARIABLE (J_VARIABLES_COMMA J_LOOP_VARIABLE)*;
 
-iterable: J_LOOP_ITERABLE (idMember | funcParamList)?;
+iterable: J_LOOP_ITERABLE (varMember | funcParamList)?;
 
 forStatementEnd: J_STMNT_START J_STMNT_ENDFOR J_STMNT_END;
 
 forBody
-    : (ifBlock | forBlock | jinjaExpression | htmlElem | NORMAL_TEXT)+ elseBlock?
+    : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+ elseBlock?
     ;
 
 extendsBlock: J_STMNT_START J_STMNT_EXTENDS J_EXTENDS_STRING J_EXTENDS_END;
@@ -87,14 +89,14 @@ inheritBlockStart: J_STMNT_START J_STMNT_BLOCK J_INHERIT_BLOCK_NAME J_STMNT_END;
 inheritBlockEnd: J_STMNT_START J_STMNT_ENDBLOCK J_STMNT_END;
 
 inheritBlockBody
-    : (ifBlock | forBlock | jinjaExpression | htmlElem | NORMAL_TEXT)+
+    : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+
     ;
 
 jinjaExpression: jinjaExprStart jinjaExprBody jinjaExprEnd;
 
 jinjaExprStart
     : J_EXPR_START
-    | INSIDE_TAG_J_EXPR_START
+    | INSIDE_START_TAG_J_EXPR_OPEN
     ;
 
 jinjaExprEnd
@@ -105,9 +107,9 @@ jinjaExprBody: jinjaFilter? jinjaId;
 
 jinjaFilter: J_FORMAT_STRING J_EXPR_PIPELINE;
 
-jinjaId: J_EXPR_ID (idMember | funcParamList)?;
+jinjaId: J_EXPR_ID (varMember | funcParamList)?;
 
-idMember
+varMember
     : dictKey
     | objAttr
     ;
@@ -125,20 +127,24 @@ funcParam
 
 // =====================================================================================
 
-htmlElem
-    : htmlOpenTag htmlElemBody? htmlCloseTag
-    | htmlSelfClosingTag
+htmlElement
+    : htmlRegularElement
+    | htmlSelfClosingElement
     ;
 
-htmlElemBody
-    : (htmlElem | htmlStyleElem | jinjaExpression | jinjaBlock | NORMAL_TEXT)+
+htmlRegularElement: htmlStartTag htmlElementBody? htmlEndTag;
+
+htmlStartTag: START_TAG_OPEN START_TAG_NAME (htmlTagAttr | jinjaExpression)* START_TAG_CLOSE;
+
+htmlElementBody
+    : (htmlElement | htmlStyleElem | jinjaExpression | jinjaBlock | templateText)+
     ;
 
-htmlOpenTag: OPEN_TAG_START OPEN_TAG_NAME (htmlTagAttr | jinjaExpression)* (BOOL_ATTR_TAG_END | INSIDE_TAG_CLOSE);
+htmlEndTag: CLOSE_TAG_START END_TAG_NAME END_TAG_CLOSE;
 
-htmlCloseTag: CLOSE_TAG_START CLOSE_TAG_NAME CLOSE_TAG_END;
+htmlSelfClosingElement: htmlSelfClosingTag;
 
-htmlSelfClosingTag: OPEN_TAG_START OPEN_TAG_NAME (htmlTagAttr | jinjaExpression)* (SELF_CLOSING_TAG_END | BOOL_ATTR_SELF_CLOSING_TAG_END);
+htmlSelfClosingTag: START_TAG_OPEN START_TAG_NAME (htmlTagAttr | jinjaExpression)* SELF_CLOSING_TAG_CLOSE;
 
 htmlTagAttr
     : styleAttr
@@ -147,21 +153,22 @@ htmlTagAttr
     | attrWithUnquotedVal
     ;
 
-booleanAttr: ATTR_NAME;
+booleanAttr
+    : ATTR_NAME
+    ;
 
-attrWithUnquotedVal: ATTR_VALUE_UNQUOTED;
+attrWithUnquotedVal: ATTR_NAME ATTR_EQ ATTR_VALUE_UNQUOTED;
 
 attrWithQuotedVal: ATTR_NAME ATTR_EQ ATTR_DQUOTE_START (ATTR_VAL_TEXT | jinjaAttrVal)+ ATTR_DQUOTE_END;
 
 jinjaAttrVal: ATTR_VAL_J_EXPR_START jinjaExprBody J_ID_EXPR_END;
 
 styleAttr: STYLE_ATTR CSS_INLINE_EQ CSS_INLINE_DQUOT_START inlineStyleProp* CSS_INLINE_PROP_DQUOT_END;
-inlineStyleProp: CSS_INLINE_PROP_NAME CSS_INLINE_PROP_COLON inlineStylePropValues+ ;
-inlineStylePropValues: CSS_PROP_VAL+ CSS_PROP_SEMICOLON;
+inlineStyleProp: CSS_INLINE_PROP_NAME CSS_INLINE_PROP_COLON CSS_PROP_VAL+ CSS_PROP_SEMICOLON;
 
 htmlStyleElem: htmlStyleElemOpenTag cssBlockDecl* htmlStyleElemCloseTag;
-htmlStyleElemOpenTag: OPEN_TAG_START OPEN_STYLE OPEN_STYLE_END;
-htmlStyleElemCloseTag: CLOSE_STYLE_START CLOSE_STYLE CLOSE_STYLE_END;
+htmlStyleElemOpenTag: START_TAG_OPEN STYLE_TAG_START_NAME STYLE_TAG_START_CLOSE;
+htmlStyleElemCloseTag: CLOSE_STYLE_START STYLE_END_TAG_NAME STYLE_END_TAG_CLOSE;
 
 // =====================================================================================
 
