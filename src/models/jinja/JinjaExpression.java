@@ -19,17 +19,17 @@ public class JinjaExpression extends Node {
     }
 
     public String evaluate(){
-        if(this.filter != null){
-            return this.filter + " " + this.id;
-        }
-        return this.id.toString();
+        return "{{ "
+                + (this.filter == null? "" : this.filter + " ")
+                + this.id.toString()
+                + " }}";
     }
 
     @Override
     public String toString() {
-        if(this.filter != null){
-            return this.filter + " " + this.id;
-        }
-        return this.id.toString();
+        return "{{ "
+                + (this.filter == null? "" : this.filter + " ")
+                + this.id.toString()
+                + " }}";
     }
 }

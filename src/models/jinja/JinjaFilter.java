@@ -1,6 +1,8 @@
 package models.jinja;
 
-public class JinjaFilter {
+import models.Node;
+
+public class JinjaFilter extends Node {
     String formatString;
 
     public JinjaFilter() {

@@ -24,7 +24,7 @@ public class FlaskCompiler {
         String addTemplate = "tests/add.html";
         String indexTemplate = "tests/index.html";
 
-        Path fullPath = currentPath.resolve(addTemplate);
+        Path fullPath = currentPath.resolve(indexTemplate);
 
 //        IO.print("Enter file path: ");
 //        String filePath = IO.readln();

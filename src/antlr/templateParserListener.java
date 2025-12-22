@@ -188,15 +188,15 @@ public interface templateParserListener extends ParseTreeListener {
 	 */
 	void exitForBlock(templateParser.ForBlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#forStatementStart}.
+	 * Enter a parse tree produced by {@link templateParser#forStartStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterForStatementStart(templateParser.ForStatementStartContext ctx);
+	void enterForStartStatement(templateParser.ForStartStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#forStatementStart}.
+	 * Exit a parse tree produced by {@link templateParser#forStartStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitForStatementStart(templateParser.ForStatementStartContext ctx);
+	void exitForStartStatement(templateParser.ForStartStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link templateParser#iterationStatement}.
 	 * @param ctx the parse tree
@@ -218,6 +218,26 @@ public interface templateParserListener extends ParseTreeListener {
 	 */
 	void exitLoopVariables(templateParser.LoopVariablesContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link templateParser#firstLoopVariable}.
+	 * @param ctx the parse tree
+	 */
+	void enterFirstLoopVariable(templateParser.FirstLoopVariableContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#firstLoopVariable}.
+	 * @param ctx the parse tree
+	 */
+	void exitFirstLoopVariable(templateParser.FirstLoopVariableContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link templateParser#anotherLoopVariable}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnotherLoopVariable(templateParser.AnotherLoopVariableContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#anotherLoopVariable}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnotherLoopVariable(templateParser.AnotherLoopVariableContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link templateParser#iterable}.
 	 * @param ctx the parse tree
 	 */
@@ -228,15 +248,15 @@ public interface templateParserListener extends ParseTreeListener {
 	 */
 	void exitIterable(templateParser.IterableContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#forStatementEnd}.
+	 * Enter a parse tree produced by {@link templateParser#forEndStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterForStatementEnd(templateParser.ForStatementEndContext ctx);
+	void enterForEndStatement(templateParser.ForEndStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#forStatementEnd}.
+	 * Exit a parse tree produced by {@link templateParser#forEndStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitForStatementEnd(templateParser.ForStatementEndContext ctx);
+	void exitForEndStatement(templateParser.ForEndStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link templateParser#forBody}.
 	 * @param ctx the parse tree

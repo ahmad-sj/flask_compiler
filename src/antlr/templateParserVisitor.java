@@ -119,11 +119,11 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitForBlock(templateParser.ForBlockContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#forStatementStart}.
+	 * Visit a parse tree produced by {@link templateParser#forStartStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitForStatementStart(templateParser.ForStatementStartContext ctx);
+	T visitForStartStatement(templateParser.ForStartStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link templateParser#iterationStatement}.
 	 * @param ctx the parse tree
@@ -137,17 +137,29 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLoopVariables(templateParser.LoopVariablesContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link templateParser#firstLoopVariable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFirstLoopVariable(templateParser.FirstLoopVariableContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#anotherLoopVariable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAnotherLoopVariable(templateParser.AnotherLoopVariableContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link templateParser#iterable}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIterable(templateParser.IterableContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#forStatementEnd}.
+	 * Visit a parse tree produced by {@link templateParser#forEndStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitForStatementEnd(templateParser.ForStatementEndContext ctx);
+	T visitForEndStatement(templateParser.ForEndStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link templateParser#forBody}.
 	 * @param ctx the parse tree

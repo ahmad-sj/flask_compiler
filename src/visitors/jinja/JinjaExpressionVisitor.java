@@ -10,11 +10,14 @@ public class JinjaExpressionVisitor extends templateParserBaseVisitor<JinjaExpre
     @Override
     public JinjaExpression visitJinjaExpression(templateParser.JinjaExpressionContext ctx) {
 
-        String filter = ctx.jinjaExprBody().jinjaFilter().getText();
-
         String id = ctx.jinjaExprBody().jinjaId().getText();
 
-        return new JinjaExpression(new JinjaFilter(filter), new JinjaId(id));
+        if (ctx.jinjaExprBody().jinjaFilter() != null){
+            String filter = ctx.jinjaExprBody().jinjaFilter().getText();
+            return new JinjaExpression(new JinjaFilter(filter), new JinjaId(id));
+        }
+
+        return new JinjaExpression(new JinjaId(id));
     }
 
     @Override

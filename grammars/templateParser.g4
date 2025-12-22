@@ -64,17 +64,20 @@ conditionComparisionOperator
     ;
 
 // for loop rules
-forBlock: forStatementStart forBody? forStatementEnd;
+forBlock: forStartStatement forBody? forEndStatement;
 
-forStatementStart: J_STMNT_START J_STMNT_FOR iterationStatement J_ID_END;
+forStartStatement: J_STMNT_START J_STMNT_FOR iterationStatement J_ID_END;
 
 iterationStatement: loopVariables J_LOOP_KEYWORD iterable;
 
-loopVariables: J_LOOP_VARIABLE (J_VARIABLES_COMMA J_LOOP_VARIABLE)*;
+loopVariables: firstLoopVariable anotherLoopVariable*;
+
+firstLoopVariable: J_LOOP_VARIABLE;
+anotherLoopVariable: J_VARIABLES_COMMA J_LOOP_VARIABLE;
 
 iterable: J_LOOP_ITERABLE (varMember | funcParamList)?;
 
-forStatementEnd: J_STMNT_START J_STMNT_ENDFOR J_STMNT_END;
+forEndStatement: J_STMNT_START J_STMNT_ENDFOR J_STMNT_END;
 
 forBody
     : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+ elseBlock?

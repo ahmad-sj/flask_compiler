@@ -1,11 +1,11 @@
 package models.jinja.blocks.inheritedBlock;
 
-import models.jinja.blocks.JinjaBlock;
+import models.jinja.blocks.JinjaStatement;
 
-public class InheritedBlockEnd extends JinjaBlock {
+public class InheritedBlockEndStatement extends JinjaStatement {
     public String name;
 
-    public InheritedBlockEnd(String name) {
+    public InheritedBlockEndStatement(String name) {
         this.name = name;
     }
 

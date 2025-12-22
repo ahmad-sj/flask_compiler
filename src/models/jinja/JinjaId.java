@@ -1,6 +1,8 @@
 package models.jinja;
 
-public class JinjaId {
+import models.Node;
+
+public class JinjaId extends Node {
     String idName;
 
     public JinjaId() {

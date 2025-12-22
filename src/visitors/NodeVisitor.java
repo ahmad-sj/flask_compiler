@@ -4,7 +4,9 @@ import antlr.templateParser;
 import antlr.templateParserBaseVisitor;
 import models.Node;
 import models.NormalText;
+import models.jinja.JinjaExpression;
 import visitors.html.HtmlVisitor;
+import visitors.jinja.JinjaExpressionVisitor;
 import visitors.jinja.JinjaVisitor;
 
 public class NodeVisitor extends templateParserBaseVisitor<Node> {
@@ -20,6 +22,11 @@ public class NodeVisitor extends templateParserBaseVisitor<Node> {
     @Override
     public Node visitJinjaBlock(templateParser.JinjaBlockContext ctx) {
         return jinjaVisitor.visit(ctx);
+    }
+
+    @Override
+    public Node visitJinjaExpression(templateParser.JinjaExpressionContext ctx) {
+        return new JinjaExpressionVisitor().visit(ctx);
     }
 
     @Override

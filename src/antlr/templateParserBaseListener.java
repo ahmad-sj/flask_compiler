@@ -233,13 +233,13 @@ public class templateParserBaseListener implements templateParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterForStatementStart(templateParser.ForStatementStartContext ctx) { }
+	@Override public void enterForStartStatement(templateParser.ForStartStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitForStatementStart(templateParser.ForStatementStartContext ctx) { }
+	@Override public void exitForStartStatement(templateParser.ForStartStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -269,6 +269,30 @@ public class templateParserBaseListener implements templateParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFirstLoopVariable(templateParser.FirstLoopVariableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFirstLoopVariable(templateParser.FirstLoopVariableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnotherLoopVariable(templateParser.AnotherLoopVariableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnotherLoopVariable(templateParser.AnotherLoopVariableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIterable(templateParser.IterableContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -281,13 +305,13 @@ public class templateParserBaseListener implements templateParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterForStatementEnd(templateParser.ForStatementEndContext ctx) { }
+	@Override public void enterForEndStatement(templateParser.ForEndStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitForStatementEnd(templateParser.ForStatementEndContext ctx) { }
+	@Override public void exitForEndStatement(templateParser.ForEndStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
