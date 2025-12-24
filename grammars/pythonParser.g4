@@ -8,10 +8,13 @@ options { tokenVocab=pythonLexer; }
 
 stmt
     : simpleStmt
+    blockStmt
     ;
     simpleStmt:
              importLine
             | assignLine
+            | returnLine
+            |exprLine
             | PASS;
 
 
@@ -19,7 +22,7 @@ stmt
     importLine : IMPORT name (AS NAME)?
     | FROM name IMPORT importList ;
 
-importList : Name (COMMA NAME)*;
+importList : NAME (COMMA NAME)*;
 
     name
         : NAME (DOT NAME)*
@@ -31,7 +34,7 @@ differentForm : NAME
 | indexAccess
 | dotAccess ;
 
-indexAccess : value OPENED_SQUAR_BRAKET expr CLOSED_SQUAR_BRAKET;
+indexAccess : value OPEND_SQUAR_BRAKET expr CLOSED_SQUAR_BRAKET;
 
 dotAccess : value DOT NAME ;
 
@@ -49,6 +52,12 @@ callList : expr (COMMA expr)*;
 
 literal :INT |NONE |FALSE |TRUE|STRING_SINGLE|STRING_DOUBLE;
 
+
+
+
+returnLine :RETURN expr?;
+
+exprLine :expr;
 
 
 expr
@@ -83,3 +92,33 @@ singleExpr
     : NOT singleExpr
     | value
     ;
+
+
+
+blockStmt : func | ifBlock |forBlock |whileBlock ;
+
+
+func :dec * DEF NAME funcArgs COLON block;
+
+
+ dec :AT name callArgs? ;
+
+ funcArgs : OPEND_NORMAL_BRAKET argsNames ? CLOSED_NORMAL_BRAKET ;
+
+ argsNames : NAME ( COMMA NAME)*;
+
+
+ block :NEWLINE INDENT stmt+ DEDENT
+ | simpleStmt;
+
+
+ ifBlock
+ : IF expr COLON block
+    (ELIF expr COLON block)*
+    (ELSE COLON block)?;
+
+
+
+forBlock : FOR NAME IN expr COLON block;
+
+whileBlock : WHILE expr COLON block;

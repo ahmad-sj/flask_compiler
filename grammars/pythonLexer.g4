@@ -95,6 +95,7 @@ WS      : [ \t]+ -> skip;
      WHILE   : 'while';
     BREAK   : 'break';
     CONTINUE: 'continue';
+    IN :'in';
 
      //Definition
     DEF     : 'def';
@@ -135,9 +136,10 @@ WS      : [ \t]+ -> skip;
 
  // data type
  NAME :[a-zA-Z_][a-zA-Z0-9_]*;
- INT :[0-9]+;
-FLOAT  : DIGIT+ '.' DIGIT* ;
-DIGIT : [0-9] ;
+
+FLOAT  : INT+ '.' INT* ;
+INT :[0-9]+;
+
 
 
  //Comment
