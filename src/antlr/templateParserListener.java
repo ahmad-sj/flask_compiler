@@ -98,15 +98,15 @@ public interface templateParserListener extends ParseTreeListener {
 	 */
 	void exitElseBlock(templateParser.ElseBlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link templateParser#subconitionBody}.
+	 * Enter a parse tree produced by {@link templateParser#subBlock}.
 	 * @param ctx the parse tree
 	 */
-	void enterSubconitionBody(templateParser.SubconitionBodyContext ctx);
+	void enterSubBlock(templateParser.SubBlockContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link templateParser#subconitionBody}.
+	 * Exit a parse tree produced by {@link templateParser#subBlock}.
 	 * @param ctx the parse tree
 	 */
-	void exitSubconitionBody(templateParser.SubconitionBodyContext ctx);
+	void exitSubBlock(templateParser.SubBlockContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link templateParser#forBlock}.
 	 * @param ctx the parse tree
@@ -127,26 +127,6 @@ public interface templateParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitForStartStatement(templateParser.ForStartStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link templateParser#iterationStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterIterationStatement(templateParser.IterationStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link templateParser#iterationStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitIterationStatement(templateParser.IterationStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link templateParser#loopVariables}.
-	 * @param ctx the parse tree
-	 */
-	void enterLoopVariables(templateParser.LoopVariablesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link templateParser#loopVariables}.
-	 * @param ctx the parse tree
-	 */
-	void exitLoopVariables(templateParser.LoopVariablesContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link templateParser#forEndStatement}.
 	 * @param ctx the parse tree
@@ -207,16 +187,6 @@ public interface templateParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitInheritBlockEnd(templateParser.InheritBlockEndContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link templateParser#inheritBlockBody}.
-	 * @param ctx the parse tree
-	 */
-	void enterInheritBlockBody(templateParser.InheritBlockBodyContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link templateParser#inheritBlockBody}.
-	 * @param ctx the parse tree
-	 */
-	void exitInheritBlockBody(templateParser.InheritBlockBodyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link templateParser#jinjaExpression}.
 	 * @param ctx the parse tree

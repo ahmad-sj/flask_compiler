@@ -9,8 +9,8 @@ import visitors.jinja.JinjaVisitor;
 
 public class NodeVisitor extends templateParserBaseVisitor<Node> {
 
-    HtmlVisitor htmlVisitor = new HtmlVisitor();
-    JinjaVisitor jinjaVisitor = new JinjaVisitor();
+    HtmlVisitor htmlVisitor = new HtmlVisitor(this);
+    JinjaVisitor jinjaVisitor = new JinjaVisitor(this);
 
     @Override
     public Node visitExtendsBlock(templateParser.ExtendsBlockContext ctx) {
@@ -28,6 +28,11 @@ public class NodeVisitor extends templateParserBaseVisitor<Node> {
     }
 
     @Override
+    public Node visitJinjaAttrVal(templateParser.JinjaAttrValContext ctx) {
+        return jinjaVisitor.visit(ctx);
+    }
+
+    @Override
     public Node visitHtmlElement(templateParser.HtmlElementContext ctx) {
         return htmlVisitor.visit(ctx);
     }
@@ -40,5 +45,6 @@ public class NodeVisitor extends templateParserBaseVisitor<Node> {
 
         return normalText;
     }
+
 
 }

@@ -1,9 +1,9 @@
 package models.jinja.blocks;
 
-public class JinjaExtendsBlock extends JinjaBlock {
+public class ExtendsBlock extends JinjaBlock {
     public String templateName;
 
-    public JinjaExtendsBlock(String templateName) {
+    public ExtendsBlock(String templateName) {
         this.templateName = templateName;
     }
 

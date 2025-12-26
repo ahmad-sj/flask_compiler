@@ -18,6 +18,8 @@ templateText
     : NORMAL_TEXT
     ;
 
+// ============================================================
+
 // conditional rules
 ifBlock
     : ifStatmentStart ifBody? ifStatmentEnd
@@ -37,49 +39,63 @@ ifStatmentEnd
     ;
 
 elifBlock
-    : J_STMNT_START ELIF expression J_EXPR_STMNT_END subconitionBody?
+    : J_STMNT_START ELIF expression J_EXPR_STMNT_END subBlock*
     ;
 
 elseBlock
-    : J_STMNT_START ELSE J_STMNT_END subconitionBody?
+    : J_STMNT_START ELSE J_STMNT_END subBlock*
     ;
 
-// body for elif / else block
-subconitionBody
-    : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+
+// body for: for loop, elif and else block
+subBlock
+    : ifBlock
+    | forBlock
+    | jinjaExpression
+    | htmlElement
+    | templateText
     ;
 
 // ============================================================
 
-forBlock: forStartStatement forBody? forEndStatement;
+forBlock
+    : forStartStatement forBody? forEndStatement
+    ;
 
-forStartStatement: J_STMNT_START FOR iterationStatement J_EXPR_STMNT_END;
+forStartStatement
+    : J_STMNT_START FOR ID (COMMA ID)* IN expression J_EXPR_STMNT_END
+    ;
 
-iterationStatement: loopVariables IN expression;
-
-loopVariables: ID (COMMA ID)*;
-
-forEndStatement: J_STMNT_START ENDFOR J_STMNT_END;
+forEndStatement
+    : J_STMNT_START ENDFOR J_STMNT_END
+    ;
 
 forBody
-    : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+ elseBlock?
+    : subBlock+ elseBlock?
     ;
 
 // ============================================================
 
-extendsBlock: J_STMNT_START EXTENDS STRING J_EXPR_STMNT_END;
+extendsBlock
+    : J_STMNT_START EXTENDS STRING J_EXPR_STMNT_END
+    ;
 
 // ============================================================
 
-inheritBlock: inheritBlockStart inheritBlockBody? inheritBlockEnd;
-
-inheritBlockStart: J_STMNT_START BLOCK ID J_EXPR_STMNT_END;
-
-inheritBlockEnd: J_STMNT_START ENDBLOCK J_STMNT_END;
-
-inheritBlockBody
-    : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+
+inheritBlock
+    : inheritBlockStart subBlock* inheritBlockEnd
     ;
+
+inheritBlockStart
+    : J_STMNT_START BLOCK ID J_EXPR_STMNT_END
+    ;
+
+inheritBlockEnd
+    : J_STMNT_START ENDBLOCK J_STMNT_END
+    ;
+
+//inheritBlockBody
+//    : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+
+//    ;
 
 // ============================================================
 

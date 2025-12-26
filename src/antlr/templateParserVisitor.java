@@ -65,11 +65,11 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitElseBlock(templateParser.ElseBlockContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#subconitionBody}.
+	 * Visit a parse tree produced by {@link templateParser#subBlock}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSubconitionBody(templateParser.SubconitionBodyContext ctx);
+	T visitSubBlock(templateParser.SubBlockContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link templateParser#forBlock}.
 	 * @param ctx the parse tree
@@ -82,18 +82,6 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitForStartStatement(templateParser.ForStartStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#iterationStatement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIterationStatement(templateParser.IterationStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#loopVariables}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLoopVariables(templateParser.LoopVariablesContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link templateParser#forEndStatement}.
 	 * @param ctx the parse tree
@@ -130,12 +118,6 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitInheritBlockEnd(templateParser.InheritBlockEndContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#inheritBlockBody}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitInheritBlockBody(templateParser.InheritBlockBodyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link templateParser#jinjaExpression}.
 	 * @param ctx the parse tree
