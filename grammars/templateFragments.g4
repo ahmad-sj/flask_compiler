@@ -1,14 +1,24 @@
 lexer grammar templateFragments;
 
-fragment ID: [a-zA-Z_][a-zA-Z0-9_]*;
-fragment STRING: '\'' [a-zA-Z0-9()._-]* '\'' | '"' [a-zA-Z0-9()._-]* '"';
-fragment NUMBER
-    : INT
-    | FLOAT
+fragment ID_FRAG: [a-zA-Z_][a-zA-Z0-9_]*;
+
+//fragment STRING_FRAG: '\'' [a-zA-Z0-9()._-]* '\'' | '"' [a-zA-Z0-9()._-]* '"';
+//    FORMAT_STRING: '"%' [a-zA-Z0-9.%#+\-]+ '"';
+
+fragment STRING_FRAG
+    : '"' ( ~["\\] | '\\' . )* '"'
+    | '\'' ( ~['\\] | '\\' . )* '\''
     ;
 
-fragment INT: [0-9]+;
-fragment FLOAT: [0-9]+ '.' [0-9]+;
+fragment NUMBER_FRAG
+    : INT_FRAG
+    | FLOAT_FRAG
+    ;
+
+fragment INT_FRAG: [0-9]+;
+fragment FLOAT_FRAG
+    : [0-9]+ '.' [0-9]+
+    ;
 
 // comparison operators
 fragment J_COMP_EQ: '==';
@@ -35,42 +45,42 @@ fragment J_TEST_LOWER: 'lower';
 fragment J_TEST_UPPER: 'upper';
 
 
-fragment LAB: '<';
-fragment RAB: '>';
+fragment LAB_FRAG: '<';
+fragment RAB_FRAG: '>';
 
-fragment LBRACE: '{';
-fragment RBRACE: '}';
+fragment LBRACE_FRAG: '{';
+fragment RBRACE_FRAG: '}';
 
-fragment LPAREN: '(';
-fragment RPAREN: ')';
+fragment LPAREN_FRAG: '(';
+fragment RPAREN_FRAG: ')';
 
-fragment SLASH: '/';
+fragment SLASH_FRAG: '/';
 
-fragment SQUOT: '\'';
-fragment DQUOT: '"';
-fragment EQ: '=';
-fragment DASH: '-';
+fragment SQUOT_FRAG: '\'';
+fragment DQUOT_FRAG: '"';
+fragment ASSIGN_FRAG: '=';
+fragment DASH_FRAG: '-';
 
-fragment DOT: '.';
-fragment COLON: ':';
-fragment SEMICOLON: ';';
-fragment COMMA: ',';
+fragment DOT_FRAG: '.';
+fragment COLON_FRAG: ':';
+fragment SEMICOLON_FRAG: ';';
+fragment COMMA_FRAG: ',';
 
-fragment TILDE: '~';
+fragment TILDE_FRAG: '~';
 fragment EXCALM: '!';
 fragment AT: '@';
 fragment HASH: '#';
 fragment DOLLAR: '$';
 fragment PERCENT: '%';
 fragment POWER: '^';
-fragment AND: '&';
-fragment STAR: '*';
-fragment PIPELINE: '|';
+fragment AMPERSAND_FRAG: '&';
+fragment STAR_FRAG: '*';
+fragment PIPELINE_FRAG: '|';
 
-fragment MULT: '*';
-fragment PLUS: '+';
-fragment MINUS: '-';
-fragment DIV: '/';
+//fragment MULT: '*';
+//fragment PLUS: '+';
+//fragment MINUS: '-';
+//fragment DIV: '/';
 
 
 

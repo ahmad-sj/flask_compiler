@@ -71,48 +71,6 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSubconitionBody(templateParser.SubconitionBodyContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCondition(templateParser.ConditionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#singleClauseCondition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSingleClauseCondition(templateParser.SingleClauseConditionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#multiClauseCondition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMultiClauseCondition(templateParser.MultiClauseConditionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#conditionOperand}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConditionOperand(templateParser.ConditionOperandContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#conditionOperandTest}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConditionOperandTest(templateParser.ConditionOperandTestContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#binaryLogicalOperator}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBinaryLogicalOperator(templateParser.BinaryLogicalOperatorContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#conditionComparisionOperator}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConditionComparisionOperator(templateParser.ConditionComparisionOperatorContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link templateParser#forBlock}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -136,24 +94,6 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLoopVariables(templateParser.LoopVariablesContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#firstLoopVariable}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFirstLoopVariable(templateParser.FirstLoopVariableContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#anotherLoopVariable}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAnotherLoopVariable(templateParser.AnotherLoopVariableContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#iterable}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIterable(templateParser.IterableContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link templateParser#forEndStatement}.
 	 * @param ctx the parse tree
@@ -215,59 +155,191 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitJinjaExprEnd(templateParser.JinjaExprEndContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#jinjaExprBody}.
+	 * Visit a parse tree produced by {@link templateParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitJinjaExprBody(templateParser.JinjaExprBodyContext ctx);
+	T visitExpression(templateParser.ExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#jinjaFilter}.
+	 * Visit a parse tree produced by {@link templateParser#ternaryExt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitJinjaFilter(templateParser.JinjaFilterContext ctx);
+	T visitTernaryExt(templateParser.TernaryExtContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#jinjaId}.
+	 * Visit a parse tree produced by {@link templateParser#defaultExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitJinjaId(templateParser.JinjaIdContext ctx);
+	T visitDefaultExpr(templateParser.DefaultExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#varMember}.
+	 * Visit a parse tree produced by {@link templateParser#orExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVarMember(templateParser.VarMemberContext ctx);
+	T visitOrExpr(templateParser.OrExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#dictKey}.
+	 * Visit a parse tree produced by {@link templateParser#andExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDictKey(templateParser.DictKeyContext ctx);
+	T visitAndExpr(templateParser.AndExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#objAttr}.
+	 * Visit a parse tree produced by {@link templateParser#notExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitObjAttr(templateParser.ObjAttrContext ctx);
+	T visitNotExpr(templateParser.NotExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#funcParamList}.
+	 * Visit a parse tree produced by {@link templateParser#compareExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFuncParamList(templateParser.FuncParamListContext ctx);
+	T visitCompareExpr(templateParser.CompareExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#funcParamId}.
+	 * Visit a parse tree produced by {@link templateParser#compExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFuncParamId(templateParser.FuncParamIdContext ctx);
+	T visitCompExpr(templateParser.CompExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#funcParam}.
+	 * Visit a parse tree produced by {@link templateParser#inExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFuncParam(templateParser.FuncParamContext ctx);
+	T visitInExpr(templateParser.InExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#comparisonOperator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComparisonOperator(templateParser.ComparisonOperatorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#pipeExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPipeExpr(templateParser.PipeExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#filter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFilter(templateParser.FilterContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#argumentList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArgumentList(templateParser.ArgumentListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#argument}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArgument(templateParser.ArgumentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#concatExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConcatExpr(templateParser.ConcatExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#addExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddExpr(templateParser.AddExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#addExprOptor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddExprOptor(templateParser.AddExprOptorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#mulExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMulExpr(templateParser.MulExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#mulExprOptor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMulExprOptor(templateParser.MulExprOptorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#unaryExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryExpr(templateParser.UnaryExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#powExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPowExpr(templateParser.PowExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#atom}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAtom(templateParser.AtomContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#parenthedExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParenthedExpr(templateParser.ParenthedExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#primary}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrimary(templateParser.PrimaryContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#trailer}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTrailer(templateParser.TrailerContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#memberTrailer}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMemberTrailer(templateParser.MemberTrailerContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#subTrailer}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSubTrailer(templateParser.SubTrailerContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#callTrailer}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCallTrailer(templateParser.CallTrailerContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitList(templateParser.ListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#dict}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDict(templateParser.DictContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#pair}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPair(templateParser.PairContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link templateParser#htmlElement}.
 	 * @param ctx the parse tree

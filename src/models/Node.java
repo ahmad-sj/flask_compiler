@@ -1,7 +1,7 @@
 package models;
 
 public abstract class Node {
-    public String name;
+//    public String name;
     protected String nodeName;
     protected int lineNumber;
 

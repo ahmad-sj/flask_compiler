@@ -14,88 +14,78 @@ jinjaBlock
     | forBlock
     ;
 
-templateText: NORMAL_TEXT;
+templateText
+    : NORMAL_TEXT
+    ;
 
 // conditional rules
-ifBlock: ifStatmentStart ifBody? ifStatmentEnd;
+ifBlock
+    : ifStatmentStart ifBody? ifStatmentEnd
+    ;
 
-ifStatmentStart: J_STMNT_START J_STMNT_IF condition (J_ID_END | J_CONDITION_END);
+ifStatmentStart
+    : J_STMNT_START IF expression J_EXPR_STMNT_END
+    ;
 
 ifBody
     : (ifBlock | elifBlock | forBlock | jinjaExpression | htmlElement | templateText)+ elseBlock?
     | elseBlock
     ;
 
-ifStatmentEnd: J_STMNT_START J_STMNT_ENDIF J_STMNT_END;
+ifStatmentEnd
+    : J_STMNT_START ENDIF J_STMNT_END
+    ;
 
-elifBlock: J_STMNT_START J_STMNT_ELIF condition J_ID_END subconitionBody?;
+elifBlock
+    : J_STMNT_START ELIF expression J_EXPR_STMNT_END subconitionBody?
+    ;
 
-elseBlock: J_STMNT_START J_STMNT_ELSE J_CONDITION_ELSE_END subconitionBody?;
+elseBlock
+    : J_STMNT_START ELSE J_STMNT_END subconitionBody?
+    ;
 
 // body for elif / else block
 subconitionBody
     : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+
     ;
 
-condition
-    : multiClauseCondition
-    | singleClauseCondition
-    ;
+// ============================================================
 
-singleClauseCondition: J_CONDITION_NOT? conditionOperand (conditionComparisionOperator conditionOperand | conditionOperandTest)?;
-multiClauseCondition: J_CONDITION_NOT? singleClauseCondition (binaryLogicalOperator singleClauseCondition)+;
-
-conditionOperand
-    : J_CONDITION_VAR_NAME (varMember | funcParamList)?
-    | J_CONDITION_PRIMITIVE
-    ;
-conditionOperandTest: J_COND_ID_IS J_TEST_VALUE;
-
-binaryLogicalOperator
-    : J_COND_ID_AND
-    | J_COND_ID_OR
-    | J_COND_PRIM_AND
-    | J_COND_PRIM_OR
-    ;
-
-conditionComparisionOperator
-    : J_COND_ID_COMP_OPTOR
-    | J_COND_PRIM_COMP_OPTOR
-    ;
-
-// for loop rules
 forBlock: forStartStatement forBody? forEndStatement;
 
-forStartStatement: J_STMNT_START J_STMNT_FOR iterationStatement J_ID_END;
+forStartStatement: J_STMNT_START FOR iterationStatement J_EXPR_STMNT_END;
 
-iterationStatement: loopVariables J_LOOP_KEYWORD iterable;
+iterationStatement: loopVariables IN expression;
 
-loopVariables: firstLoopVariable anotherLoopVariable*;
+loopVariables: ID (COMMA ID)*;
 
-firstLoopVariable: J_LOOP_VARIABLE;
-anotherLoopVariable: J_VARIABLES_COMMA J_LOOP_VARIABLE;
-
-iterable: J_LOOP_ITERABLE (varMember | funcParamList)?;
-
-forEndStatement: J_STMNT_START J_STMNT_ENDFOR J_STMNT_END;
+forEndStatement: J_STMNT_START ENDFOR J_STMNT_END;
 
 forBody
     : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+ elseBlock?
     ;
 
-extendsBlock: J_STMNT_START J_STMNT_EXTENDS J_EXTENDS_STRING J_EXTENDS_END;
+// ============================================================
+
+extendsBlock: J_STMNT_START EXTENDS STRING J_EXPR_STMNT_END;
+
+// ============================================================
 
 inheritBlock: inheritBlockStart inheritBlockBody? inheritBlockEnd;
 
-inheritBlockStart: J_STMNT_START J_STMNT_BLOCK J_INHERIT_BLOCK_NAME J_STMNT_END;
+inheritBlockStart: J_STMNT_START BLOCK ID J_EXPR_STMNT_END;
 
-inheritBlockEnd: J_STMNT_START J_STMNT_ENDBLOCK J_STMNT_END;
+inheritBlockEnd: J_STMNT_START ENDBLOCK J_STMNT_END;
 
 inheritBlockBody
     : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+
     ;
 
-jinjaExpression: jinjaExprStart jinjaExprBody jinjaExprEnd;
+// ============================================================
+
+jinjaExpression
+    : jinjaExprStart expression jinjaExprEnd
+    ;
 
 jinjaExprStart
     : J_EXPR_START
@@ -103,29 +93,146 @@ jinjaExprStart
     ;
 
 jinjaExprEnd
-    : J_ID_EXPR_END
+    : J_EXPR_END
     ;
 
-jinjaExprBody: jinjaFilter? jinjaId;
-
-jinjaFilter: J_FORMAT_STRING J_EXPR_PIPELINE;
-
-jinjaId: J_EXPR_ID (varMember | funcParamList)?;
-
-varMember
-    : dictKey
-    | objAttr
+expression
+    : orExpr ternaryExt?  // ternary ?:
+    | defaultExpr
     ;
 
-dictKey: J_ID_LSB J_DICT_KEY J_DICT_VAR_RSB (objAttr | dictKey)?;
-objAttr: J_ID_DOT J_VAR_ATTR (objAttr | dictKey | funcParamList)?;
+ternaryExt
+    : QMARK expression COLON expression;
 
-funcParamList: J_FUNC_LPAREN (funcParam | (J_ID_COMMA funcParam))* (J_FUNC_RPAREN | J_FUNC_PARAMLESS_RPAREN);
-funcParamId: J_FUNC_PARAM_ALIAS? J_FUNC_PARAM_ID (objAttr | dictKey)?;
+defaultExpr
+    : orExpr ELVIS expression;
 
-funcParam
-    : funcParamId
-    | J_FUNC_PARAM_STRING
+orExpr
+    : andExpr (OR andExpr)*
+    ;
+
+andExpr
+    : notExpr (AND notExpr)*
+    ;
+
+notExpr
+    : NOT notExpr
+    | compareExpr
+    ;
+
+compareExpr
+    : concatExpr (IS (NOT)? ID)?
+    | compExpr
+    | inExpr
+    ;
+
+compExpr
+    : pipeExpr comparisonOperator pipeExpr
+    ;
+
+inExpr
+    : pipeExpr (IN pipeExpr)?
+    ;
+
+comparisonOperator
+    : EQ | NEQ | LT | GT | LE | GE
+    ;
+
+pipeExpr
+    : concatExpr filter*
+    ;
+
+filter
+    : PIPELINE ID (LPAREN argumentList? RPAREN)?;
+
+argumentList
+    : argument (COMMA argument)*
+    ;
+
+argument
+    : expression
+    | ID ASSIGN expression
+    ;
+
+concatExpr
+    : addExpr (TILDE addExpr)*
+    ;
+
+addExpr
+    : mulExpr (addExprOptor mulExpr)*
+    ;
+
+addExprOptor
+    : PLUS
+    | MINUS
+    ;
+
+mulExpr
+    : unaryExpr (mulExprOptor unaryExpr)*
+    ;
+
+mulExprOptor
+    : MULT
+    | DIV
+    | FLOORDIV
+    | MOD
+    ;
+
+unaryExpr
+    : (PLUS | MINUS) unaryExpr
+    | powExpr
+    ;
+
+powExpr
+    : primary (POW unaryExpr)?
+    ;
+
+atom
+     : ID
+     | INT
+     | FLOAT
+     | STRING
+     | parenthedExpr
+     | list
+     | dict
+     ;
+
+parenthedExpr
+    : LPAREN expression RPAREN
+    ;
+
+ primary
+     : atom trailer*
+     ;
+
+trailer
+    : memberTrailer
+    | subTrailer
+    | callTrailer
+    ;
+
+memberTrailer
+    : DOT ID
+    ;
+
+subTrailer
+    : LSB expression RSB
+    ;
+
+callTrailer
+    : LPAREN argumentList? RPAREN
+    ;
+
+list
+    : LSB (expression (COMMA expression)*)? RSB
+    ;
+
+dict
+    : LBRACE (pair (COMMA pair)*)? RBRACE
+    ;
+
+pair
+    : expression COLON expression
     ;
 
 // =====================================================================================
@@ -164,7 +271,7 @@ attrWithUnquotedVal: ATTR_NAME ATTR_EQ ATTR_VALUE_UNQUOTED;
 
 attrWithQuotedVal: ATTR_NAME ATTR_EQ ATTR_DQUOTE_START (ATTR_VAL_TEXT | jinjaAttrVal)+ ATTR_DQUOTE_END;
 
-jinjaAttrVal: ATTR_VAL_J_EXPR_START jinjaExprBody J_ID_EXPR_END;
+jinjaAttrVal: ATTR_VAL_J_EXPR_START expression J_EXPR_END;
 
 styleAttr: STYLE_ATTR CSS_INLINE_EQ CSS_INLINE_DQUOT_START inlineStyleProp* CSS_INLINE_PROP_DQUOT_END;
 inlineStyleProp: CSS_INLINE_PROP_NAME CSS_INLINE_PROP_COLON CSS_PROP_VAL+ CSS_PROP_SEMICOLON;

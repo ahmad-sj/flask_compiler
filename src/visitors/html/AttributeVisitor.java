@@ -7,7 +7,7 @@ import models.html.attributes.*;
 import models.jinja.JinjaExpression;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import visitors.css.PropertyVisitor;
-import visitors.jinja.JinjaExpressionVisitor;
+import visitors.jinja.JinjaVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,10 +51,10 @@ public class AttributeVisitor extends templateParserBaseVisitor<Attribute> {
         ArrayList<JinjaExpression> jinjaValues = new ArrayList<>();
 
         if (ctx.jinjaAttrVal() != null){
-            JinjaExpressionVisitor jinjaExpressionVisitor = new JinjaExpressionVisitor();
+            JinjaVisitor jinjaVisitor = new JinjaVisitor();
 
             for (templateParser.JinjaAttrValContext jinjaExpr : ctx.jinjaAttrVal()){
-                jinjaValues.add(jinjaExpressionVisitor.visit(jinjaExpr));
+                jinjaValues.add((JinjaExpression) jinjaVisitor.visit(jinjaExpr));
             }
         }
 
