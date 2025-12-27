@@ -8,11 +8,18 @@ import models.jinja.expressions.*;
 import models.jinja.trailers.CallTrailer;
 import models.jinja.trailers.MemberTrailer;
 import models.jinja.trailers.SubTrailer;
+import visitors.NodeVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
+
+    public NodeVisitor nodeVisitor;
+
+    public ExpressionVisitor(NodeVisitor nodeVisitor) {
+        this.nodeVisitor = nodeVisitor;
+    }
 
     @Override
     public Node visitExpression(templateParser.ExpressionContext ctx) {
@@ -216,7 +223,8 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
 
     @Override
     public Node visitPipeExpr(templateParser.PipeExprContext ctx) {
-        if (ctx.filter() == null) {
+
+        if (ctx.filter() == null || ctx.filter().isEmpty()) {
             return this.visit(ctx.concatExpr());
         } else {
             Node expr = this.visit(ctx.concatExpr());

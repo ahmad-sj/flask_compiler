@@ -3,14 +3,18 @@ package visitors.html;
 import antlr.templateParser;
 import antlr.templateParserBaseVisitor;
 import models.Node;
-import models.html.attributes.Attribute;
-import models.html.elements.Element;
-import models.html.elements.ElementBody;
-import models.html.tags.EndTag;
-import models.html.tags.SelfClosingTag;
-import models.html.tags.StartTag;
-import models.html.tags.Tag;
+import models.css.CssBlock;
+import models.css.properties.Property;
+import models.css.properties.PropertyValue;
+import models.css.selectors.*;
+import models.html.attributes.*;
+import models.html.elements.HtmlRegularElement;
+import models.html.elements.HtmlElementBody;
+import models.html.elements.HtmlSelfClosingElement;
+import models.html.elements.HtmlStyleElement;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import visitors.NodeVisitor;
 
 import java.util.ArrayList;
@@ -18,7 +22,7 @@ import java.util.List;
 
 public class HtmlVisitor extends templateParserBaseVisitor<Node> {
 
-    NodeVisitor nodeVisitor;
+    public NodeVisitor nodeVisitor;
 
     public HtmlVisitor(NodeVisitor nodeVisitor) {
         this.nodeVisitor = nodeVisitor;
@@ -26,17 +30,34 @@ public class HtmlVisitor extends templateParserBaseVisitor<Node> {
 
     @Override
     public Node visitHtmlRegularElement(templateParser.HtmlRegularElementContext ctx) {
+        // getting tag name
+        String tagName = ctx.htmlStartTag().START_TAG_NAME().getText();
 
-        StartTag startTag = (StartTag) this.visit(ctx.htmlStartTag());
-        EndTag endTag = (EndTag) this.visit(ctx.htmlEndTag());
-        ElementBody elementBody = null;
+        // getting tag attributes
+        ArrayList<Node> attrList = null;
+
+        if (ctx.htmlStartTag().htmlTagAttr() != null) {
+            attrList = new ArrayList<>();
+
+            for (int i = 0; i < ctx.htmlStartTag().htmlTagAttr().size(); i++)
+                attrList.add(this.visit(ctx.htmlStartTag().htmlTagAttr().get(i)));
+        }
+
+        //getting element body
+        Node elementBody = null;
 
         if (ctx.htmlElementBody() != null) {
-            elementBody = (ElementBody) visit(ctx.htmlElementBody());
-            elementBody.setNodeName(ctx.htmlStartTag().START_TAG_NAME().getText() + " tag body");
+            elementBody = this.visit(ctx.htmlElementBody());
+            elementBody.setNodeName(tagName + " element body");
             elementBody.setLineNumber(ctx.getStart().getLine());
         }
-        return new Element(startTag, elementBody, endTag);
+
+        // return html element
+        HtmlRegularElement htmlRegularElement = new HtmlRegularElement(tagName, attrList, elementBody);
+        htmlRegularElement.setNodeName(tagName + " html element");
+        htmlRegularElement.setLineNumber(ctx.getStart().getLine());
+
+        return htmlRegularElement;
     }
 
     @Override
@@ -51,59 +72,286 @@ public class HtmlVisitor extends templateParserBaseVisitor<Node> {
         for (ParseTree child : ctx.children)
             nodes.add(this.nodeVisitor.visit(child));
 
-        return new ElementBody(nodes);
+        return new HtmlElementBody(nodes);
     }
 
     @Override
-    public Tag visitHtmlStartTag(templateParser.HtmlStartTagContext ctx) {
+    public Node visitHtmlSelfClosingTag(templateParser.HtmlSelfClosingTagContext ctx) {
         String tagName = ctx.START_TAG_NAME().getText();
 
         List<templateParser.HtmlTagAttrContext> attributesContext = ctx.htmlTagAttr();
 
-        AttributeVisitor attributeVisitor = new AttributeVisitor();
+        // getting element attributes
+        ArrayList<Node> attrList = null;
 
-        ArrayList<Attribute> attributesList = new ArrayList<>();
+        if (ctx.htmlTagAttr() != null) {
+            attrList = new ArrayList<>();
 
-        for (templateParser.HtmlTagAttrContext htmlTagAttrContext : attributesContext) {
-            attributesList.add(attributeVisitor.visit(htmlTagAttrContext));
+            for (int i = 0; i < ctx.htmlTagAttr().size(); i++)
+                attrList.add(this.visit(ctx.htmlTagAttr().get(i)));
         }
 
-        StartTag startTag = new StartTag(tagName, attributesList);
-        startTag.setNodeName(tagName);
-        startTag.setLineNumber(ctx.START_TAG_NAME().getSymbol().getLine());
+        HtmlSelfClosingElement htmlSelfClosingElement = new HtmlSelfClosingElement(tagName, attrList);
+        htmlSelfClosingElement.setNodeName(tagName);
+        htmlSelfClosingElement.setLineNumber(ctx.START_TAG_NAME().getSymbol().getLine());
 
-        return startTag;
+        return htmlSelfClosingElement;
     }
 
     @Override
-    public Tag visitHtmlEndTag(templateParser.HtmlEndTagContext ctx) {
-        String tagName = ctx.END_TAG_NAME().getText();
+    public Node visitBooleanAttr(templateParser.BooleanAttrContext ctx) {
+        String attrName = ctx.ATTR_NAME().getText();
 
-        EndTag endTag = new EndTag(tagName);
-        endTag.setNodeName(tagName);
-        endTag.setLineNumber(ctx.END_TAG_NAME().getSymbol().getLine());
+        BooleanAttribute booleanAttribute = new BooleanAttribute(attrName);
+        booleanAttribute.setNodeName(attrName);
+        booleanAttribute.setLineNumber(ctx.ATTR_NAME().getSymbol().getLine());
 
-        return endTag;
+        return booleanAttribute;
     }
 
     @Override
-    public Tag visitHtmlSelfClosingTag(templateParser.HtmlSelfClosingTagContext ctx) {
-        String tagName = ctx.START_TAG_NAME().getText();
+    public Node visitAttrWithUnquotedVal(templateParser.AttrWithUnquotedValContext ctx) {
+        String attributeName = ctx.ATTR_NAME().getText();
+        String attributeValue = ctx.ATTR_VALUE_UNQUOTED().getText();
 
-        List<templateParser.HtmlTagAttrContext> attributesContext = ctx.htmlTagAttr();
+        UnquotedAttribute unquotedAttribute = new UnquotedAttribute(attributeName, attributeValue);
+        unquotedAttribute.setNodeName(attributeName);
+        unquotedAttribute.setLineNumber(ctx.ATTR_NAME().getSymbol().getLine());
 
-        AttributeVisitor attributeVisitor = new AttributeVisitor();
+        return unquotedAttribute;
+    }
 
-        ArrayList<Attribute> attributesList = new ArrayList<>();
+    @Override
+    public Node visitAttrWithQuotedVal(templateParser.AttrWithQuotedValContext ctx) {
+        String attributeName = ctx.ATTR_NAME().getText();
 
-        for (templateParser.HtmlTagAttrContext htmlTagAttrContext : attributesContext) {
-            attributesList.add(attributeVisitor.visit(htmlTagAttrContext));
+        // getting attribute values
+        ArrayList<Node> attrValList = null;
+
+        if (ctx.quotedValElem() != null) {
+            attrValList = new ArrayList<>();
+
+            for (int i = 0; i < ctx.quotedValElem().size(); i++)
+                attrValList.add(this.visit(ctx.quotedValElem().get(i)));
         }
 
-        SelfClosingTag selfClosingTag = new SelfClosingTag(tagName, attributesList);
-        selfClosingTag.setNodeName(tagName);
-        selfClosingTag.setLineNumber(ctx.START_TAG_NAME().getSymbol().getLine());
+        QuotedAttribute quotedAttribute = new QuotedAttribute(attributeName, attrValList);
+        quotedAttribute.setNodeName("html element attribute: " + attributeName);
+        quotedAttribute.setLineNumber(ctx.ATTR_NAME().getSymbol().getLine());
 
-        return selfClosingTag;
+        return quotedAttribute;
+    }
+
+    @Override
+    public Node visitQuotedValElem(templateParser.QuotedValElemContext ctx) {
+        if (ctx.jinjaAttrVal() != null) {
+            Node jinjaExprAsAttrVal = nodeVisitor.jinjaVisitor.visit(ctx.jinjaAttrVal());
+            jinjaExprAsAttrVal.setNodeName("jinja expr as atrr val");
+            jinjaExprAsAttrVal.setLineNumber(ctx.jinjaAttrVal().getStart().getLine());
+
+            return jinjaExprAsAttrVal;
+        } else {
+            Token attrValCtx = ctx.ATTR_VAL_TEXT().getSymbol();
+
+            AttributeValue attributeValue = new AttributeValue(attrValCtx.getText());
+            attributeValue.setNodeName("html" + attrValCtx.getText());
+            attributeValue.setLineNumber(attrValCtx.getLine());
+
+            return attributeValue;
+        }
+    }
+
+    @Override
+    public Node visitStyleAttr(templateParser.StyleAttrContext ctx) {
+        String attrName = ctx.STYLE_ATTR().getText(); // attrName = style
+
+        // getting properties
+        ArrayList<Node> propList = null;
+
+        if (ctx.inlineStyleProp() != null) {
+            propList = new ArrayList<>();
+
+            for (int i = 0; i < ctx.inlineStyleProp().size(); i++) {
+                propList.add(this.visit(ctx.inlineStyleProp().get(i)));
+            }
+        }
+
+        StyleAttribute styleAttribute = new StyleAttribute(attrName, propList);
+        styleAttribute.setNodeName(attrName);
+        styleAttribute.setLineNumber(ctx.STYLE_ATTR().getSymbol().getLine());
+        return styleAttribute;
+    }
+
+    @Override
+    public Node visitInlineStyleProp(templateParser.InlineStylePropContext ctx) {
+        String propName = ctx.CSS_INLINE_PROP_NAME().getText();
+
+        ArrayList<Node> propValues = new ArrayList<>();
+
+        for (TerminalNode propValue : ctx.CSS_PROP_VAL())
+            propValues.add(new PropertyValue(propValue.getText()));
+
+        return new Property(propName, propValues);
+    }
+
+    @Override
+    public Node visitHtmlStyleElem(templateParser.HtmlStyleElemContext ctx) {
+        //getting style element name
+        String tagName = ctx.htmlStyleElemOpenTag().STYLE_TAG_START_NAME().getText();
+
+        // getting style element body
+        HtmlElementBody htmlElementBody = null;
+
+        if (ctx.cssBlock() != null) {
+            ArrayList<Node> blockList = new ArrayList<>();
+
+            for (int i = 0; i < ctx.cssBlock().size(); i++)
+                blockList.add(this.visit(ctx.cssBlock().get(i)));
+
+            htmlElementBody = new HtmlElementBody(blockList);
+            htmlElementBody.setNodeName("style element body");
+            htmlElementBody.setLineNumber(ctx.cssBlock().getFirst().getStart().getLine());
+        }
+
+        HtmlStyleElement htmlStyleElement = new HtmlStyleElement(tagName, null, htmlElementBody);
+        htmlStyleElement.setNodeName("html style element");
+        htmlStyleElement.setLineNumber(ctx.getStart().getLine());
+
+        return htmlStyleElement;
+    }
+
+    @Override
+    public Node visitCssBlock(templateParser.CssBlockContext ctx) {
+        // getting css block selectors
+        Node selectorList = this.visit(ctx.selectorList());
+        selectorList.setNodeName("css block selectors");
+        selectorList.setLineNumber(ctx.selectorList().getStart().getLine());
+
+        //getting css block properties
+        ArrayList<Node> propList = null;
+
+        if (ctx.cssProp() != null) {
+            propList = new ArrayList<>();
+
+            for (int i = 0; i < ctx.cssProp().size(); i++)
+                propList.add(this.visit(ctx.cssProp().get(i)));
+
+        }
+        // returning css block object
+        CssBlock cssBlock = new CssBlock(selectorList, propList);
+        cssBlock.setNodeName("css block");
+        cssBlock.setLineNumber(ctx.getStart().getLine());
+
+        return cssBlock;
+    }
+
+    @Override
+    public Node visitSingleSelector(templateParser.SingleSelectorContext ctx) {
+        return this.visit(ctx.children.getFirst());
+    }
+
+    @Override
+    public Node visitDescendentSelector(templateParser.DescendentSelectorContext ctx) {
+        ArrayList<Node> selectorList = new ArrayList<>();
+
+        for (int i = 0; i < ctx.selector().size(); i++)
+            selectorList.add(this.visit(ctx.selector().get(i)));
+
+        DescendantSelector descendantSelector = new DescendantSelector(selectorList);
+        descendantSelector.setNodeName("descendant selector");
+        descendantSelector.setLineNumber(ctx.getStart().getLine());
+
+        return descendantSelector;
+    }
+
+    @Override
+    public Node visitGroupSelector(templateParser.GroupSelectorContext ctx) {
+        ArrayList<Node> selectorList = new ArrayList<>();
+
+        for (int i = 0; i < ctx.selector().size(); i++)
+            selectorList.add(this.visit(ctx.selector().get(i)));
+
+        GroupSelector groupSelector = new GroupSelector(selectorList);
+        groupSelector.setNodeName("group selector");
+        groupSelector.setLineNumber(ctx.getStart().getLine());
+
+        return groupSelector;
+    }
+
+    @Override
+    public Node visitSelector(templateParser.SelectorContext ctx) {
+        return this.visit(ctx.children.getFirst());
+    }
+
+    @Override
+    public Node visitIdSelector(templateParser.IdSelectorContext ctx) {
+        String idName = ctx.CSS_SEL_ID().getText().substring(1);
+
+        IdSelector idSelector = new IdSelector(idName);
+        idSelector.setNodeName("css id selector: " + idName);
+        idSelector.setLineNumber(ctx.CSS_SEL_ID().getSymbol().getLine());
+
+        return idSelector;
+    }
+
+    @Override
+    public Node visitClassSelector(templateParser.ClassSelectorContext ctx) {
+        String className = ctx.CSS_SEL_CLASS().getText().substring(1);
+
+        ClassSelector classSelector = new ClassSelector(className);
+        classSelector.setNodeName("class id selector: " + className);
+        classSelector.setLineNumber(ctx.CSS_SEL_CLASS().getSymbol().getLine());
+
+        return classSelector;
+    }
+
+    @Override
+    public Node visitElementSelector(templateParser.ElementSelectorContext ctx) {
+        String elementName = ctx.CSS_SEL_ELEM().getText();
+
+        ElementSelector elementSelector = new ElementSelector(elementName);
+        elementSelector.setNodeName("class element selector: " + elementName);
+        elementSelector.setLineNumber(ctx.CSS_SEL_ELEM().getSymbol().getLine());
+
+        return elementSelector;
+    }
+
+    @Override
+    public Node visitPseudoClassSelector(templateParser.PseudoClassSelectorContext ctx) {
+        // getting selector first part
+        Node selector = this.visit(ctx.simpleSelector());
+        selector.setNodeName("pseudo selector id");
+        selector.setLineNumber(ctx.simpleSelector().getStart().getLine());
+
+        // getting selector state
+        String selectorState = ctx.CSS_SEL_STATE().getSymbol().getText().substring(1);
+
+        // return pseudoClassSelector object
+        PseudoClassSelector pseudoClassSelector = new PseudoClassSelector(selector, selectorState);
+        pseudoClassSelector.setNodeName("pseudo class selector: " + selector.toString());
+        pseudoClassSelector.setLineNumber(ctx.getStart().getLine());
+
+        return pseudoClassSelector;
+    }
+
+    @Override
+    public Node visitCssProp(templateParser.CssPropContext ctx) {
+        String propName = ctx.BLK_PROP_NAME().getText();
+
+        ArrayList<Node> propValues = new ArrayList<>();
+
+        for (int i = 0; i < ctx.CSS_PROP_VAL().size(); i++)
+            propValues.add(new PropertyValue(ctx.CSS_PROP_VAL().get(i).getText()));
+
+        Property property = new Property(propName, propValues);
+        property.setNodeName(propName + " css property");
+        property.setLineNumber(ctx.getStart().getLine());
+
+        return property;
+    }
+
+    @Override
+    public Node visitJinjaExpression(templateParser.JinjaExpressionContext ctx) {
+        return nodeVisitor.visit(ctx);
     }
 }

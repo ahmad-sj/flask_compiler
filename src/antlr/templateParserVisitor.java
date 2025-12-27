@@ -47,6 +47,12 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIfBody(templateParser.IfBodyContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link templateParser#ifBodyElem}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfBodyElem(templateParser.IfBodyElemContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link templateParser#ifStatmentEnd}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -389,6 +395,12 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAttrWithQuotedVal(templateParser.AttrWithQuotedValContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link templateParser#quotedValElem}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQuotedValElem(templateParser.QuotedValElemContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link templateParser#jinjaAttrVal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -425,82 +437,69 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitHtmlStyleElemCloseTag(templateParser.HtmlStyleElemCloseTagContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#cssBlockDecl}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCssBlockDecl(templateParser.CssBlockDeclContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code CSS_SEL_ID}
-	 * labeled alternative in {@link templateParser#cssSel}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCSS_SEL_ID(templateParser.CSS_SEL_IDContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code CSS_SEL_CLASS}
-	 * labeled alternative in {@link templateParser#cssSel}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCSS_SEL_CLASS(templateParser.CSS_SEL_CLASSContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code CSS_SEL_ELEM}
-	 * labeled alternative in {@link templateParser#cssSel}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCSS_SEL_ELEM(templateParser.CSS_SEL_ELEMContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code CSS_SEL_PSEUDO_CLASS}
-	 * labeled alternative in {@link templateParser#cssSel}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCSS_SEL_PSEUDO_CLASS(templateParser.CSS_SEL_PSEUDO_CLASSContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link templateParser#cssSelWithState}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCssSelWithState(templateParser.CssSelWithStateContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code CSS_SEL_SINGLE}
-	 * labeled alternative in {@link templateParser#cssSelectors}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCSS_SEL_SINGLE(templateParser.CSS_SEL_SINGLEContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code CSS_SEL_DESCENDENT}
-	 * labeled alternative in {@link templateParser#cssSelectors}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCSS_SEL_DESCENDENT(templateParser.CSS_SEL_DESCENDENTContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code CSS_SEL_GROUP}
-	 * labeled alternative in {@link templateParser#cssSelectors}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCSS_SEL_GROUP(templateParser.CSS_SEL_GROUPContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link templateParser#cssBlock}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitCssBlock(templateParser.CssBlockContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#cssPropDecl}.
+	 * Visit a parse tree produced by the {@code singleSelector}
+	 * labeled alternative in {@link templateParser#selectorList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCssPropDecl(templateParser.CssPropDeclContext ctx);
+	T visitSingleSelector(templateParser.SingleSelectorContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link templateParser#cssBlockPropVal}.
+	 * Visit a parse tree produced by the {@code descendentSelector}
+	 * labeled alternative in {@link templateParser#selectorList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCssBlockPropVal(templateParser.CssBlockPropValContext ctx);
+	T visitDescendentSelector(templateParser.DescendentSelectorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code groupSelector}
+	 * labeled alternative in {@link templateParser#selectorList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGroupSelector(templateParser.GroupSelectorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#selector}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSelector(templateParser.SelectorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code idSelector}
+	 * labeled alternative in {@link templateParser#simpleSelector}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdSelector(templateParser.IdSelectorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code classSelector}
+	 * labeled alternative in {@link templateParser#simpleSelector}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitClassSelector(templateParser.ClassSelectorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code elementSelector}
+	 * labeled alternative in {@link templateParser#simpleSelector}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElementSelector(templateParser.ElementSelectorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#pseudoClassSelector}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPseudoClassSelector(templateParser.PseudoClassSelectorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link templateParser#cssProp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCssProp(templateParser.CssPropContext ctx);
 }

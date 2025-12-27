@@ -1,38 +1,31 @@
 package models.html.attributes;
 
-import models.jinja.JinjaExpression;
+import models.Node;
 
 import java.util.ArrayList;
 
-public class QuotedAttribute extends Attribute{
-    public ArrayList<String> values;
+public class QuotedAttribute extends Attribute {
+    public ArrayList<Node> attrValList;
 
-    public QuotedAttribute() {
-    }
-
-    public QuotedAttribute(String name, ArrayList<String> values, ArrayList<JinjaExpression> jinjaExpressions) {
-        this.name = name;
-        this.values = values;
-
-        if (jinjaExpressions != null){
-            for (JinjaExpression jinjaExpression : jinjaExpressions){
-                values.add(jinjaExpression.evaluate());
-            }
-        }
+    public QuotedAttribute(String name, ArrayList<Node> attrValList) {
+        this.attrName = name;
+        this.attrValList = attrValList;
     }
 
     @Override
     public String toString() {
         StringBuilder values = new StringBuilder();
 
-        for (int i = 0; i < this.values.size(); i++) {
-            values.append(this.values.get(i));
+        if (this.attrValList != null) {
+            for (int i = 0; i < this.attrValList.size(); i++) {
+                values.append(this.attrValList.get(i));
 
-            if (i + 1 != this.values.size()){
-                values.append(", ");
+                if (i + 1 < this.attrValList.size())
+                    values.append(" ");
             }
         }
 
-        return this.name + "=" + '"' + values + '"';
+
+        return this.attrName + "=" + '"' + values + '"';
     }
 }

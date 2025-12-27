@@ -30,8 +30,17 @@ ifStatmentStart
     ;
 
 ifBody
-    : (ifBlock | elifBlock | forBlock | jinjaExpression | htmlElement | templateText)+ elseBlock?
+    : ifBodyElem+ elseBlock?
     | elseBlock
+    ;
+
+ifBodyElem
+    : ifBlock
+    | elifBlock
+    | forBlock
+    | jinjaExpression
+    | htmlElement
+    | templateText
     ;
 
 ifStatmentEnd
@@ -46,7 +55,7 @@ elseBlock
     : J_STMNT_START ELSE J_STMNT_END subBlock*
     ;
 
-// body for: for loop, elif and else block
+// body for: for loop, elif, else, inherit blocks.
 subBlock
     : ifBlock
     | forBlock
@@ -92,10 +101,6 @@ inheritBlockStart
 inheritBlockEnd
     : J_STMNT_START ENDBLOCK J_STMNT_END
     ;
-
-//inheritBlockBody
-//    : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+
-//    ;
 
 // ============================================================
 
@@ -258,67 +263,90 @@ htmlElement
     | htmlSelfClosingElement
     ;
 
-htmlRegularElement: htmlStartTag htmlElementBody? htmlEndTag;
+htmlRegularElement
+    : htmlStartTag htmlElementBody? htmlEndTag;
 
-htmlStartTag: START_TAG_OPEN START_TAG_NAME (htmlTagAttr | jinjaExpression)* START_TAG_CLOSE;
+htmlStartTag
+    : START_TAG_OPEN START_TAG_NAME htmlTagAttr* START_TAG_CLOSE;
 
 htmlElementBody
     : (htmlElement | htmlStyleElem | jinjaExpression | jinjaBlock | templateText)+
     ;
 
-htmlEndTag: CLOSE_TAG_START END_TAG_NAME END_TAG_CLOSE;
+htmlEndTag
+    : CLOSE_TAG_START END_TAG_NAME END_TAG_CLOSE;
 
-htmlSelfClosingElement: htmlSelfClosingTag;
+htmlSelfClosingElement
+    : htmlSelfClosingTag;
 
-htmlSelfClosingTag: START_TAG_OPEN START_TAG_NAME (htmlTagAttr | jinjaExpression)* SELF_CLOSING_TAG_CLOSE;
+htmlSelfClosingTag
+    : START_TAG_OPEN START_TAG_NAME htmlTagAttr* SELF_CLOSING_TAG_CLOSE;
 
 htmlTagAttr
     : styleAttr
     | booleanAttr
     | attrWithQuotedVal
     | attrWithUnquotedVal
+    | jinjaExpression
     ;
 
 booleanAttr
     : ATTR_NAME
     ;
 
-attrWithUnquotedVal: ATTR_NAME ATTR_EQ ATTR_VALUE_UNQUOTED;
+attrWithUnquotedVal
+    : ATTR_NAME ATTR_EQ ATTR_VALUE_UNQUOTED;
 
-attrWithQuotedVal: ATTR_NAME ATTR_EQ ATTR_DQUOTE_START (ATTR_VAL_TEXT | jinjaAttrVal)+ ATTR_DQUOTE_END;
+attrWithQuotedVal
+    : ATTR_NAME ATTR_EQ ATTR_DQUOTE_START quotedValElem* ATTR_DQUOTE_END;
 
-jinjaAttrVal: ATTR_VAL_J_EXPR_START expression J_EXPR_END;
+quotedValElem
+    : ATTR_VAL_TEXT
+    | jinjaAttrVal
+    ;
 
-styleAttr: STYLE_ATTR CSS_INLINE_EQ CSS_INLINE_DQUOT_START inlineStyleProp* CSS_INLINE_PROP_DQUOT_END;
-inlineStyleProp: CSS_INLINE_PROP_NAME CSS_INLINE_PROP_COLON CSS_PROP_VAL+ CSS_PROP_SEMICOLON;
+jinjaAttrVal
+    : ATTR_VAL_J_EXPR_START expression J_EXPR_END;
 
-htmlStyleElem: htmlStyleElemOpenTag cssBlockDecl* htmlStyleElemCloseTag;
-htmlStyleElemOpenTag: START_TAG_OPEN STYLE_TAG_START_NAME STYLE_TAG_START_CLOSE;
-htmlStyleElemCloseTag: CLOSE_STYLE_START STYLE_END_TAG_NAME STYLE_END_TAG_CLOSE;
+styleAttr
+    : STYLE_ATTR CSS_INLINE_EQ CSS_INLINE_DQUOT_START inlineStyleProp* CSS_INLINE_PROP_DQUOT_END;
+
+inlineStyleProp
+    : CSS_INLINE_PROP_NAME CSS_INLINE_PROP_COLON CSS_PROP_VAL+ CSS_PROP_SEMICOLON;
+
+htmlStyleElem
+    : htmlStyleElemOpenTag cssBlock* htmlStyleElemCloseTag;
+
+htmlStyleElemOpenTag
+    : START_TAG_OPEN STYLE_TAG_START_NAME STYLE_TAG_START_CLOSE;
+
+htmlStyleElemCloseTag
+    : CLOSE_STYLE_START STYLE_END_TAG_NAME STYLE_END_TAG_CLOSE;
 
 // =====================================================================================
 
 // CSS rules
-cssBlockDecl: cssSelectors cssBlock;
+cssBlock
+    : selectorList CSS_LBRACE cssProp* BLK_RBRACE;
 
-cssSel
-    : CSS_SEL_ID         #CSS_SEL_ID
-    | CSS_SEL_CLASS      #CSS_SEL_CLASS
-    | CSS_SEL_ELEM       #CSS_SEL_ELEM
-    | cssSelWithState    #CSS_SEL_PSEUDO_CLASS
+selectorList
+    : selector                                #singleSelector
+    | selector+                               #descendentSelector
+    | selector (CSS_SEL_COMMA selector)+      #groupSelector
     ;
 
-cssSelWithState: (CSS_SEL_ID | CSS_SEL_CLASS | CSS_SEL_ELEM) CSS_SEL_STATE;
-
-cssSelectors
-    : cssSel                                #CSS_SEL_SINGLE
-    | cssSel+                               #CSS_SEL_DESCENDENT
-    | cssSel (CSS_SEL_COMMA cssSel)+        #CSS_SEL_GROUP
+selector
+    : simpleSelector
+    | pseudoClassSelector
     ;
 
-cssBlock: CSS_LBRACE cssPropDecl* BLK_RBRACE;
+simpleSelector
+    : CSS_SEL_ID        #idSelector
+    | CSS_SEL_CLASS     #classSelector
+    | CSS_SEL_ELEM      #elementSelector
+    ;
 
-cssPropDecl: BLK_PROP_NAME BLK_COLON cssBlockPropVal;
+pseudoClassSelector
+    : simpleSelector CSS_SEL_STATE;
 
-cssBlockPropVal: CSS_PROP_VAL+ CSS_PROP_SEMICOLON;
-
+cssProp: BLK_PROP_NAME BLK_COLON CSS_PROP_VAL+ CSS_PROP_SEMICOLON;

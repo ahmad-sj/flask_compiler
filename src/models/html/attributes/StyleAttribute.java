@@ -1,28 +1,31 @@
 package models.html.attributes;
 
-import models.css.properties.Property;
+import models.Node;
 
 import java.util.ArrayList;
 
 public class StyleAttribute extends Attribute {
-    ArrayList<Property> properties;
+    ArrayList<Node> propList;
 
-    public StyleAttribute() {
-    }
-
-    public StyleAttribute(String name, ArrayList<Property> properties) {
-        this.name = name;
-        this.properties = properties;
+    public StyleAttribute(String name, ArrayList<Node> propList) {
+        this.attrName = name;
+        this.propList = propList;
     }
 
     @Override
     public String toString() {
         StringBuilder properties = new StringBuilder();
 
-        for (Property property : this.properties) {
-            properties.append(property);
-            properties.append("; ");
+        if (this.propList != null) {
+
+            for (int i = 0; i < this.propList.size(); i++) {
+                properties.append(this.propList.get(i));
+
+                if (i + 1 < this.propList.size())
+                    properties.append(" ");
+            }
         }
+
 
         return "style=" + '"' + properties + '"';
     }

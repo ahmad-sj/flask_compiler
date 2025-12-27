@@ -1,15 +1,13 @@
 package models.html.attributes;
 
 public class BooleanAttribute extends Attribute {
-    public BooleanAttribute() {
-    }
 
     public BooleanAttribute(String name) {
-        this.name = name;
+        this.attrName = name;
     }
 
     @Override
     public String toString() {
-        return this.name;
+        return this.attrName;
     }
 }

@@ -4,13 +4,24 @@ import antlr.templateParser;
 import antlr.templateParserBaseVisitor;
 import models.Node;
 import models.NormalText;
+import models.SymbolTable;
 import visitors.html.HtmlVisitor;
+import visitors.jinja.ExpressionVisitor;
 import visitors.jinja.JinjaVisitor;
 
 public class NodeVisitor extends templateParserBaseVisitor<Node> {
+    public SymbolTable symbolTable;
 
-    HtmlVisitor htmlVisitor = new HtmlVisitor(this);
-    JinjaVisitor jinjaVisitor = new JinjaVisitor(this);
+    public HtmlVisitor htmlVisitor;
+    public JinjaVisitor jinjaVisitor;
+    public ExpressionVisitor expressionVisitor;
+
+    public NodeVisitor(SymbolTable symbolTable) {
+        this.symbolTable = symbolTable;
+        this.htmlVisitor = new HtmlVisitor(this);
+        this.jinjaVisitor = new JinjaVisitor(this);
+        this.expressionVisitor = new ExpressionVisitor(this);
+    }
 
     @Override
     public Node visitExtendsBlock(templateParser.ExtendsBlockContext ctx) {
@@ -28,12 +39,11 @@ public class NodeVisitor extends templateParserBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitJinjaAttrVal(templateParser.JinjaAttrValContext ctx) {
-        return jinjaVisitor.visit(ctx);
+    public Node visitHtmlElement(templateParser.HtmlElementContext ctx) {
+        return htmlVisitor.visit(ctx);
     }
 
-    @Override
-    public Node visitHtmlElement(templateParser.HtmlElementContext ctx) {
+    public Node visitHtmlStyleElem(templateParser.HtmlStyleElemContext ctx) {
         return htmlVisitor.visit(ctx);
     }
 
@@ -45,6 +55,4 @@ public class NodeVisitor extends templateParserBaseVisitor<Node> {
 
         return normalText;
     }
-
-
 }
