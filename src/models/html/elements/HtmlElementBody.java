@@ -24,4 +24,25 @@ public class HtmlElementBody extends Node {
 
         return stringBuilder.toString();
     }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+        String dedent = getIndent(level - 1);
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < this.nodesList.size(); i++) {
+            stringBuilder.append(indent);
+
+            if (i + 1 < nodesList.size())
+                stringBuilder.append("├─ ");
+            else
+                stringBuilder.append("└─ ");
+
+            stringBuilder.append(this.nodesList.get(i).print(level));
+        }
+
+        return stringBuilder.toString();
+    }
 }

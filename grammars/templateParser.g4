@@ -142,10 +142,12 @@ notExpr
     ;
 
 compareExpr
-    : concatExpr (IS (NOT)? ID)?
+    : isExpr
     | compExpr
     | inExpr
     ;
+
+isExpr: concatExpr (IS (NOT)? ID)?;
 
 compExpr
     : pipeExpr comparisonOperator pipeExpr

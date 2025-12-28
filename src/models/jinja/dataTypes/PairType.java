@@ -15,4 +15,15 @@ public class PairType extends Node {
     public String toString() {
         return expr1.toString() + " : " + expr2.toString();
     }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        return "pair type: \n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "├─ expr1: " + expr1.print(level + 2) + "\n"
+                + indent + "└─ expr2: " + expr1.print(level + 2)
+                ;
+    }
 }

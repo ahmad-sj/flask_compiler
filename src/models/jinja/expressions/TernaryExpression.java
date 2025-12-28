@@ -2,7 +2,7 @@ package models.jinja.expressions;
 
 import models.Node;
 
-public class TernaryExpression extends Expression{
+public class TernaryExpression extends Expression {
     Node condExpr;
     Node trueExpr;
     Node falseExpr;
@@ -22,5 +22,17 @@ public class TernaryExpression extends Expression{
                 + " : "
                 + falseExpr.toString()
                 + ")";
+    }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        return "ternary expr\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "├─ cond expr: " + condExpr.print(level + 2) + "\n"
+                + indent + "├─ true expr: " + trueExpr.print(level + 2) + "\n"
+                + indent + "└─ false expr: " + falseExpr.print(level + 2)
+                ;
     }
 }

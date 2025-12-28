@@ -13,4 +13,13 @@ public class MemberTrailer extends Trailer {
     public String toString() {
         return "." + this.id.toString();
     }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        return "member trailer:\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "└─ name: " + this.id.print(level);
+    }
 }

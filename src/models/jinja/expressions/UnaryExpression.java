@@ -2,7 +2,7 @@ package models.jinja.expressions;
 
 import models.Node;
 
-public class UnaryExpression extends Expression{
+public class UnaryExpression extends Expression {
     public Node sign;
     public Node expr;
 
@@ -14,5 +14,16 @@ public class UnaryExpression extends Expression{
     @Override
     public String toString() {
         return sign.toString() + expr.toString();
+    }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        return "unary expr\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "├─ sign: " + sign.print(level) + "\n"
+                + indent + "└─ expr: " + expr.print(level + 2)
+                ;
     }
 }

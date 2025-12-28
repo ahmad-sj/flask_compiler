@@ -24,4 +24,18 @@ public class ArgumentList extends Node {
 
         return stringBuilder.toString();
     }
+
+    @Override
+    public String print(int level) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < argList.size(); i++) {
+            stringBuilder.append(argList.get(i));
+
+            if (i + 1 < argList.size())
+                stringBuilder.append(", ");
+        }
+
+        return stringBuilder.toString();
+    }
 }

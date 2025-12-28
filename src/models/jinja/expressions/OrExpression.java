@@ -5,22 +5,46 @@ import models.Node;
 import java.util.ArrayList;
 
 public class OrExpression extends Expression {
-    ArrayList<Node> expressionsList;
+    ArrayList<Node> exprList;
 
-    public OrExpression(ArrayList<Node> expressionsList) {
-        this.expressionsList = expressionsList;
+    public OrExpression(ArrayList<Node> exprList) {
+        this.exprList = exprList;
     }
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder orExpr = new StringBuilder();
 
-        for (int i = 0; i < expressionsList.size(); i++) {
-            stringBuilder.append(expressionsList.get(i));
+        for (int i = 0; i < exprList.size(); i++) {
+            orExpr.append(exprList.get(i));
 
-            if (i + 1 < expressionsList.size())
-                stringBuilder.append(" or ");
+            if (i + 1 < exprList.size())
+                orExpr.append(" or ");
         }
-        return stringBuilder.toString();
+        return orExpr.toString();
+    }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        StringBuilder orExpr = new StringBuilder();
+
+        for (int i = 0; i < exprList.size(); i++) {
+            if (i + 1 < exprList.size()) {
+                orExpr.append(indent).append("├─ expr").append(i).append(": ");
+                orExpr.append(exprList.get(i).print(level + 2));
+
+                orExpr.append("\n");
+                orExpr.append(indent).append("├─ optor: or\n");
+            } else {
+                orExpr.append(indent).append("└─ expr").append(i).append(": ");
+                orExpr.append(exprList.get(i).print(level + 2));
+            }
+        }
+
+        return "or expr\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + orExpr;
     }
 }

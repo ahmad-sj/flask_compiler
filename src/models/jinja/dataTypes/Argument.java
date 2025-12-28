@@ -13,6 +13,18 @@ public class Argument extends Node {
 
     @Override
     public String toString() {
-        return (argName == null? "" : argName.toString() + " = ") + expr.toString();
+        return (argName == null ? "" : argName.toString() + " = ") + expr.toString();
+    }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        return "argument\n" +
+                (argName == null
+                        ? indent + "└─ arg expr: " + expr.print(level + 1) + "\n"
+                        : indent + "├─ arg expr: " + expr.print(level + 1) + "\n"
+                        + indent + "└─ argName: " + argName.print(level)
+                );
     }
 }

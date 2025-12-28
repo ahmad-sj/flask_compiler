@@ -37,7 +37,7 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
         // getting block body
         SubBlocks subBlocks = null;
 
-        if (ctx.subBlock() != null) {
+        if (ctx.subBlock() != null && !ctx.subBlock().isEmpty()) {
             ArrayList<Node> nodeList = new ArrayList<>();
 
             for (int i = 0; i < ctx.subBlock().size(); i++) {
@@ -66,10 +66,14 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
     public Node visitJinjaExpression(templateParser.JinjaExpressionContext ctx) {
 
         Node expression = nodeVisitor.expressionVisitor.visit(ctx.expression());
-        expression.setNodeName("expression");
-        expression.setLineNumber(ctx.jinjaExprStart().J_EXPR_START().getSymbol().getLine());
+//        expression.setNodeName("expression");
+//        expression.setLineNumber(ctx.jinjaExprStart().J_EXPR_START().getSymbol().getLine());
 
-        return new JinjaExpression(expression);
+        JinjaExpression jinjaExpression = new JinjaExpression(expression);
+        jinjaExpression.setNodeName("jinja expression");
+        jinjaExpression.setLineNumber(ctx.jinjaExprStart().getStart().getLine());
+
+        return jinjaExpression;
     }
 
     public Node visitId(TerminalNode Id) {
@@ -127,7 +131,7 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
     public Node visitElseBlock(templateParser.ElseBlockContext ctx) {
         ArrayList<Node> nodeList = null;
 
-        if (ctx.subBlock() != null) {
+        if (ctx.subBlock() != null && !ctx.subBlock().isEmpty()) {
             nodeList = new ArrayList<>();
 
             for (int i = 0; i < ctx.subBlock().size(); i++) {
@@ -150,7 +154,7 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
 
         SubBlocks elifBody = null;
 
-        if (ctx.subBlock() != null) {
+        if (ctx.subBlock() != null && !ctx.subBlock().isEmpty()) {
             ArrayList<Node> nodeList = new ArrayList<>();
 
             for (int i = 0; i < ctx.subBlock().size(); i++) {

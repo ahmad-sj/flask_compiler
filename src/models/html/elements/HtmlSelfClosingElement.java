@@ -15,7 +15,7 @@ public class HtmlSelfClosingElement extends HtmlElement {
     public String toString() {
         StringBuilder attributes = new StringBuilder();
 
-        if (attrList != null){
+        if (attrList != null) {
             for (int i = 0; i < attrList.size(); i++) {
                 attributes.append(attrList.get(i).toString());
 
@@ -24,6 +24,29 @@ public class HtmlSelfClosingElement extends HtmlElement {
             }
         }
 
-        return  "<" + tagName + (attributes.isEmpty()? "" : " " + attributes ) + "/>";
+        return "<" + tagName + (attributes.isEmpty() ? "" : " " + attributes) + "/>";
+    }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level + 1);
+
+        StringBuilder attributes = new StringBuilder();
+
+        if (attrList != null) {
+            for (int i = 0; i < attrList.size(); i++) {
+                attributes.append(attrList.get(i).toString());
+
+                if (i + 1 < attrList.size())
+                    attributes.append(" ");
+            }
+        }
+
+        return "html self closing element: <" + tagName + "/>\n"
+                + (attributes.isEmpty() ?
+                indent + "└─ line no: " + lineNumber + " \n" :
+                indent + "├─ line no: " + lineNumber + " \n" +
+                indent + "└─ attributes: " + attributes + "\n")
+                ;
     }
 }

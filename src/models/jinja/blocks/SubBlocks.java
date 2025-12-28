@@ -25,4 +25,26 @@ public class SubBlocks extends Node {
         }
         return stringBuilder.toString();
     }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (this.nodeList != null) {
+            for (int i = 0; i < nodeList.size(); i++) {
+                stringBuilder.append(indent);
+
+                if (i + 1 < nodeList.size())
+                    stringBuilder.append("├─ ");
+                else
+                    stringBuilder.append("└─ ");
+
+                stringBuilder.append(nodeList.get(i).print(level));
+            }
+        }
+
+        return stringBuilder.toString();
+    }
 }

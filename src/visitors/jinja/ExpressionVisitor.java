@@ -40,7 +40,7 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
                 trueExpr.setLineNumber(ctx.ternaryExt().expression().getFirst().getStart().getLine());
 
                 Node falseExpr = this.visit(ctx.ternaryExt().expression().getLast());
-                falseExpr.setNodeName("ternary true expr");
+                falseExpr.setNodeName("ternary false expr");
                 falseExpr.setLineNumber(ctx.ternaryExt().expression().getLast().getStart().getLine());
 
                 TernaryExpression ternaryExpression = new TernaryExpression(condExpr, trueExpr, falseExpr);
@@ -94,25 +94,23 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
 
     @Override
     public Node visitAndExpr(templateParser.AndExprContext ctx) {
-        List<templateParser.NotExprContext> exprListCtx = ctx.notExpr();
-
         // checking if it's an "and" expr
-        if (exprListCtx.size() > 1) {
-            ArrayList<Node> exprList = new ArrayList<>();
+        if (ctx.children.size() > 1) {
 
-            for (int i = 0; i < exprListCtx.size(); i++) {
-                exprList.add(this.visit(exprListCtx.get(i)));
+            ArrayList<Node> exprList = new ArrayList<>();
+            for (int i = 0; i < ctx.notExpr().size(); i++) {
+                exprList.add(this.visit(ctx.notExpr().get(i)));
             }
 
             AndExpression andExpression = new AndExpression(exprList);
             andExpression.setNodeName("and expr");
-            andExpression.setLineNumber(ctx.AND().getFirst().getSymbol().getLine());
+            andExpression.setLineNumber(ctx.getStart().getLine());
 
             return andExpression;
         }
         // check if remaining expr is "not" expr
         else {
-            return this.visit(ctx.notExpr().getFirst());
+            return this.visit(ctx.children.getFirst());
         }
     }
 
@@ -137,56 +135,72 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
     @Override
     public Node visitCompareExpr(templateParser.CompareExprContext ctx) {
 
-        // check if expr is "is" expr
+        if (ctx.isExpr() != null)
+            return this.visit(ctx.isExpr());
+
+        if (ctx.compExpr() != null)
+            return this.visit(ctx.compExpr());
+
+        return this.visit(ctx.inExpr());
+    }
+
+    @Override
+    public Node visitIsExpr(templateParser.IsExprContext ctx) {
         if (ctx.IS() != null) {
             // visit "concat" expr
-            Node expression = this.visit(ctx.concatExpr());
-            boolean negated = (ctx.NOT() != null);
-            String id = ctx.ID().getText();
+            Node expr = this.visit(ctx.concatExpr());
 
-            IsExpression isExpression = new IsExpression(expression, negated, id);
+            // check if expr is negated (not is used)
+            boolean negated = (ctx.NOT() != null);
+
+            // getting id
+            IdType id = new IdType(ctx.ID().getText());
+            id.setNodeName("id");
+            id.setLineNumber(ctx.ID().getSymbol().getLine());
+
+            // return in expr
+            IsExpression isExpression = new IsExpression(expr, negated, id);
             isExpression.setNodeName("is expr");
             isExpression.setLineNumber(ctx.getStart().getLine());
 
             return isExpression;
-        }
-        // visit "concat" expr
-        else if (ctx.concatExpr() != null) {
+        } else
             return this.visit(ctx.concatExpr());
+    }
+
+    @Override
+    public Node visitCompExpr(templateParser.CompExprContext ctx) {
+
+        Node expr1 = this.visit(ctx.pipeExpr().getFirst());
+        Node expr2 = this.visit(ctx.pipeExpr().getLast());
+        Node compOptor = this.visitComparisonOperator(ctx.comparisonOperator());
+
+        ComparisonExpression compExpr = new ComparisonExpression(expr1, expr2, compOptor);
+        compExpr.setNodeName("comparison expr");
+        compExpr.setLineNumber(ctx.getStart().getLine());
+
+        return compExpr;
+    }
+
+    @Override
+    public Node visitInExpr(templateParser.InExprContext ctx) {
+
+        // check if expr is "in" expr
+        if (ctx.pipeExpr().size() > 1) {
+            // visit "pipe" expressions
+            Node expr1 = this.visit(ctx.pipeExpr().getFirst());
+            Node expr2 = this.visit(ctx.pipeExpr().getLast());
+
+            InExpression inExpression = new InExpression(expr1, expr2);
+            inExpression.setNodeName("in expr");
+            inExpression.setLineNumber(ctx.IN().getSymbol().getLine());
+
+            return inExpression;
         }
-
-        // check if expr is "in" or "pipe" expr
-        if (ctx.inExpr() != null) {
-            // visit "pipe" expr
-            Node expression1 = this.visit(ctx.inExpr().pipeExpr().getFirst());
-
-            // check if expr is "in" expr
-            if (ctx.inExpr().pipeExpr().size() > 1) {
-                // visit "pipe" expr
-                Node expression2 = this.visit(ctx.inExpr().pipeExpr().getLast());
-
-                InExpression inExpression = new InExpression(expression1, expression2);
-                inExpression.setNodeName("in expr");
-                inExpression.setLineNumber(ctx.inExpr().IN().getSymbol().getLine());
-
-                return inExpression;
-            }
-            // visit "pipe" expr
-            else {
-                return this.visit(ctx.inExpr().pipeExpr().getFirst());
-            }
+        // visit "pipe" expr
+        else {
+            return this.visit(ctx.pipeExpr().getFirst());
         }
-
-        // expr should be "comp" expr
-        Node expression1 = this.visit(ctx.compExpr().pipeExpr().getFirst());
-        Node expression2 = this.visit(ctx.compExpr().pipeExpr().getLast());
-        Node comparisonOperator = this.visitComparisonOperator(ctx.compExpr().comparisonOperator());
-
-        ComparisonExpression comparisonExpression = new ComparisonExpression(expression1, expression2, comparisonOperator);
-        comparisonExpression.setNodeName("comparison expr");
-        comparisonExpression.setLineNumber(ctx.getStart().getLine());
-
-        return comparisonExpression;
     }
 
     @Override
@@ -294,12 +308,15 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
     @Override
     public Node visitConcatExpr(templateParser.ConcatExprContext ctx) {
         // check if expr is "concat" expr
-        if (ctx.addExpr().size() > 1) {
-            Node expr1 = this.visit(ctx.addExpr().getFirst());
-            Node expr2 = this.visit(ctx.addExpr().get(1));
+        if (ctx.children.size() > 1) {
 
-            ConcatExpression concatExpression = new ConcatExpression(expr1, expr2);
-            concatExpression.setNodeName("concat operation");
+            ArrayList<Node> exprList = new ArrayList<>();
+            for (int i = 0; i < ctx.addExpr().size(); i++) {
+                exprList.add(this.visit(ctx.addExpr().get(i)));
+            }
+
+            ConcatExpression concatExpression = new ConcatExpression(exprList);
+            concatExpression.setNodeName("concat expr");
             concatExpression.setLineNumber(ctx.getStart().getLine());
 
             return concatExpression;
@@ -312,17 +329,22 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
 
     @Override
     public Node visitAddExpr(templateParser.AddExprContext ctx) {
-        if (ctx.mulExpr().size() > 1) {
-            Node expr1 = this.visit(ctx.mulExpr().getFirst());
-            Node expr2 = this.visit(ctx.mulExpr().get(1));
-            Node optor = this.visit(ctx.mulExpr().getFirst());
+        // checking if it's an "add" expr
+        if (ctx.children.size() > 1) {
 
-            AddExpression addExpression = new AddExpression(optor, expr1, expr2);
-            addExpression.setNodeName(optor.toString() + " operation");
-            addExpression.setLineNumber(ctx.addExprOptor().getFirst().getStart().getLine());
+            ArrayList<Node> exprList = new ArrayList<>();
+            for (int i = 0; i < ctx.mulExpr().size(); i++) {
+                exprList.add(this.visit(ctx.mulExpr().get(i)));
+            }
+
+            AddExpression addExpression = new AddExpression(exprList);
+            addExpression.setNodeName("add expr");
+            addExpression.setLineNumber(ctx.getStart().getLine());
 
             return addExpression;
-        } else {
+        }
+        // visit mul expr
+        else {
             return this.visit(ctx.mulExpr().getFirst());
         }
     }
@@ -343,17 +365,22 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
 
     @Override
     public Node visitMulExpr(templateParser.MulExprContext ctx) {
-        if (ctx.unaryExpr().size() > 1) {
-            Node expr1 = this.visit(ctx.unaryExpr().getFirst());
-            Node expr2 = this.visit(ctx.unaryExpr().get(1));
-            Node optor = this.visit(ctx.mulExprOptor().getFirst());
+        // check if it's mul expr
+        if (ctx.children.size() > 1) {
+            ArrayList<Node> exprList = new ArrayList<>();
 
-            MulExpression mulExpression = new MulExpression(optor, expr1, expr2);
-            mulExpression.setNodeName(optor.toString() + " operation");
-            mulExpression.setLineNumber(ctx.mulExprOptor().getFirst().getStart().getLine());
+            for (int i = 0; i < ctx.unaryExpr().size(); i++) {
+                exprList.add(this.visit(ctx.unaryExpr().get(i)));
+            }
+
+            MulExpression mulExpression = new MulExpression(exprList);
+            mulExpression.setNodeName("mul expr");
+            mulExpression.setLineNumber(ctx.getStart().getLine());
 
             return mulExpression;
-        } else {
+        }
+        // visit unary expr
+        else {
             return this.visit(ctx.unaryExpr().getFirst());
         }
     }
@@ -463,7 +490,7 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
         }
 
         if (ctx.parenthedExpr() != null) {
-            this.visit(ctx.parenthedExpr());
+            return this.visit(ctx.parenthedExpr());
         }
 
         if (ctx.list() != null)
@@ -478,7 +505,7 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
 
         ParenthedExpression parenthedExpression = new ParenthedExpression(expr);
         parenthedExpression.setNodeName("parenthed expr");
-        parenthedExpression.setLineNumber(ctx.LPAREN().getSymbol().getLine());
+        parenthedExpression.setLineNumber(ctx.getStart().getLine());
 
         return parenthedExpression;
     }
@@ -533,16 +560,16 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
 
         SubTrailer subTrailer = new SubTrailer(expr);
         subTrailer.setNodeName("sub trailer");
-        subTrailer.setLineNumber(ctx.LSB().getSymbol().getLine());
+        subTrailer.setLineNumber(ctx.getStart().getLine());
 
-        return super.visitSubTrailer(ctx);
+        return subTrailer;
     }
 
     @Override
     public Node visitCallTrailer(templateParser.CallTrailerContext ctx) {
         Node argList = null;
 
-        if (ctx.argumentList() != null){
+        if (ctx.argumentList() != null) {
             argList = this.visit(ctx.argumentList());
         }
 
@@ -557,17 +584,16 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
     public Node visitList(templateParser.ListContext ctx) {
         ArrayList<Node> exprList = null;
 
-        if (ctx.expression() != null) {
+        if (ctx.expression() != null && !ctx.expression().isEmpty()) {
             exprList = new ArrayList<>();
 
-            for (templateParser.ExpressionContext expr : ctx.expression()) {
+            for (templateParser.ExpressionContext expr : ctx.expression())
                 exprList.add(this.visit(expr));
-            }
         }
 
         ListType listType = new ListType(exprList);
         listType.setNodeName("list type");
-        listType.setLineNumber(ctx.LSB().getSymbol().getLine());
+        listType.setLineNumber(ctx.getStart().getLine());
 
         return listType;
     }
@@ -576,7 +602,7 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
     public Node visitDict(templateParser.DictContext ctx) {
         ArrayList<Node> pairList = null;
 
-        if (ctx.pair() != null) {
+        if (ctx.pair() != null && !ctx.pair().isEmpty()) {
             pairList = new ArrayList<>();
 
             for (templateParser.PairContext pair : ctx.pair()) {
@@ -600,6 +626,6 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
         pairType.setNodeName("pair type");
         pairType.setLineNumber(ctx.getStart().getLine());
 
-        return super.visitPair(ctx);
+        return pairType;
     }
 }

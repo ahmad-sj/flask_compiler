@@ -28,4 +28,28 @@ public class PipeExpression extends Node {
 
         return expr.toString() + " | " + stringBuilder;
     }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        StringBuilder filters = new StringBuilder();
+
+        if (filterList != null) {
+            for (int i = 0; i < filterList.size(); i++) {
+                filters.append(getIndent(level + 1));
+                filters.append("├─ ");
+                filters.append(filterList.get(i).print(level + 1));
+
+                if (i + 1 < filterList.size())
+                    filters.append("\n");
+            }
+        }
+
+        return "pipe expr\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "├─ expr: " + expr.print(level + 1) + "\n"
+                + indent + "└─ filters:\n" + filters
+                ;
+    }
 }

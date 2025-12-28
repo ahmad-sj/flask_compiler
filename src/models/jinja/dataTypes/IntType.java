@@ -17,4 +17,9 @@ public class IntType extends Node {
     public String toString() {
         return Integer.toString(this.value);
     }
+
+    @Override
+    public String print(int level) {
+        return "" + this.value;
+    }
 }

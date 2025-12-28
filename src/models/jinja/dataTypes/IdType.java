@@ -13,4 +13,9 @@ public class IdType extends Node {
     public String toString() {
         return this.name;
     }
+
+    @Override
+    public String print(int level) {
+        return this.name;
+    }
 }

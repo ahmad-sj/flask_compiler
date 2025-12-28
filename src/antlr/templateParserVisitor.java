@@ -185,6 +185,12 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCompareExpr(templateParser.CompareExprContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link templateParser#isExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIsExpr(templateParser.IsExprContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link templateParser#compExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

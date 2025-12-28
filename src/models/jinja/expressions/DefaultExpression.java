@@ -2,7 +2,7 @@ package models.jinja.expressions;
 
 import models.Node;
 
-public class DefaultExpression extends Expression{
+public class DefaultExpression extends Expression {
     Node expr;
     Node defaultExpr;
 
@@ -18,5 +18,16 @@ public class DefaultExpression extends Expression{
                 + " ?? "
                 + defaultExpr.toString()
                 + ")";
+    }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        return "default expr\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "├─ main expr: " + expr.print(level + 2) + "\n"
+                + indent + "└─ default expr: " + expr.print(level + 2)
+                ;
     }
 }

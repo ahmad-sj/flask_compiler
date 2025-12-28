@@ -16,4 +16,17 @@ public class ElifBlock extends JinjaBlock {
         return "{% elif " + this.condition.toString() + " %}\n"
                 + (elifBody == null ? "" : elifBody.toString());
     }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level + 1);
+
+        return "elif block\n" +
+                indent + "├─ line no: " + lineNumber + "\n" +
+                (elifBody == null
+                        ? indent + "└─ condition: " + condition.toString() + "\n"
+                        : indent + "├─ condition: " + condition.toString() + "\n"
+                        + indent + "└─ children:\n" + elifBody.print(level + 2)
+                );
+    }
 }

@@ -13,4 +13,9 @@ public class SignType extends Node {
     public String toString() {
         return this.sign;
     }
+
+    @Override
+    public String print(int level) {
+        return this.sign;
+    }
 }

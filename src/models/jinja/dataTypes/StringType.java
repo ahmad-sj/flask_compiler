@@ -13,4 +13,9 @@ public class StringType extends Node {
     public String toString() {
         return this.value;
     }
+
+    @Override
+    public String print(int level) {
+        return this.value;
+    }
 }

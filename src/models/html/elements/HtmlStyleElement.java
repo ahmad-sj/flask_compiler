@@ -4,7 +4,7 @@ import models.Node;
 
 import java.util.ArrayList;
 
-public class HtmlStyleElement extends HtmlElement{
+public class HtmlStyleElement extends HtmlElement {
     Node elementBody; // object of type HtmlElementBody
 
     public HtmlStyleElement(String tagName, ArrayList<Node> attrList, Node elementBody) {
@@ -28,5 +28,26 @@ public class HtmlStyleElement extends HtmlElement{
         return "<" + tagName + (attributes.isEmpty() ? "" : " " + attributes) + ">"
                 + (this.elementBody == null ? "" : "\n" + elementBody.toString())
                 + "\n</" + tagName + ">";
+    }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level + 1);
+
+        StringBuilder attributes = new StringBuilder();
+
+        if (attrList != null) {
+            for (int i = 0; i < attrList.size(); i++) {
+                attributes.append(attrList.get(i).toString());
+
+                if (i + 1 < attrList.size())
+                    attributes.append(" ");
+            }
+        }
+
+        return "html element: <" + tagName + ">\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + (attributes.isEmpty() ? "" : indent + "├─ attributes: " + attributes + "\n")
+                + (elementBody == null ? "" : indent + "└─ children:\n" + elementBody.print(level + 2));
     }
 }

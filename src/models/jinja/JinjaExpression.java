@@ -17,4 +17,14 @@ public class JinjaExpression extends Node {
     public String evaluate(){
         return "{{ " + this.expression.toString() + " }}";
     }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level + 1);
+
+        return "jinja expression" + "\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "└─ expression: " + this.expression.print(level + 2) + "\n"
+                ;
+    }
 }

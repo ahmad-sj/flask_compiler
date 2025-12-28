@@ -45,7 +45,8 @@ public class FlaskCompiler {
             Template template = templateVisitor.visit(antlrAST);
 
             for (Node node : template.nodes) {
-                System.out.println(node);
+//                System.out.println(node);
+                System.out.println(node.print(0));
             }
 //        }
     }

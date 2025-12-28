@@ -15,4 +15,16 @@ public class PowerExpression extends Expression {
     public String toString() {
         return baseValueExpr.toString() + "**" + powerValueExpr.toString();
     }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        return "power expr\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "├─ base expr: " + baseValueExpr.print(level + 2) + "\n"
+                + indent + "├─ optor: **\n"
+                + indent + "└─ pow expr: " + powerValueExpr.print(level + 2)
+                ;
+    }
 }

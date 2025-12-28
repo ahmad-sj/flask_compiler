@@ -19,4 +19,15 @@ public class ComparisonExpression extends Expression {
                 + " " + compOptor.toString() + " "
                 + expr2.toString();
     }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        return "comp expr\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "├─ expr1: " + expr1.print(level + 2) + "\n"
+                + indent + "├─ optor: " + compOptor.print(level) + "\n"
+                + indent + "└─ expr2: " + expr2.print(level + 2);
+    }
 }

@@ -13,4 +13,9 @@ public class OperatorType extends Node {
     public String toString() {
         return this.operator;
     }
+
+    @Override
+    public String print(int level) {
+        return this.operator;
+    }
 }

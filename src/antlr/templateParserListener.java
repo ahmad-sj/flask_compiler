@@ -298,6 +298,16 @@ public interface templateParserListener extends ParseTreeListener {
 	 */
 	void exitCompareExpr(templateParser.CompareExprContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link templateParser#isExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterIsExpr(templateParser.IsExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#isExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitIsExpr(templateParser.IsExprContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link templateParser#compExpr}.
 	 * @param ctx the parse tree
 	 */

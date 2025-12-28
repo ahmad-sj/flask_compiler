@@ -9,6 +9,15 @@ public class ExtendsBlock extends JinjaBlock {
 
     @Override
     public String toString() {
-        return "{% extends "+ this.templateName + " %}\n";
+        return "{% extends " + this.templateName + " %}\n";
+    }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        return "extends block \n"
+                + indent + "├─ line no: " + this.lineNumber + "\n"
+                + indent + "└─ templateName: " + templateName + "\n";
     }
 }

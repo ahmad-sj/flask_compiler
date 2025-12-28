@@ -3,18 +3,30 @@ package models.jinja.expressions;
 import models.Node;
 
 public class IsExpression extends Expression {
-    public Node expression;
+    public Node expr;
     public boolean negated;
-    public String id;
+    public Node id;
 
-    public IsExpression(Node expression, boolean negated, String id) {
-        this.expression = expression;
+    public IsExpression(Node expr, boolean negated, Node id) {
+        this.expr = expr;
         this.negated = negated;
         this.id = id;
     }
 
     @Override
     public String toString() {
-        return expression.toString() + " is " + (negated? "not " : "") + id;
+        return expr.toString() + " is " + (negated ? "not " : "") + id.toString();
+    }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        return "in expr\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "├─ expr: " + expr.print(level + 2) + "\n"
+                + indent + "├─ optor: is" + (negated ? " not" : "") + "\n"
+                + indent + "└─ id: " + id.print(level)
+                ;
     }
 }

@@ -365,6 +365,18 @@ public class templateParserBaseListener implements templateParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterIsExpr(templateParser.IsExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIsExpr(templateParser.IsExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCompExpr(templateParser.CompExprContext ctx) { }
 	/**
 	 * {@inheritDoc}

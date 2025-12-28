@@ -2,19 +2,51 @@ package models.jinja.expressions;
 
 import models.Node;
 
-public class AddExpression extends Expression{
-    Node expr1;
-    Node expr2;
-    Node optor;
+import java.util.ArrayList;
 
-    public AddExpression(Node expr1, Node expr2, Node optor) {
-        this.expr1 = expr1;
-        this.expr2 = expr2;
-        this.optor = optor;
+public class AddExpression extends Expression {
+
+    ArrayList<Node> exprList;
+
+    public AddExpression(ArrayList<Node> exprList) {
+        this.exprList = exprList;
     }
 
     @Override
     public String toString() {
-        return expr1.toString() + " " + optor + " " + expr2.toString();
+        StringBuilder addExpr = new StringBuilder();
+
+        for (int i = 0; i < exprList.size(); i++) {
+            addExpr.append(exprList.get(i));
+
+            if (i + 1 < exprList.size())
+                addExpr.append(" + ");
+        }
+        return addExpr.toString();
+    }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        StringBuilder andExpr = new StringBuilder();
+
+        for (int i = 0; i < exprList.size(); i++) {
+            if (i + 1 < exprList.size()) {
+                andExpr.append(indent).append("├─ expr").append(i).append(": ");
+                andExpr.append(exprList.get(i).print(level + 2));
+
+                andExpr.append("\n");
+                andExpr.append(indent).append("├─ optor: +\n");
+            } else {
+                andExpr.append(indent).append("└─ expr").append(i).append(": ");
+                andExpr.append(exprList.get(i).print(level + 2));
+            }
+        }
+
+        return "add expr\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + andExpr
+                ;
     }
 }

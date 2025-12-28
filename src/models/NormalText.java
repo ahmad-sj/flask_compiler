@@ -11,4 +11,11 @@ public class NormalText extends Node{
     public String toString() {
         return this.text;
     }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level);
+
+        return "text: " + this.toString() + "\n";
+    }
 }
