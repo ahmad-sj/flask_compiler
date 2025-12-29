@@ -4,7 +4,7 @@ import antlr.templateParser;
 import antlr.templateParserBaseVisitor;
 import models.Node;
 import models.NormalText;
-import models.SymbolTable;
+import symbols.SymbolTable;
 import visitors.html.HtmlVisitor;
 import visitors.jinja.ExpressionVisitor;
 import visitors.jinja.JinjaVisitor;

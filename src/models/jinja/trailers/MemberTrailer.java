@@ -20,6 +20,7 @@ public class MemberTrailer extends Trailer {
 
         return "member trailer:\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + indent + "└─ name: " + this.id.print(level);
+                + indent + "└─ name: " + this.id.print(level)
+                ;
     }
 }

@@ -12,6 +12,7 @@ jinjaBlock
     : inheritBlock
     | ifBlock
     | forBlock
+    | setStatement
     ;
 
 templateText
@@ -20,7 +21,12 @@ templateText
 
 // ============================================================
 
-// conditional rules
+setStatement
+    : J_STMNT_START SET ID ASSIGN expression J_EXPR_STMNT_END;
+
+// ============================================================
+
+// conditional blocks
 ifBlock
     : ifStatmentStart ifBody? ifStatmentEnd
     ;
@@ -41,6 +47,7 @@ ifBodyElem
     | jinjaExpression
     | htmlElement
     | templateText
+    | setStatement
     ;
 
 ifStatmentEnd
@@ -62,6 +69,7 @@ subBlock
     | jinjaExpression
     | htmlElement
     | templateText
+    | setStatement
     ;
 
 // ============================================================

@@ -29,6 +29,12 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTemplateText(templateParser.TemplateTextContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link templateParser#setStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSetStatement(templateParser.SetStatementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link templateParser#ifBlock}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

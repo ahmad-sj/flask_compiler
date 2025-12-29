@@ -16,6 +16,6 @@ public class SignType extends Node {
 
     @Override
     public String print(int level) {
-        return this.sign;
+        return this.sign + "\n";
     }
 }

@@ -48,9 +48,9 @@ public class ListType extends Node {
 
         return "list type:\n" +
                 (itemList == null
-                        ? indent + "└─ line no: " + lineNumber
+                        ? indent + "└─ line no: " + lineNumber + "\n"
                         : indent + "├─ line no: " + lineNumber + "\n"
-                        + indent + "└─ expr list:\n" + items
+                        + indent + "└─ expr list:\n" + items + "\n"
                 );
     }
 }

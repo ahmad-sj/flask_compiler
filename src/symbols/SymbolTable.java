@@ -1,4 +1,4 @@
-package models;
+package symbols;
 
 public class SymbolTable {
 }

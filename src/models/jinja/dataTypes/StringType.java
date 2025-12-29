@@ -16,6 +16,6 @@ public class StringType extends Node {
 
     @Override
     public String print(int level) {
-        return this.value;
+        return this.value + "\n";
     }
 }

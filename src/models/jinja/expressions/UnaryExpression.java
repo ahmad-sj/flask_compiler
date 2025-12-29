@@ -22,7 +22,7 @@ public class UnaryExpression extends Expression {
 
         return "unary expr\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + indent + "├─ sign: " + sign.print(level) + "\n"
+                + indent + "├─ sign: " + sign.print(level)
                 + indent + "└─ expr: " + expr.print(level + 2)
                 ;
     }

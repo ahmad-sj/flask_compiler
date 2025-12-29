@@ -4,30 +4,30 @@ import models.Node;
 
 public class IfBlock extends JinjaBlock {
     Node condition;
-    Node ifBody; // an object of type SubBlocks
+    Node nodeBody; // object of type NodeBody
 
-    public IfBlock(Node condition, Node ifBody) {
+    public IfBlock(Node condition, Node nodeBody) {
         this.condition = condition;
-        this.ifBody = ifBody;
+        this.nodeBody = nodeBody;
     }
 
     @Override
     public String toString() {
         return "{% if " + this.condition.toString() + " %}\n"
-                + (ifBody == null ? "" : ifBody.toString() + "\n")
+                + (nodeBody == null ? "" : nodeBody.toString() + "\n")
                 + "{% endif %}";
     }
 
     @Override
     public String print(int level) {
-        String indent = getIndent(level + 1);
+        String indent = getIndent(level);
 
         return "if block\n" +
                 indent + "├─ line no: " + lineNumber + "\n" +
-                (ifBody == null
+                (nodeBody == null
                         ? indent + "└─ condition: " + condition.toString() + "\n"
                         : indent + "├─ condition: " + condition.toString() + "\n"
-                        + indent + "└─ children:\n" + ifBody.print(level + 2)
+                        + indent + "└─ if body:\n" + nodeBody.print(level + 1)
                 );
     }
 }

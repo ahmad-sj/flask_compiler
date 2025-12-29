@@ -16,6 +16,6 @@ public class IdType extends Node {
 
     @Override
     public String print(int level) {
-        return this.name;
+        return this.name + "\n";
     }
 }

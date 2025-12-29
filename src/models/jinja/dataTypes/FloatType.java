@@ -15,6 +15,6 @@ public class FloatType extends Node {
 
     @Override
     public String toString() {
-        return Float.toString(this.value);
+        return Float.toString(this.value) + "\n";
     }
 }

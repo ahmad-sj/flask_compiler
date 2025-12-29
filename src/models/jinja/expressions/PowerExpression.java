@@ -24,7 +24,7 @@ public class PowerExpression extends Expression {
                 + indent + "├─ line no: " + lineNumber + "\n"
                 + indent + "├─ base expr: " + baseValueExpr.print(level + 2) + "\n"
                 + indent + "├─ optor: **\n"
-                + indent + "└─ pow expr: " + powerValueExpr.print(level + 2)
+                + indent + "└─ pow expr: " + powerValueExpr.print(level + 2) + "\n"
                 ;
     }
 }

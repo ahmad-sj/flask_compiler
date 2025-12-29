@@ -44,6 +44,7 @@ public class ConcatExpression extends Expression {
         }
         return "concat expr\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + concatExpr;
+                + concatExpr
+                ;
     }
 }

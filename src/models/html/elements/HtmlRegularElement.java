@@ -5,7 +5,7 @@ import models.Node;
 import java.util.ArrayList;
 
 public class HtmlRegularElement extends HtmlElement {
-    Node elementBody; // object of type HtmlElementBody
+    Node elementBody; // object of type NodeBody
 
     public HtmlRegularElement(String tagName, ArrayList<Node> attrList, Node elementBody) {
         super(tagName, attrList);
@@ -32,7 +32,7 @@ public class HtmlRegularElement extends HtmlElement {
 
     @Override
     public String print(int level) {
-        String indent = getIndent(level + 1);
+        String indent = getIndent(level);
 
         StringBuilder attributes = new StringBuilder();
 
@@ -45,10 +45,24 @@ public class HtmlRegularElement extends HtmlElement {
             }
         }
 
-        return "html element: <" + tagName + ">\n"
-                + indent + "├─ line no: " + lineNumber + "\n"
-                + (attributes.isEmpty()? "" :indent + "├─ attributes: " + attributes + "\n")
-                + (elementBody == null? "" : indent + "└─ children:\n" + elementBody.print(level + 2))
-                ;
+        return "html element: <" + tagName + ">\n" +
+                (attributes.isEmpty() ?
+                        (elementBody == null
+                                // line no only
+                                ? indent + "└─ line no: " + lineNumber + "\n"
+                                // line no + children
+                                : indent + "├─ line no: " + lineNumber + "\n"
+                                + indent + "└─ children:\n" + elementBody.print(level + 1)
+                        ) :
+                        (elementBody == null
+                                // line no + attributes
+                                ? indent + "├─ line no: " + lineNumber + "\n"
+                                + indent + "└─ attributes: " + attributes + "\n"
+                                // line no + attributes + children
+                                : indent + "├─ line no: " + lineNumber + "\n"
+                                + indent + "├─ attributes: " + attributes + "\n"
+                                + indent + "└─ children:\n" + elementBody.print(level + 1)
+                        )
+                );
     }
 }

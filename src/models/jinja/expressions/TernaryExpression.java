@@ -30,8 +30,8 @@ public class TernaryExpression extends Expression {
 
         return "ternary expr\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + indent + "├─ cond expr: " + condExpr.print(level + 2) + "\n"
-                + indent + "├─ true expr: " + trueExpr.print(level + 2) + "\n"
+                + indent + "├─ cond expr: " + condExpr.print(level + 2)
+                + indent + "├─ true expr: " + trueExpr.print(level + 2)
                 + indent + "└─ false expr: " + falseExpr.print(level + 2)
                 ;
     }

@@ -36,6 +36,6 @@ public class ArgumentList extends Node {
                 stringBuilder.append(", ");
         }
 
-        return stringBuilder.toString();
+        return stringBuilder.toString() + "\n";
     }
 }

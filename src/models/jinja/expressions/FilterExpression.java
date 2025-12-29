@@ -25,7 +25,7 @@ public class FilterExpression extends Expression {
                 indent + "├─ line no: " + lineNumber + "\n" +
                 (argList == null
                         ? indent + "└─ name: " + filterName.print(level + 2)
-                        : indent + "├─ name: " + filterName.print(level + 2) + "\n"
+                        : indent + "├─ name: " + filterName.print(level + 2)
                         + indent + "└─ args: " + argList.print(level + 2)
                 );
     }

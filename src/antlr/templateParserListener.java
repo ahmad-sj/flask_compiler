@@ -38,6 +38,16 @@ public interface templateParserListener extends ParseTreeListener {
 	 */
 	void exitTemplateText(templateParser.TemplateTextContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link templateParser#setStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterSetStatement(templateParser.SetStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#setStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitSetStatement(templateParser.SetStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link templateParser#ifBlock}.
 	 * @param ctx the parse tree
 	 */

@@ -22,7 +22,7 @@ public class InExpression extends Expression {
 
         return "in expr\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + indent + "├─ expr1: " + expr1.print(level + 2) + "\n"
+                + indent + "├─ expr1: " + expr1.print(level + 2)
                 + indent + "├─ optor: in\n"
                 + indent + "└─ expr2: " + expr2.print(level + 2)
                 ;

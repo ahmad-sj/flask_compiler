@@ -1,13 +1,11 @@
-package models.jinja.blocks;
-
-import models.Node;
+package models;
 
 import java.util.ArrayList;
 
-public class SubBlocks extends Node {
+public class NodeBody extends Node {
     public ArrayList<Node> nodeList;
 
-    public SubBlocks(ArrayList<Node> nodeList) {
+    public NodeBody(ArrayList<Node> nodeList) {
         this.nodeList = nodeList;
     }
 
@@ -29,22 +27,22 @@ public class SubBlocks extends Node {
     @Override
     public String print(int level) {
         String indent = getIndent(level);
-
         StringBuilder stringBuilder = new StringBuilder();
 
         if (this.nodeList != null) {
             for (int i = 0; i < nodeList.size(); i++) {
                 stringBuilder.append(indent);
 
-                if (i + 1 < nodeList.size())
+                if (i + 1 < nodeList.size()) {
                     stringBuilder.append("├─ ");
-                else
+                    stringBuilder.append(nodeList.get(i).print(level + 1));
+//                    stringBuilder.append("\n");
+                } else {
                     stringBuilder.append("└─ ");
-
-                stringBuilder.append(nodeList.get(i).print(level));
+                    stringBuilder.append(nodeList.get(i).print(level + 1));
+                }
             }
         }
-
         return stringBuilder.toString();
     }
 }

@@ -7,12 +7,12 @@ import java.util.ArrayList;
 public class ForBlock extends JinjaBlock {
     public ArrayList<Node> loopVars;
     public Node iterable;
-    public Node forBody; // an object of type SubBlocks
+    public Node nodeBody; // object of type NodeBody
 
-    public ForBlock(ArrayList<Node> loopVars, Node iterable, Node forBody) {
+    public ForBlock(ArrayList<Node> loopVars, Node iterable, Node nodeBody) {
         this.loopVars = loopVars;
         this.iterable = iterable;
-        this.forBody = forBody;
+        this.nodeBody = nodeBody;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class ForBlock extends JinjaBlock {
         }
 
         return "{% for " + loopVars + " in " + iterable.toString() + " %}\n"
-                + (forBody == null ? "" : forBody.toString())
+                + (nodeBody == null ? "" : nodeBody.toString())
                 + "\n{% endfor %}";
     }
 
@@ -44,12 +44,13 @@ public class ForBlock extends JinjaBlock {
                 loopVars.append(", ");
         }
 
-        return "for block\n"
-                + indent + "├─ line no: " + lineNumber + "\n"
-                + indent + "├─ loop vars: " + loopVars.toString() + "\n" +
-                (forBody == null
-                        ? ""
-                        : indent + "└─ for body:\n" + forBody.print(level + 2) + "\n"
+        return "for block\n" +
+                (nodeBody == null
+                        ? indent + "├─ line no: " + lineNumber + "\n"
+                        + indent + "└─ loop vars: " + loopVars.toString() + "\n"
+                        : indent + "├─ line no: " + lineNumber + "\n"
+                        + indent + "├─ loop vars: " + loopVars.toString() + "\n"
+                        + indent + "└─ for body:\n" + nodeBody.print(level + 2)
                 );
     }
 }

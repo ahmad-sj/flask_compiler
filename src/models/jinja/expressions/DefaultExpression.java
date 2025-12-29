@@ -26,7 +26,7 @@ public class DefaultExpression extends Expression {
 
         return "default expr\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + indent + "├─ main expr: " + expr.print(level + 2) + "\n"
+                + indent + "├─ main expr: " + expr.print(level + 2)
                 + indent + "└─ default expr: " + expr.print(level + 2)
                 ;
     }

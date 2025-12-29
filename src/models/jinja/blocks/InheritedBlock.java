@@ -4,17 +4,17 @@ import models.Node;
 
 public class InheritedBlock extends JinjaBlock {
     public String blockName;
-    Node subBlocks; // an object of type SubBlocks
+    Node nodeBody; // object of type NodeBody
 
-    public InheritedBlock(String blockName, Node subBlocks) {
+    public InheritedBlock(String blockName, Node nodeBody) {
         this.blockName = blockName;
-        this.subBlocks = subBlocks;
+        this.nodeBody = nodeBody;
     }
 
     @Override
     public String toString() {
         return "{% block " + blockName + " %}\n"
-                + (this.subBlocks == null ? "" : subBlocks.toString())
+                + (this.nodeBody == null ? "" : nodeBody.toString())
                 + "\n{% endblock %}";
     }
 
@@ -24,11 +24,11 @@ public class InheritedBlock extends JinjaBlock {
 
         return "block" + "\n"
                 + indent + "├─ line no: " + lineNumber + "\n" +
-                (subBlocks == null
+                (nodeBody == null
                         ? indent + "└─ block name: " + blockName + "\n"
                         : indent + "├─ block name: " + blockName + "\n"
                         + indent + "└─ children: " + "\n"
-                        + this.subBlocks.print(level + 2)
+                        + this.nodeBody.print(level + 2)
                 );
     }
 }

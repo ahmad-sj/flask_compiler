@@ -29,24 +29,24 @@ public class AddExpression extends Expression {
     public String print(int level) {
         String indent = getIndent(level);
 
-        StringBuilder andExpr = new StringBuilder();
+        StringBuilder addExpr = new StringBuilder();
 
         for (int i = 0; i < exprList.size(); i++) {
             if (i + 1 < exprList.size()) {
-                andExpr.append(indent).append("├─ expr").append(i).append(": ");
-                andExpr.append(exprList.get(i).print(level + 2));
+                addExpr.append(indent).append("├─ expr").append(i).append(": ");
+                addExpr.append(exprList.get(i).print(level + 2));
 
-                andExpr.append("\n");
-                andExpr.append(indent).append("├─ optor: +\n");
+                addExpr.append("\n");
+                addExpr.append(indent).append("├─ optor: +\n");
             } else {
-                andExpr.append(indent).append("└─ expr").append(i).append(": ");
-                andExpr.append(exprList.get(i).print(level + 2));
+                addExpr.append(indent).append("└─ expr").append(i).append(": ");
+                addExpr.append(exprList.get(i).print(level + 2));
             }
         }
 
         return "add expr\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + andExpr
+                + addExpr
                 ;
     }
 }

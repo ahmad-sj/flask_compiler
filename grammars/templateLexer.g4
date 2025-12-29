@@ -26,6 +26,7 @@ mode J_STMNT_MODE;
    FOR: 'for' -> pushMode(EXPRESSION_MODE);
    EXTENDS: 'extends' -> pushMode(EXPRESSION_MODE);
    BLOCK: 'block' -> pushMode(EXPRESSION_MODE);
+   SET: 'set' -> pushMode(EXPRESSION_MODE);
    ELSE: 'else';
    ENDIF: 'endif';
    ENDFOR: 'endfor';

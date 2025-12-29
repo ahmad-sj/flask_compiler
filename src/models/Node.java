@@ -21,7 +21,7 @@ public abstract class Node {
         StringBuilder indent = new StringBuilder();
 
         for (int i = 0; i < level; i++) {
-            indent.append("````");
+            indent.append("```");
         }
 
         return indent.toString();

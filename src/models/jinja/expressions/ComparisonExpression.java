@@ -26,8 +26,9 @@ public class ComparisonExpression extends Expression {
 
         return "comp expr\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + indent + "├─ expr1: " + expr1.print(level + 2) + "\n"
-                + indent + "├─ optor: " + compOptor.print(level) + "\n"
-                + indent + "└─ expr2: " + expr2.print(level + 2);
+                + indent + "├─ expr1: " + expr1.print(level + 2)
+                + indent + "├─ optor: " + compOptor.print(level)
+                + indent + "└─ expr2: " + expr2.print(level + 2)
+                ;
     }
 }

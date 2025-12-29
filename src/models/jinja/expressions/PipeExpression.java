@@ -48,7 +48,7 @@ public class PipeExpression extends Node {
 
         return "pipe expr\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + indent + "├─ expr: " + expr.print(level + 1) + "\n"
+                + indent + "├─ expr: " + expr.print(level + 1)
                 + indent + "└─ filters:\n" + filters
                 ;
     }

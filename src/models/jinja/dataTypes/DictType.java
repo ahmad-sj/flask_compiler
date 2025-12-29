@@ -47,9 +47,9 @@ public class DictType extends Node {
 
         return "dict type:\n" +
                 (pairsList == null
-                        ? indent + "└─ line no: " + lineNumber
+                        ? indent + "└─ line no: " + lineNumber + "\n"
                         : indent + "├─ line no: " + lineNumber + "\n"
-                        + indent + "└─ pair list:\n" + pairs
+                        + indent + "└─ pair list:\n" + pairs + "\n"
                 );
     }
 }

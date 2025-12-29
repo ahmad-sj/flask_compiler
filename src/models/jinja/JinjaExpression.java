@@ -24,7 +24,7 @@ public class JinjaExpression extends Node {
 
         return "jinja expression" + "\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + indent + "└─ expression: " + this.expression.print(level + 2) + "\n"
+                + indent + "└─ expression: " + this.expression.print(level + 2)
                 ;
     }
 }

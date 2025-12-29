@@ -20,7 +20,7 @@ public class CallTrailer extends Trailer {
 
         return "call trailer:\n" +
                 (argList == null
-                        ? indent + "└─ line no: " + lineNumber
+                        ? indent + "└─ line no: " + lineNumber + "\n"
                         : indent + "├─ line no: " + lineNumber + "\n"
                         + indent + "└─ arg list: " + argList.print(level)
                 );

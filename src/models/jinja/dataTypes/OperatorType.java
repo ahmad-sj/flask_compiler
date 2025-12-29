@@ -16,6 +16,6 @@ public class OperatorType extends Node {
 
     @Override
     public String print(int level) {
-        return this.operator;
+        return this.operator + "\n";
     }
 }

@@ -23,7 +23,7 @@ public class PairType extends Node {
         return "pair type: \n"
                 + indent + "├─ line no: " + lineNumber + "\n"
                 + indent + "├─ expr1: " + expr1.print(level + 2) + "\n"
-                + indent + "└─ expr2: " + expr1.print(level + 2)
+                + indent + "└─ expr2: " + expr1.print(level + 2) + "\n"
                 ;
     }
 }

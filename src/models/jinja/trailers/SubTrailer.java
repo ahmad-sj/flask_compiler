@@ -24,6 +24,7 @@ public class SubTrailer extends Trailer {
 
         return "sub trailer:\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + indent + "└─ expr: " + expr.print(level + 2);
+                + indent + "└─ expr: " + expr.print(level + 2)
+                ;
     }
 }

@@ -24,7 +24,7 @@ public class Argument extends Node {
                 (argName == null
                         ? indent + "└─ arg expr: " + expr.print(level + 1) + "\n"
                         : indent + "├─ arg expr: " + expr.print(level + 1) + "\n"
-                        + indent + "└─ argName: " + argName.print(level)
+                        + indent + "└─ argName: " + argName.print(level) + "\n"
                 );
     }
 }

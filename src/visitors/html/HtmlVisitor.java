@@ -3,13 +3,13 @@ package visitors.html;
 import antlr.templateParser;
 import antlr.templateParserBaseVisitor;
 import models.Node;
+import models.NodeBody;
 import models.css.CssBlock;
 import models.css.properties.Property;
 import models.css.properties.PropertyValue;
 import models.css.selectors.*;
 import models.html.attributes.*;
 import models.html.elements.HtmlRegularElement;
-import models.html.elements.HtmlElementBody;
 import models.html.elements.HtmlSelfClosingElement;
 import models.html.elements.HtmlStyleElement;
 import org.antlr.v4.runtime.Token;
@@ -49,7 +49,7 @@ public class HtmlVisitor extends templateParserBaseVisitor<Node> {
         if (ctx.htmlElementBody() != null) {
             elementBody = this.visit(ctx.htmlElementBody());
             elementBody.setNodeName(tagName + " element body");
-            elementBody.setLineNumber(ctx.getStart().getLine());
+            elementBody.setLineNumber(ctx.htmlElementBody().getStart().getLine());
         }
 
         // return html element
@@ -72,7 +72,7 @@ public class HtmlVisitor extends templateParserBaseVisitor<Node> {
         for (ParseTree child : ctx.children)
             nodes.add(this.nodeVisitor.visit(child));
 
-        return new HtmlElementBody(nodes);
+        return new NodeBody(nodes);
     }
 
     @Override
@@ -200,7 +200,7 @@ public class HtmlVisitor extends templateParserBaseVisitor<Node> {
         String tagName = ctx.htmlStyleElemOpenTag().STYLE_TAG_START_NAME().getText();
 
         // getting style element body
-        HtmlElementBody htmlElementBody = null;
+        NodeBody htmlElementBody = null;
 
         if (ctx.cssBlock() != null) {
             ArrayList<Node> blockList = new ArrayList<>();
@@ -208,7 +208,7 @@ public class HtmlVisitor extends templateParserBaseVisitor<Node> {
             for (int i = 0; i < ctx.cssBlock().size(); i++)
                 blockList.add(this.visit(ctx.cssBlock().get(i)));
 
-            htmlElementBody = new HtmlElementBody(blockList);
+            htmlElementBody = new NodeBody(blockList);
             htmlElementBody.setNodeName("style element body");
             htmlElementBody.setLineNumber(ctx.cssBlock().getFirst().getStart().getLine());
         }
