@@ -1,7 +1,6 @@
+/*
 package visitors.css;
 
-import antlr.templateParser;
-import antlr.templateParserBaseVisitor;
 import models.css.properties.InlineProperty;
 import models.css.properties.Property;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -24,3 +23,4 @@ public class PropertyVisitor extends templateParserBaseVisitor<Property> {
         return new InlineProperty(name, values);
     }
 }
+*/

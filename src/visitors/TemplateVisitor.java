@@ -1,7 +1,6 @@
+/*
 package visitors;
 
-import antlr.templateParser;
-import antlr.templateParserBaseVisitor;
 import models.Node;
 import models.Template;
 
@@ -18,4 +17,4 @@ public class TemplateVisitor extends templateParserBaseVisitor<Template> {
         }
         return template;
     }
-}
+}*/

@@ -1,151 +1,117 @@
 lexer grammar pythonLexer;
 
+@lexer::header {
+import org.antlr.v4.runtime.*;
+import java.util.*;
+}
 
-
-//Indentation
+tokens { INDENT, DEDENT }
 
 @members {
-    private Stack<Integer> indents = new Stack<>();
-    private LinkedList<Token> pendingTokens = new LinkedList<>();
+    private static final int TAB_LENGTH = 8;
+
+    private Deque<Integer> indents = new ArrayDeque<>();
+    private LinkedList<Token> pending = new LinkedList<>();
     private int opened = 0;
 
-    public PythonFlaskLexer(CharStream input) {
+    public pythonLexer(CharStream input) {
         super(input);
         indents.push(0);
     }
 
     @Override
     public Token nextToken() {
-        if (!pendingTokens.isEmpty()) {
-            return pendingTokens.removeFirst();
+        if (!pending.isEmpty()) {
+            return pending.poll();
         }
 
-        Token token = super.nextToken();
+        Token t = super.nextToken();
 
-        if (token.getType() == EOF) {
+        if (t.getType() == EOF) {
+
             while (indents.size() > 1) {
                 indents.pop();
-                Token dedent = new CommonToken(DEDENT, "<DEDENT>");
-                pendingTokens.add(dedent);
+                pending.add(new CommonToken(DEDENT, ""));
             }
-
-            if (!pendingTokens.isEmpty()) {
-                return pendingTokens.removeFirst();
-            }
+            pending.add(t);
+            return pending.poll();
         }
 
-        return token;
+        return t;
     }
 
-    private Token createToken(int type, String text) {
-        return new CommonToken(type, text);
+    private void emitIndentation(String spaces) {
+        int indent = countIndent(spaces);
+        int prev = indents.peek();
+
+        if (indent > prev) {
+            indents.push(indent);
+            pending.add(new CommonToken(INDENT, ""));
+        }
+        else if (indent < prev) {
+            while (indents.peek() > indent) {
+                indents.pop();
+                pending.add(new CommonToken(DEDENT, ""));
+            }
+            if (indents.peek() != indent) {
+                throw new RuntimeException("IndentationError: inconsistent indentation");
+            }
+        }
     }
+
+    private int countIndent(String spaces) {
+        int count = 0;
+        for (char c : spaces.toCharArray()) {
+            count += (c == '\t') ? TAB_LENGTH : 1;
+        }
+        return count;
+    }
+
+    private void openBrace() { opened++; }
+    private void closeBrace() { opened--; }
 }
 
 
+// NEWLINE
+
 NEWLINE
-    :   ('\r'? '\n')+ {
-            String spaces = "";
-            int pos = 1;
-            while (true) {
-                int c = _input.LA(pos);
-                if (c == ' ' || c == '\t') {
-                    spaces += (char)c;
-                    pos++;
-                } else break;
-            }
+    : '\r'? '\n' [ \t]* {
+        if (opened == 0) {
+            String text = getText();
+            String spaces = text.replaceAll("[^\t ]", "");
 
-            if (opened > 0) {
-                skip();
-            } else {
-                emit(createToken(NEWLINE, "\n"));
-
-                int currentIndent = spaces.replace("\t","    ").length();
-                int previousIndent = indents.peek();
-
-                if (currentIndent > previousIndent) {
-                    indents.push(currentIndent);
-                    pendingTokens.add(createToken(INDENT, "<INDENT>"));
-                } else {
-                    while (currentIndent < previousIndent) {
-                        indents.pop();
-                        previousIndent = indents.peek();
-                        pendingTokens.add(createToken(DEDENT, "<DEDENT>"));
-                    }
-                }
-            }
+            // 1) emit NEWLINE
+            pending.add(new CommonToken(NEWLINE, "\n"));
+            // 2) then emit INDENT / DEDENT immediately after
+            emitIndentation(spaces);
         }
-    ;
+        else {
+            pending.add(new CommonToken(NEWLINE, "\n"));
+        }
+    }
+;
 
-INDENT  : '<INVALID_INDENT>' -> skip;
-DEDENT  : '<INVALID_DEDENT>' -> skip;
-
-WS      : [ \t]+ -> skip;
-
-
-
-// Condition
-    IF  :    'if';
-    ELIF :   'elif'; //اختصار ل else if
-    ELSE : 'else';
-
-     // loops
-
-     FOR     : 'for';
-     WHILE   : 'while';
-    BREAK   : 'break';
-    CONTINUE: 'continue';
-    IN :'in';
-
-     //Definition
-    DEF     : 'def';
-
-
-    // OOP
-    CLASS   : 'class';
-    RETURN  : 'return';
-    IMPORT  : 'import';
-
-     //operator
-    EQUAL :'=';
-    NOTEQUAL:'!=';
-    EQUALEQUAL   : '==';
-    LESSTHAN      : '<';
-    GREATERTHAN     : '>';
-    LESSOREQUAL      : '<=';
-    GREATEROREQUAL      : '>=';
-    PLUS    : '+';
-    MINUS   : '-';
-    STAR    : '*';
-    SLASH   : '/';
-    PERCENT : '%';
-    COLON :':';
-    COMMA : ',';
-    DOT : '.';
-    AT : '@';
-    ARROW:'->';
-    FROM : 'from';
-    AS      : 'as';
-    PASS    : 'pass';
+WS : [ \t]+ -> skip;
 
 
 
-// print
-    PRINT :'print';
+// Keywords
 
-
- // data type
- NAME :[a-zA-Z_][a-zA-Z0-9_]*;
-
-FLOAT  : INT+ '.' INT* ;
-INT :[0-9]+;
-
-
-
- //Comment
- COMMENT : '#' ~[\r\n]* -> skip;
-
-
+DEF     : 'def';
+CLASS   : 'class';
+IF      : 'if';
+ELIF    : 'elif';
+ELSE    : 'else';
+FOR     : 'for';
+WHILE   : 'while';
+RETURN  : 'return';
+BREAK   : 'break';
+CONTINUE: 'continue';
+PASS    : 'pass';
+IMPORT  : 'import';
+FROM    : 'from';
+AS      : 'as';
+IN      : 'in';
 TRUE    : 'True';
 FALSE   : 'False';
 NONE    : 'None';
@@ -154,52 +120,52 @@ OR      : 'or';
 NOT     : 'not';
 
 
-// Brackets
+// Operators
 
-OPEND_NORMAL_BRAKET :'('{opened++;};
-CLOSED_NORMAL_BRAKET:')'{opened--;};
+EQUAL           : '=';
+NOTEQUAL        : '!=';
+EQUALEQUAL      : '==';
+LESSTHAN        : '<';
+GREATERTHAN     : '>';
+LESSOREQUAL     : '<=';
+GREATEROREQUAL  : '>=';
+PLUS            : '+';
+MINUS           : '-';
+STAR            : '*';
+SLASH           : '/';
+PERCENT         : '%';
+COLON           : ':';
+COMMA           : ',';
+DOT             : '.';
+AT              : '@';
+ARROW           : '->';
+SEMICOLON       : ';';
 
-OPEND_SQUAR_BRAKET:'['{opened++;};
-CLOSED_SQUAR_BRAKET:']'{opened--;};
 
-OPEN_CURLY_BRAKET:'{'{opened++;};
-CLOSED_CURLY_BRAKET:'}'{opened--;};
+// Brackets (IMPORTANT)
+
+OPEND_NORMAL_BRAKET   : '(' { openBrace(); };
+CLOSED_NORMAL_BRAKET  : ')' { closeBrace(); };
+OPEND_SQUAR_BRAKET    : '[' { openBrace(); };
+CLOSED_SQUAR_BRAKET   : ']' { closeBrace(); };
+OPEN_CURLY_BRAKET     : '{' { openBrace(); };
+CLOSED_CURLY_BRAKET   : '}' { closeBrace(); };
 
 
-     //Handle string
+// Literals & Identifiers
 
-STRING_SINGLE : '\'' -> pushMode(STR);
-STRING_DOUBLE : '"' -> pushMode(STR);
-TRIPLE_SINGLE : '\'\'\'' -> pushMode(STR3);
-TRIPLE_DOUBLE : '"""' -> pushMode(STR3);
-FSTRING_SINGLE : [fF]'\'' -> pushMode(FSTR);
-FSTRING_DOUBLE : [fF]'"' -> pushMode(FSTR);
-FTRIPLE_SINGLE : [fF]'\'\'\'' -> pushMode(FSTR3);
-FTRIPLE_DOUBLE : [fF]'"""' -> pushMode(FSTR3);
 
-mode STR;
-STR_CONTENT : ~['"\\]+ ;
-STR_ESC     : '\\' . ;
-STR_END     : ['"] -> popMode ;
 
-mode STR3;
-STR3_CONTENT : (.|[\r\n])+? ;
-STR3_END     : '\'\'\'' -> popMode ;
-STR3_END2    : '"""' -> popMode ;
+NAME   : [a-zA-Z_][a-zA-Z0-9_]*;
+FLOAT  : [0-9]+ '.' [0-9]*;
+INT    : [0-9]+;
+STRING
+    : '"' (~["\\] | '\\' .)* '"'
+    | '\'' (~['\\] | '\\' .)* '\''
+    ;
 
-mode FSTR;
-FSTR_CONTENT : ~['"\\{]+ ;
-FSTR_BRACE   : '{' -> pushMode(FSTR_EXPR);
-FSTR_ESC     : '\\' . ;
-FSTR_END     : ['"] -> popMode ;
 
-mode FSTR_EXPR;
-FSTR_EXPR_CONTENT : ~[{}]+ ;
-FSTR_EXPR_END     : '}' -> popMode ;
+// Comments
 
-mode FSTR3;
-FSTR3_CONTENT : (.|[\r\n])+? ;
-FSTR3_END     : '\'\'\'' -> popMode ;
-FSTR3_END2    : '"""' -> popMode ;
-
+COMMENT : '#' ~[\r\n]* -> skip;
 

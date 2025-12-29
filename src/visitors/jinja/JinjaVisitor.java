@@ -1,7 +1,6 @@
+/*
 package visitors.jinja;
 
-import antlr.templateParser;
-import antlr.templateParserBaseVisitor;
 import models.Node;
 import models.jinja.blocks.JinjaExtendsBlock;
 import models.jinja.blocks.inheritedBlock.InheritedBlock;
@@ -58,3 +57,4 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
         return new InheritedBlockBody(nodes);
     }
 }
+*/

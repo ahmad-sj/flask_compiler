@@ -1,7 +1,6 @@
+/*
 package visitors.html;
 
-import antlr.templateParser;
-import antlr.templateParserBaseVisitor;
 import models.css.properties.Property;
 import models.html.attributes.*;
 import models.jinja.JinjaExpression;
@@ -83,3 +82,4 @@ public class AttributeVisitor extends templateParserBaseVisitor<Attribute> {
         return styleAttribute;
     }
 }
+*/

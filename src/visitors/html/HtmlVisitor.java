@@ -1,7 +1,6 @@
+/*
 package visitors.html;
 
-import antlr.templateParser;
-import antlr.templateParserBaseVisitor;
 import models.Node;
 import models.html.elements.Element;
 import models.html.elements.ElementBody;
@@ -44,3 +43,4 @@ public class HtmlVisitor extends templateParserBaseVisitor<Node> {
         return new ElementBody(nodes);
     }
 }
+*/

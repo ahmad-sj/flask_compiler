@@ -1,8 +1,6 @@
+/*
 package visitors.html;
 
-import antlr.templateParser;
-import antlr.templateParserBaseVisitor;
-import models.Node;
 import models.html.attributes.Attribute;
 import models.html.tags.EndTag;
 import models.html.tags.SelfClosingTag;
@@ -66,3 +64,4 @@ public class TagVisitor extends templateParserBaseVisitor<Tag> {
         return selfClosingTag;
     }
 }
+*/

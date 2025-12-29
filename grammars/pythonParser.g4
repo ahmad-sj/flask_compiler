@@ -2,66 +2,93 @@ parser grammar pythonParser;
 
 options { tokenVocab=pythonLexer; }
 
- prog
-    : stmt* EOF
+prog
+    : stmtList EOF
+    ;
+
+
+stmtList
+    : (stmt (NEWLINE | WS)*)+
     ;
 
 stmt
     : simpleStmt
-    blockStmt
+    | blockStmt
     ;
-    simpleStmt:
-             importLine
-            | assignLine
-            | returnLine
-            |exprLine
-            | PASS;
 
+simpleStmt
+    : importLine
+    | assignLine
+    | returnLine
+    | exprLine
+    | PASS
+    ;
 
+importLine
+    : IMPORT name (AS NAME)?
+    | FROM name IMPORT importList
+    ;
 
-    importLine : IMPORT name (AS NAME)?
-    | FROM name IMPORT importList ;
+importList
+    : NAME (COMMA NAME)* (COMMA)? // يسمح بفاصلة أخيرة
+    ;
 
-importList : NAME (COMMA NAME)*;
+name
+    : NAME (DOT NAME)*
+    ;
 
-    name
-        : NAME (DOT NAME)*
-        ;
+assignLine
+    : target EQUAL expr
+    ;
 
- assignLine : differentForm EQUAL expr ;
+target
+    : NAME
+    | value
+    ;
 
-differentForm : NAME
-| indexAccess
-| dotAccess ;
+value
+    : baseValue (DOT NAME | OPEND_SQUAR_BRAKET expr CLOSED_SQUAR_BRAKET | callArgs)*
+    ;
 
-indexAccess : value OPEND_SQUAR_BRAKET expr CLOSED_SQUAR_BRAKET;
+baseValue
+    : NAME
+    | literal
+    | tupleExpr
+    | OPEND_NORMAL_BRAKET expr CLOSED_NORMAL_BRAKET
+    | OPEND_NORMAL_BRAKET genExpr CLOSED_NORMAL_BRAKET
+    ;
 
-dotAccess : value DOT NAME ;
+tupleExpr
+    : OPEND_NORMAL_BRAKET expr COMMA expr (COMMA expr)* COMMA? CLOSED_NORMAL_BRAKET
+    ;
 
-value : baseValue extra*;
+genExpr
+    : expr FOR NAME IN expr (IF expr)?
+    ;
 
-baseValue :NAME |literal |  OPEND_NORMAL_BRAKET expr CLOSED_NORMAL_BRAKET;
+callArgs
+    : OPEND_NORMAL_BRAKET callList CLOSED_NORMAL_BRAKET
+    ;
 
-extra : callArgs
-| DOT NAME | OPEND_SQUAR_BRAKET expr CLOSED_SQUAR_BRAKET;
+callList
+    : callArg (COMMA callArg)* COMMA?
+    ;
 
+callArg
+    : NAME EQUAL expr   // keyword argument
+    | expr              // positional
+    ;
 
-callArgs : OPEND_NORMAL_BRAKET callList CLOSED_NORMAL_BRAKET;
+returnLine
+    : RETURN expr?
+    ;
 
-callList : expr (COMMA expr)*;
-
-literal :INT |NONE |FALSE |TRUE|STRING_SINGLE|STRING_DOUBLE;
-
-
-
-
-returnLine :RETURN expr?;
-
-exprLine :expr;
-
+exprLine
+    : expr
+    ;
 
 expr
-    : orExpr
+    : orExpr (IF orExpr ELSE expr)?
     ;
 
 orExpr
@@ -93,32 +120,89 @@ singleExpr
     | value
     ;
 
+// Block statements
+blockStmt
+    : func
+    | ifBlock
+    | forBlock
+    | whileBlock
+    ;
+
+func
+    : dec* DEF NAME funcArgs COLON block
+    ;
+
+dec
+    : AT name callArgs?
+    ;
+
+funcArgs
+    : OPEND_NORMAL_BRAKET argsNames? CLOSED_NORMAL_BRAKET
+    ;
+
+argsNames
+    : NAME (COMMA NAME)*
+    ;
+block
+    : INDENT stmtList DEDENT
+    ;
 
 
-blockStmt : func | ifBlock |forBlock |whileBlock ;
+ifBlock
+    : IF expr COLON NEWLINE block
+      (ELIF expr COLON NEWLINE block)*
+      (ELSE COLON NEWLINE block)?
+    ;
 
+forBlock
+    : FOR NAME IN expr COLON NEWLINE block
+    ;
 
-func :dec * DEF NAME funcArgs COLON block;
+whileBlock
+    : WHILE expr COLON NEWLINE block
+    ;
 
+// Lists
+listVal
+    : OPEND_SQUAR_BRAKET
+      (NEWLINE | WS)*
+      listItem? (listItemSeparator listItem)* listItemSeparator?
+      (NEWLINE | WS)*
+      CLOSED_SQUAR_BRAKET
+    ;
 
- dec :AT name callArgs? ;
+listItem
+    : expr (NEWLINE | WS)*
+    ;
 
- funcArgs : OPEND_NORMAL_BRAKET argsNames ? CLOSED_NORMAL_BRAKET ;
+listItemSeparator
+    : COMMA (NEWLINE | WS)*
+    ;
 
- argsNames : NAME ( COMMA NAME)*;
+// Dictionaries
+dictVal
+    : OPEN_CURLY_BRAKET
+      (NEWLINE | WS)*
+      dictItem? (dictItemSeparator dictItem)* dictItemSeparator?
+      (NEWLINE | WS)*
+      CLOSED_CURLY_BRAKET
+    ;
 
+dictItem
+    : literal COLON expr (NEWLINE | WS)*
+    ;
 
- block :NEWLINE INDENT stmt+ DEDENT
- | simpleStmt;
+dictItemSeparator
+    : COMMA (NEWLINE | WS)*
+    ;
 
-
- ifBlock
- : IF expr COLON block
-    (ELIF expr COLON block)*
-    (ELSE COLON block)?;
-
-
-
-forBlock : FOR NAME IN expr COLON block;
-
-whileBlock : WHILE expr COLON block;
+literal
+    : INT
+    | FLOAT
+    | STRING
+    | TRUE
+    | FALSE
+    | NONE
+    | listVal
+    | dictVal
+    ;

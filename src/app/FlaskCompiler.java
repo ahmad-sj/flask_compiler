@@ -1,66 +1,73 @@
 package app;
 
-import models.Node;
-import models.Template;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-
-import antlr.templateParser;
-import antlr.templateLexer;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
-import visitors.TemplateVisitor;
+import org.antlr.v4.runtime.tree.Trees;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+
+import antlr.*;
 
 public class FlaskCompiler {
     public static void main(String[] args) {
-
-        // Get the current working directory (project root in most cases)
-        Path currentPath = Paths.get("").toAbsolutePath();
-
-        String addTemplate = "tests/add.html";
-        String indexTemplate = "tests/index.html";
-
-        Path fullPath = currentPath.resolve(addTemplate);
-
-//        IO.print("Enter file path: ");
-//        String filePath = IO.readln();
-
-//        if (args.length != 1) {
-//            System.err.print("Usage: file name\n");
-//        } else {
-//            String fileName = args[0];
-            String fileName = fullPath.toString();
-            templateParser parser = getParser(fileName);
-
-            // tell antlr to build a parse tree
-            // parse from the start symbol (template)
-            ParseTree antlrAST = parser.template();
-
-            // create a visitor for converting the parse tree into node object
-            TemplateVisitor templateVisitor = new TemplateVisitor();
-            Template template = templateVisitor.visit(antlrAST);
-
-            for (Node node : template.nodes) {
-                System.out.println(node);
-            }
-//        }
-    }
-
-    // types of parser and lexer are specific to the grammar name template.
-    private static templateParser getParser(String fileName) {
-        templateParser parser = null;
         try {
-            CharStream input = CharStreams.fromFileName(fileName);
-            templateLexer lexer = new templateLexer(input);
+            // مسار الملف app.py
+            Path currentPath = Paths.get("").toAbsolutePath();
+            Path fullPath = currentPath.resolve("tests/app.py");
+
+            // إنشاء Lexer و Parser
+            CharStream input = CharStreams.fromFileName(fullPath.toString());
+            pythonLexer lexer = new pythonLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
-            parser = new templateParser(tokens);
+
+            // طباعة جميع التوكنات للتأكد من INDENT و DEDENT
+            tokens.fill(); // اجلب كل التوكنات
+            List<Token> tokenList = tokens.getTokens();
+            System.out.println("Tokens (type : text) including INDENT/DEDENT:");
+            for (Token t : tokenList) {
+                String tokenName = pythonLexer.VOCABULARY.getSymbolicName(t.getType());
+                System.out.printf("%s : '%s'%n", tokenName, t.getText().replace("\r","\\r").replace("\n","\\n"));
+            }
+
+            // تمرير التوكنات للـ parser
+            pythonParser parser = new pythonParser(tokens);
+
+            // إنشاء Parse Tree من القاعدة الرئيسية
+            ParseTree tree = parser.prog();
+
+            // طباعة Parse Tree بشكل نصي
+            System.out.println("\nParse Tree (text format):");
+            System.out.println(tree.toStringTree(parser));
+
+            // طباعة Parse Tree بشكل شجري (Hierarchy)
+            System.out.println("\nParse Tree (hierarchy):");
+            printTree(tree, parser, 0);
+
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-        return parser;
     }
+
+    // دالة مساعدة لطباعة شجرة Parse Tree بشكل هرمي
+    private static void printTree(ParseTree tree, pythonParser parser, int indent) {
+        for (int i = 0; i < indent; i++) System.out.print("  ");
+        String nodeText = Trees.getNodeText(tree, parser);
+
+        // إبراز INDENT / DEDENT
+        if (nodeText.equals("INDENT")) {
+            System.out.println("▶ INDENT");
+        } else if (nodeText.equals("DEDENT")) {
+            System.out.println("◀ DEDENT");
+        } else {
+            System.out.println(nodeText);
+        }
+
+        for (int i = 0; i < tree.getChildCount(); i++) {
+            printTree(tree.getChild(i), parser, indent + 1);
+        }
+    }
+
 }

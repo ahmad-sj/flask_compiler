@@ -1,7 +1,6 @@
+/*
 package visitors.jinja;
 
-import antlr.templateParser;
-import antlr.templateParserBaseVisitor;
 import models.jinja.JinjaExpression;
 import models.jinja.JinjaFilter;
 import models.jinja.JinjaId;
@@ -29,3 +28,4 @@ public class JinjaExpressionVisitor extends templateParserBaseVisitor<JinjaExpre
         return new JinjaExpression(new JinjaId(id));
     }
 }
+*/
