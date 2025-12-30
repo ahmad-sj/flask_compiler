@@ -1,67 +1,37 @@
 package app;
 
-import models.Node;
-import models.Template;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-
-import antlr.templateParser;
-import antlr.templateLexer;
-import org.antlr.v4.runtime.tree.ParseTree;
-import visitors.TemplateVisitor;
-
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class FlaskCompiler {
     public static void main(String[] args) {
 
+        // creating an array with file names to be compiled
+        ArrayList<String> fileNames = new ArrayList<>();
+//        fileNames.add("tests/base.html");
+        fileNames.add("tests/index.html");
+//        fileNames.add("tests/add.html");
+//        fileNames.add("tests/detail.html");
+
         // Get the current working directory (project root in most cases)
         Path currentPath = Paths.get("").toAbsolutePath();
 
-        String addTemplate = "tests/add.html";
-        String indexTemplate = "tests/index.html";
+        // getting files full path
+        ArrayList<String> files = new ArrayList<>();
+        for (String fileName : fileNames) {
 
-        Path fullPath = currentPath.resolve(indexTemplate);
+            // get full path for file name number i
+            Path filePathObject = currentPath.resolve(fileName);
 
-//        IO.print("Enter file path: ");
-//        String filePath = IO.readln();
-
-//        if (args.length != 1) {
-//            System.err.print("Usage: file name\n");
-//        } else {
-//            String fileName = args[0];
-            String fileName = fullPath.toString();
-            templateParser parser = getParser(fileName);
-
-            // tell antlr to build a parse tree
-            // parse from the start symbol (template)
-            ParseTree antlrAST = parser.template();
-
-            // create a visitor for converting the parse tree into node object
-            TemplateVisitor templateVisitor = new TemplateVisitor();
-            Template template = templateVisitor.visit(antlrAST);
-
-            for (Node node : template.nodes) {
-//                System.out.println(node);
-                System.out.println(node.print(0));
-            }
-//        }
-    }
-
-    // types of parser and lexer are specific to the grammar name template.
-    private static templateParser getParser(String fileName) {
-        templateParser parser = null;
-        try {
-            CharStream input = CharStreams.fromFileName(fileName);
-            templateLexer lexer = new templateLexer(input);
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            parser = new templateParser(tokens);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            // add file full path to files array
+            files.add(filePathObject.toString());
         }
-        return parser;
+
+        // passing array of files full path to compiler
+        TemplateCompiler templateCompiler = new TemplateCompiler(files);
+
+        // start compiling
+        templateCompiler.compile();
     }
 }

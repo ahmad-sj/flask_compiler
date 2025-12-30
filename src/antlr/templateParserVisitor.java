@@ -119,6 +119,12 @@ public interface templateParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInheritBlock(templateParser.InheritBlockContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link templateParser#inheritBlockBody}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInheritBlockBody(templateParser.InheritBlockBodyContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link templateParser#inheritBlockStart}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

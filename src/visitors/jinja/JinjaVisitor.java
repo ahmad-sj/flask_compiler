@@ -7,8 +7,10 @@ import models.NodeBody;
 import models.jinja.JinjaExpression;
 import models.jinja.blocks.*;
 import models.jinja.dataTypes.IdType;
+import models.jinja.dataTypes.StringType;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import symbols.SymbolTable;
 import visitors.NodeVisitor;
 
 import java.util.ArrayList;
@@ -16,14 +18,18 @@ import java.util.List;
 
 public class JinjaVisitor extends templateParserBaseVisitor<Node> {
     NodeVisitor nodeVisitor;
+    SymbolTable symbolTable;
 
     public JinjaVisitor(NodeVisitor nodeVisitor) {
         this.nodeVisitor = nodeVisitor;
+        this.symbolTable = nodeVisitor.symbolTable;
     }
 
     @Override
     public Node visitExtendsBlock(templateParser.ExtendsBlockContext ctx) {
         String templateName = ctx.STRING().getText();
+
+        symbolTable.enterScope(templateName + " template");
 
         ExtendsBlock extendsBlock = new ExtendsBlock(templateName);
         extendsBlock.setNodeName("extends block: " + templateName);
@@ -48,6 +54,10 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
         setStatement.setNodeName("set statement");
         setStatement.setLineNumber(ctx.getStart().getLine());
 
+        // adding var to symbols table
+        symbolTable.currentScope.define(idToken.getText(), "var", "Node", idValueExpr);
+
+
         return setStatement;
     }
 
@@ -55,14 +65,19 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
     public Node visitInheritBlock(templateParser.InheritBlockContext ctx) {
         String blockName = ctx.inheritBlockStart().ID().getText();
 
+        StringType stringType = new StringType(blockName);
+
+        symbolTable.enterScope(blockName + " block");
+        symbolTable.currentScope.define(blockName, "block name", "StringType", stringType);
+
         // getting block body
         NodeBody nodeBody = null;
 
-        if (ctx.subBlock() != null && !ctx.subBlock().isEmpty()) {
+        if (ctx.inheritBlockBody() != null) {
             ArrayList<Node> nodeList = new ArrayList<>();
 
-            for (int i = 0; i < ctx.subBlock().size(); i++) {
-                nodeList.add(this.visit(ctx.subBlock().get(i)));
+            for (int i = 0; i < ctx.inheritBlockBody().children.size(); i++) {
+                nodeList.add(this.visit(ctx.inheritBlockBody().getChild(i)));
             }
 
             nodeBody = new NodeBody(nodeList);
@@ -72,6 +87,8 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
         InheritedBlock inheritedBlock = new InheritedBlock(blockName, nodeBody);
         inheritedBlock.setNodeName("block " + blockName);
         inheritedBlock.setLineNumber(ctx.getStart().getLine());
+
+        symbolTable.exitScope();
 
         return inheritedBlock;
     }
@@ -107,12 +124,23 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
 
     @Override
     public Node visitForBlock(templateParser.ForBlockContext ctx) {
+
+        int blockLine = ctx.forStartStatement().getStart().getLine();
+        int blockCol = ctx.forStartStatement().getStart().getCharPositionInLine();
+
+        symbolTable.enterScope("for block at " + blockLine + ":" + blockCol);
+
         // getting loop vars
         ArrayList<Node> loopVarList = new ArrayList<>();
         List<TerminalNode> loopVarCtxList = ctx.forStartStatement().ID();
 
-        for (int i = 0; i < loopVarCtxList.size(); i++)
-            loopVarList.add(this.visitId(loopVarCtxList.get(i)));
+        for (int i = 0; i < loopVarCtxList.size(); i++) {
+            IdType loopVar = (IdType) this.visitId(loopVarCtxList.get(i));
+
+            loopVarList.add(loopVar);
+            symbolTable.define(loopVar.name, "id", "IdType", loopVar);
+
+        }
 
         // getting iterable expr
         Node iterable = this.visit(ctx.forStartStatement().expression());
@@ -130,6 +158,8 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
         ForBlock forBlock = new ForBlock(loopVarList, iterable, forBody);
         forBlock.setNodeName("for block");
         forBlock.setLineNumber(ctx.getStart().getLine());
+
+        symbolTable.exitScope();
 
         return forBlock;
     }
@@ -150,6 +180,12 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
 
     @Override
     public Node visitElseBlock(templateParser.ElseBlockContext ctx) {
+
+        int blockLine = ctx.getStart().getLine();
+        int blockCol = ctx.getStart().getCharPositionInLine();
+
+        symbolTable.enterScope("else block at " + blockLine + ":" + blockCol);
+
         NodeBody nodeBody = null;
 
         if (ctx.subBlock() != null && !ctx.subBlock().isEmpty()) {
@@ -167,11 +203,19 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
         elseBlock.setNodeName("else block");
         elseBlock.setLineNumber(ctx.getStart().getLine());
 
+        symbolTable.exitScope();
+
         return elseBlock;
     }
 
     @Override
     public Node visitElifBlock(templateParser.ElifBlockContext ctx) {
+
+        int blockLine = ctx.getStart().getLine();
+        int blockCol = ctx.getStart().getCharPositionInLine();
+
+        symbolTable.enterScope("elif block at " + blockLine + ":" + blockCol);
+
         Node condition = this.visit(ctx.expression());
         condition.setNodeName("elif condition");
         condition.setLineNumber(ctx.expression().getStart().getLine());
@@ -194,6 +238,8 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
         elifBlock.setNodeName("elif block");
         elifBlock.setLineNumber(ctx.getStart().getLine());
 
+        symbolTable.exitScope();
+
         return elifBlock;
     }
 
@@ -204,6 +250,12 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
 
     @Override
     public Node visitIfBlock(templateParser.IfBlockContext ctx) {
+
+        int blockLine = ctx.getStart().getLine();
+        int blockCol = ctx.getStart().getCharPositionInLine();
+
+        symbolTable.enterScope("if block at " + blockLine + ":" + blockCol);
+
         // getting if condition
         Node condition = this.visit(ctx.ifStatmentStart().expression());
         condition.setNodeName("if condition");
@@ -228,6 +280,8 @@ public class JinjaVisitor extends templateParserBaseVisitor<Node> {
         IfBlock ifBlock = new IfBlock(condition, nodeBody);
         ifBlock.setNodeName("if block");
         ifBlock.setLineNumber(ctx.getStart().getLine());
+
+        symbolTable.exitScope();
 
         return ifBlock;
     }

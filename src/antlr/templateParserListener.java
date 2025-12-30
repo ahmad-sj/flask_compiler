@@ -188,6 +188,16 @@ public interface templateParserListener extends ParseTreeListener {
 	 */
 	void exitInheritBlock(templateParser.InheritBlockContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link templateParser#inheritBlockBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterInheritBlockBody(templateParser.InheritBlockBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link templateParser#inheritBlockBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitInheritBlockBody(templateParser.InheritBlockBodyContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link templateParser#inheritBlockStart}.
 	 * @param ctx the parse tree
 	 */

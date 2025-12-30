@@ -99,8 +99,10 @@ extendsBlock
 // ============================================================
 
 inheritBlock
-    : inheritBlockStart subBlock* inheritBlockEnd
+    : inheritBlockStart inheritBlockBody? inheritBlockEnd
     ;
+
+inheritBlockBody: (subBlock | inheritBlock)+;
 
 inheritBlockStart
     : J_STMNT_START BLOCK ID J_EXPR_STMNT_END
