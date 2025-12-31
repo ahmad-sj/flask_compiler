@@ -1,8 +1,6 @@
-package models.jinja.dataTypes;
+package models.jinja.atoms;
 
-import models.Node;
-
-public class IntType extends Node {
+public class IntType extends Atom {
     public int value;
 
     public IntType(int value) {

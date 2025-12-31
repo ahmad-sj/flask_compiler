@@ -1,10 +1,10 @@
-package models.jinja.dataTypes;
+package models.jinja.expressions;
 
 import models.Node;
 
 import java.util.ArrayList;
 
-public class ArgumentList extends Node {
+public class ArgumentList extends Expression {
     public ArrayList<Node> argList;
 
     public ArgumentList(ArrayList<Node> argList) {

@@ -1,8 +1,6 @@
-package models.jinja.dataTypes;
+package models.jinja.atoms;
 
-import models.Node;
-
-public class IdType extends Node {
+public class IdType extends Atom {
     public String name;
 
     public IdType(String name) {

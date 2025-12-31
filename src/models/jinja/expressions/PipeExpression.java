@@ -4,7 +4,7 @@ import models.Node;
 
 import java.util.ArrayList;
 
-public class PipeExpression extends Node {
+public class PipeExpression extends Expression {
     public Node expr;
     ArrayList<Node> filterList;
 

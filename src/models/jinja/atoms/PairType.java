@@ -1,8 +1,8 @@
-package models.jinja.dataTypes;
+package models.jinja.atoms;
 
 import models.Node;
 
-public class PairType extends Node {
+public class PairType extends Atom {
     public Node expr1;
     public Node expr2;
 

@@ -1,8 +1,8 @@
-package models.jinja.dataTypes;
+package models.jinja.expressions;
 
 import models.Node;
 
-public class Argument extends Node {
+public class Argument extends Expression {
     public Node expr;
     public Node argName;
 

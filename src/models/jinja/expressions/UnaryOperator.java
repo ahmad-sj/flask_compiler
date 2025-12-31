@@ -1,11 +1,11 @@
-package models.jinja.dataTypes;
+package models.jinja.expressions;
 
 import models.Node;
 
-public class SignType extends Node {
+public class UnaryOperator extends Node {
     public String sign;
 
-    public SignType(String sign) {
+    public UnaryOperator(String sign) {
         this.sign = sign;
     }
 

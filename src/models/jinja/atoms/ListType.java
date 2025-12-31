@@ -1,10 +1,10 @@
-package models.jinja.dataTypes;
+package models.jinja.atoms;
 
 import models.Node;
 
 import java.util.ArrayList;
 
-public class ListType extends Node {
+public class ListType extends Atom {
     public ArrayList<Node> itemList;
 
     public ListType(ArrayList<Node> itemList) {

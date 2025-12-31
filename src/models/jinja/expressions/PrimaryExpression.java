@@ -1,14 +1,14 @@
-package models.jinja.dataTypes;
+package models.jinja.expressions;
 
 import models.Node;
 
 import java.util.ArrayList;
 
-public class PrimaryType extends Node {
+public class PrimaryExpression extends Expression {
     Node atom;
     ArrayList<Node> trailerList;
 
-    public PrimaryType(Node atom, ArrayList<Node> trailerList) {
+    public PrimaryExpression(Node atom, ArrayList<Node> trailerList) {
         this.atom = atom;
         this.trailerList = trailerList;
     }

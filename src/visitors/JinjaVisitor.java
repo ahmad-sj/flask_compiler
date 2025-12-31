@@ -1,4 +1,4 @@
-package visitors.jinja;
+package visitors;
 
 import models.Node;
 import antlr.templateParser;
@@ -6,12 +6,11 @@ import antlr.templateParserBaseVisitor;
 import models.NodeBody;
 import models.jinja.JinjaExpression;
 import models.jinja.blocks.*;
-import models.jinja.dataTypes.IdType;
-import models.jinja.dataTypes.StringType;
+import models.jinja.atoms.IdType;
+import models.jinja.atoms.StringType;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import symbols.SymbolTable;
-import visitors.NodeVisitor;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,9 +5,6 @@ import antlr.templateParserBaseVisitor;
 import models.Node;
 import models.NormalText;
 import symbols.SymbolTable;
-import visitors.html.HtmlVisitor;
-import visitors.jinja.ExpressionVisitor;
-import visitors.jinja.JinjaVisitor;
 
 public class NodeVisitor extends templateParserBaseVisitor<Node> {
     public SymbolTable symbolTable;
@@ -50,7 +47,7 @@ public class NodeVisitor extends templateParserBaseVisitor<Node> {
     @Override
     public Node visitTemplateText(templateParser.TemplateTextContext ctx) {
         NormalText normalText = new NormalText(ctx.NORMAL_TEXT().getText());
-        normalText.setNodeName(ctx.NORMAL_TEXT().getText());
+        normalText.setNodeName("raw text");
         normalText.setLineNumber(ctx.NORMAL_TEXT().getSymbol().getLine());
 
         return normalText;

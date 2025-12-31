@@ -3,17 +3,17 @@ package models.jinja.expressions;
 import models.Node;
 
 public class UnaryExpression extends Expression {
-    public Node sign;
+    public Node unaryOperator;
     public Node expr;
 
-    public UnaryExpression(Node sign, Node expr) {
-        this.sign = sign;
+    public UnaryExpression(Node unaryOperator, Node expr) {
+        this.unaryOperator = unaryOperator;
         this.expr = expr;
     }
 
     @Override
     public String toString() {
-        return sign.toString() + expr.toString();
+        return unaryOperator.toString() + expr.toString();
     }
 
     @Override
@@ -22,7 +22,7 @@ public class UnaryExpression extends Expression {
 
         return "unary expr\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + indent + "├─ sign: " + sign.print(level)
+                + indent + "├─ sign: " + unaryOperator.print(level)
                 + indent + "└─ expr: " + expr.print(level + 2)
                 ;
     }

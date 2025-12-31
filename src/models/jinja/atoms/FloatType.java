@@ -1,8 +1,6 @@
-package models.jinja.dataTypes;
+package models.jinja.atoms;
 
-import models.Node;
-
-public class FloatType extends Node {
+public class FloatType extends Atom {
     public float value;
 
     public FloatType(float value) {

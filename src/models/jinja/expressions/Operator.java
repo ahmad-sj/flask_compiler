@@ -1,11 +1,12 @@
-package models.jinja.dataTypes;
+package models.jinja.expressions;
 
-import models.Node;
-
-public class OperatorType extends Node {
+/*
+ * arithmetic and logical operators
+ * */
+public class Operator extends Expression {
     public String operator;
 
-    public OperatorType(String operator) {
+    public Operator(String operator) {
         this.operator = operator;
     }
 

@@ -1,4 +1,4 @@
-package visitors.html;
+package visitors;
 
 import antlr.templateParser;
 import antlr.templateParserBaseVisitor;
@@ -15,7 +15,6 @@ import models.html.elements.HtmlStyleElement;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import visitors.NodeVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +71,11 @@ public class HtmlVisitor extends templateParserBaseVisitor<Node> {
         for (ParseTree child : ctx.children)
             nodes.add(this.nodeVisitor.visit(child));
 
-        return new NodeBody(nodes);
+        NodeBody nodeBody = new NodeBody(nodes);
+        nodeBody.setNodeName("html element body");
+        nodeBody.setLineNumber(ctx.getStart().getLine());
+
+        return nodeBody;
     }
 
     @Override

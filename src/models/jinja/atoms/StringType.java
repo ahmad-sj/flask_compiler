@@ -1,8 +1,6 @@
-package models.jinja.dataTypes;
+package models.jinja.atoms;
 
-import models.Node;
-
-public class StringType extends Node {
+public class StringType extends Atom {
     public String value;
 
     public StringType(String value) {

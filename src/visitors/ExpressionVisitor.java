@@ -1,14 +1,13 @@
-package visitors.jinja;
+package visitors;
 
 import antlr.templateParser;
 import antlr.templateParserBaseVisitor;
 import models.Node;
-import models.jinja.dataTypes.*;
+import models.jinja.atoms.*;
 import models.jinja.expressions.*;
 import models.jinja.trailers.CallTrailer;
 import models.jinja.trailers.MemberTrailer;
 import models.jinja.trailers.SubTrailer;
-import visitors.NodeVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -205,34 +204,34 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
 
     @Override
     public Node visitComparisonOperator(templateParser.ComparisonOperatorContext ctx) {
-        OperatorType operatorType = new OperatorType(ctx.getText());
-        operatorType.setLineNumber(ctx.getStart().getLine());
+        Operator operator = new Operator(ctx.getText());
+        operator.setLineNumber(ctx.getStart().getLine());
 
         switch (ctx.getText()) {
             case "==":
-                operatorType.setNodeName("EQ operator");
+                operator.setNodeName("EQ operator");
                 break;
 
             case "!=":
-                operatorType.setNodeName("NEQ operator");
+                operator.setNodeName("NEQ operator");
                 break;
 
             case "<":
-                operatorType.setNodeName("LT operator");
+                operator.setNodeName("LT operator");
                 break;
 
             case ">":
-                operatorType.setNodeName("GT operator");
+                operator.setNodeName("GT operator");
                 break;
 
             case "<=":
-                operatorType.setNodeName("LE operator");
+                operator.setNodeName("LE operator");
                 break;
 
             default: // >=
-                operatorType.setNodeName("GE operator");
+                operator.setNodeName("GE operator");
         }
-        return operatorType;
+        return operator;
     }
 
     @Override
@@ -352,15 +351,15 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
     @Override
     public Node visitAddExprOptor(templateParser.AddExprOptorContext ctx) {
 
-        OperatorType operatorType = new OperatorType(ctx.getText());
-        operatorType.setLineNumber(ctx.getStart().getLine());
+        Operator operator = new Operator(ctx.getText());
+        operator.setLineNumber(ctx.getStart().getLine());
 
         if (ctx.getText().equals("-"))
-            operatorType.setNodeName("minus operator");
+            operator.setNodeName("minus operator");
         else
-            operatorType.setNodeName("plus operator");
+            operator.setNodeName("plus operator");
 
-        return operatorType;
+        return operator;
     }
 
     @Override
@@ -387,26 +386,26 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
 
     @Override
     public Node visitMulExprOptor(templateParser.MulExprOptorContext ctx) {
-        OperatorType operatorType = new OperatorType(ctx.getText());
-        operatorType.setLineNumber(ctx.getStart().getLine());
+        Operator operator = new Operator(ctx.getText());
+        operator.setLineNumber(ctx.getStart().getLine());
 
         switch (ctx.getText()) {
             case "*":
-                operatorType.setNodeName("mul operator");
+                operator.setNodeName("mul operator");
                 break;
 
             case "/":
-                operatorType.setNodeName("div operator");
+                operator.setNodeName("div operator");
                 break;
 
             case "//":
-                operatorType.setNodeName("floor operator");
+                operator.setNodeName("floor operator");
                 break;
 
             default:
-                operatorType.setNodeName("mod operator");
+                operator.setNodeName("mod operator");
         }
-        return operatorType;
+        return operator;
     }
 
     @Override
@@ -416,10 +415,10 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
             Node sign;
 
             if (ctx.MINUS() != null) {
-                sign = new SignType(ctx.MINUS().getText());
+                sign = new UnaryOperator(ctx.MINUS().getText());
                 sign.setLineNumber(ctx.MINUS().getSymbol().getLine());
             } else {
-                sign = new SignType(ctx.PLUS().getText());
+                sign = new UnaryOperator(ctx.PLUS().getText());
                 sign.setLineNumber(ctx.PLUS().getSymbol().getLine());
             }
             sign.setNodeName("sign type");
@@ -523,11 +522,11 @@ public class ExpressionVisitor extends templateParserBaseVisitor<Node> {
             }
         }
 
-        PrimaryType primaryType = new PrimaryType(atom, trailerList);
-        primaryType.setNodeName("primary type");
-        primaryType.setLineNumber(ctx.atom().getStart().getLine());
+        PrimaryExpression primary = new PrimaryExpression(atom, trailerList);
+        primary.setNodeName("primary type");
+        primary.setLineNumber(ctx.atom().getStart().getLine());
 
-        return primaryType;
+        return primary;
     }
 
     @Override
