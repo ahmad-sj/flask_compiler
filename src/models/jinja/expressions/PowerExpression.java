@@ -22,9 +22,9 @@ public class PowerExpression extends Expression {
 
         return "power expr\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
-                + indent + "├─ base expr: " + baseValueExpr.print(level + 2) + "\n"
+                + indent + "├─ base expr: " + baseValueExpr.print(level + 2)
                 + indent + "├─ optor: **\n"
-                + indent + "└─ pow expr: " + powerValueExpr.print(level + 2) + "\n"
+                + indent + "└─ pow expr: " + powerValueExpr.print(level + 2)
                 ;
     }
 }

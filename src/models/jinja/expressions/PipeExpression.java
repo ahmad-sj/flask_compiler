@@ -40,9 +40,6 @@ public class PipeExpression extends Expression {
                 filters.append(getIndent(level + 1));
                 filters.append("├─ ");
                 filters.append(filterList.get(i).print(level + 1));
-
-                if (i + 1 < filterList.size())
-                    filters.append("\n");
             }
         }
 

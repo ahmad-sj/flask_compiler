@@ -34,8 +34,6 @@ public class MulExpression extends Expression {
             if (i + 1 < exprList.size()) {
                 mulExpr.append(indent).append("├─ expr").append(i).append(": ");
                 mulExpr.append(exprList.get(i).print(level + 2));
-
-                mulExpr.append("\n");
                 mulExpr.append(indent).append("├─ optor: *\n");
             } else {
                 mulExpr.append(indent).append("└─ expr").append(i).append(": ");

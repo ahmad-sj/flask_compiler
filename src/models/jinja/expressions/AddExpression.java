@@ -35,8 +35,6 @@ public class AddExpression extends Expression {
             if (i + 1 < exprList.size()) {
                 addExpr.append(indent).append("├─ expr").append(i).append(": ");
                 addExpr.append(exprList.get(i).print(level + 2));
-
-                addExpr.append("\n");
                 addExpr.append(indent).append("├─ optor: +\n");
             } else {
                 addExpr.append(indent).append("└─ expr").append(i).append(": ");

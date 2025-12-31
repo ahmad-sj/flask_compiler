@@ -35,8 +35,6 @@ public class AndExpression extends Expression {
             if (i + 1 < exprList.size()) {
                 andExpr.append(indent).append("├─ expr").append(i).append(": ");
                 andExpr.append(exprList.get(i).print(level + 2));
-
-                andExpr.append("\n");
                 andExpr.append(indent).append("├─ optor: and\n");
             } else {
                 andExpr.append(indent).append("└─ expr").append(i).append(": ");

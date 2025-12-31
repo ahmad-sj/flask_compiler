@@ -25,7 +25,7 @@ public class IsExpression extends Expression {
         return "in expr\n"
                 + indent + "├─ line no: " + lineNumber + "\n"
                 + indent + "├─ expr: " + expr.print(level + 2)
-                + indent + "├─ optor: is" + (negated ? " not" : "")
+                + indent + "├─ optor: is" + (negated ? " not" : "") + "\n"
                 + indent + "└─ id: " + id.print(level)
                 ;
     }

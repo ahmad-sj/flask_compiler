@@ -34,8 +34,6 @@ public class OrExpression extends Expression {
             if (i + 1 < exprList.size()) {
                 orExpr.append(indent).append("├─ expr").append(i).append(": ");
                 orExpr.append(exprList.get(i).print(level + 2));
-
-                orExpr.append("\n");
                 orExpr.append(indent).append("├─ optor: or\n");
             } else {
                 orExpr.append(indent).append("└─ expr").append(i).append(": ");

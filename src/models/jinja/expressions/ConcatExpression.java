@@ -34,8 +34,6 @@ public class ConcatExpression extends Expression {
             if (i + 1 < exprList.size()) {
                 concatExpr.append(indent).append("├─ expr").append(i).append(": ");
                 concatExpr.append(exprList.get(i).print(level + 2));
-
-                concatExpr.append("\n");
                 concatExpr.append(indent).append("├─ optor: ~\n");
             } else {
                 concatExpr.append(indent).append("└─ expr").append(i).append(": ");

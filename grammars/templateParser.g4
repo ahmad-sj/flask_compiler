@@ -5,13 +5,14 @@ options {tokenVocab=templateLexer;}
 @header{ package antlr; }
 
 template
-    : extendsBlock? (htmlElement | jinjaBlock*) EOF
+    : extendsBlock? (htmlElement | jinjaElement*) EOF
     ;
 
-jinjaBlock
+jinjaElement
     : inheritBlock
     | ifBlock
     | forBlock
+    | jinjaExpression
     | setStatement
     ;
 
@@ -152,23 +153,18 @@ notExpr
     ;
 
 compareExpr
-    : isExpr
-    | compExpr
-    | inExpr
-    ;
-
-isExpr: concatExpr (IS (NOT)? ID)?;
-
-compExpr
-    : pipeExpr comparisonOperator pipeExpr
-    ;
-
-inExpr
-    : pipeExpr (IN pipeExpr)?
+    : concatExpr (IS (NOT)? ID)?                #isExpr
+    | pipeExpr comparisonOperator pipeExpr      #compExpr
+    | pipeExpr (IN pipeExpr)?                   #inExpr
     ;
 
 comparisonOperator
-    : EQ | NEQ | LT | GT | LE | GE
+    : EQ        #equalOperator
+    | NEQ       #notEqualOperator
+    | LT        #lessThanOperator
+    | GT        #greaterThanOperator
+    | LE        #lessOrEqualOperator
+    | GE        #greaterOrEqualOperator
     ;
 
 pipeExpr
@@ -196,8 +192,8 @@ addExpr
     ;
 
 addExprOptor
-    : PLUS
-    | MINUS
+    : PLUS          #plusOperator
+    | MINUS         #minusOperator
     ;
 
 mulExpr
@@ -205,10 +201,10 @@ mulExpr
     ;
 
 mulExprOptor
-    : MULT
-    | DIV
-    | FLOORDIV
-    | MOD
+    : MUL           #mulOperator
+    | DIV           #divOperator
+    | FLOORDIV      #floorDivOperator
+    | MOD           #modOperator
     ;
 
 unaryExpr
@@ -221,17 +217,17 @@ powExpr
     ;
 
 atom
-     : ID
-     | INT
-     | FLOAT
-     | STRING
-     | parenthedExpr
-     | list
-     | dict
+     : ID                                               #id
+     | INT                                              #int
+     | FLOAT                                            #float
+     | STRING                                           #string
+     | LPAREN expression RPAREN                         #parenthedExpr
+     | LSB (expression (COMMA expression)*)? RSB        #list
+     | LBRACE (pair (COMMA pair)*)? RBRACE              #dict
      ;
 
-parenthedExpr
-    : LPAREN expression RPAREN
+pair
+    : expression COLON expression
     ;
 
  primary
@@ -239,33 +235,9 @@ parenthedExpr
      ;
 
 trailer
-    : memberTrailer
-    | subTrailer
-    | callTrailer
-    ;
-
-memberTrailer
-    : DOT ID
-    ;
-
-subTrailer
-    : LSB expression RSB
-    ;
-
-callTrailer
-    : LPAREN argumentList? RPAREN
-    ;
-
-list
-    : LSB (expression (COMMA expression)*)? RSB
-    ;
-
-dict
-    : LBRACE (pair (COMMA pair)*)? RBRACE
-    ;
-
-pair
-    : expression COLON expression
+    : DOT ID                            #memberTrailer
+    | LSB expression RSB                #subTrailer
+    | LPAREN argumentList? RPAREN       #callTrailer
     ;
 
 // =====================================================================================
@@ -282,7 +254,7 @@ htmlStartTag
     : START_TAG_OPEN START_TAG_NAME htmlTagAttr* START_TAG_CLOSE;
 
 htmlElementBody
-    : (htmlElement | htmlStyleElem | jinjaExpression | jinjaBlock | templateText)+
+    : (htmlElement | htmlStyleElem | jinjaElement | templateText)+
     ;
 
 htmlEndTag

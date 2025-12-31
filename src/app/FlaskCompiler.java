@@ -13,6 +13,7 @@ public class FlaskCompiler {
         fileNames.add("tests/index.html");
         fileNames.add("tests/add.html");
         fileNames.add("tests/detail.html");
+        fileNames.add("tests/tests.html");
 
         // Get the current working directory (project root in most cases)
         Path currentPath = Paths.get("").toAbsolutePath();

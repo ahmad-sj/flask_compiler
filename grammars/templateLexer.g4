@@ -35,7 +35,7 @@ mode J_STMNT_MODE;
    J_STMNT_WS: [ \t\r\n] -> skip;
 
 mode EXPRESSION_MODE;
-    MULT: '*';
+    MUL: '*';
     PLUS: '+';
     MINUS: '-';
     DIV: '/';
