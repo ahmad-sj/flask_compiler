@@ -1,6 +1,7 @@
 lexer grammar pythonLexer;
 
 @lexer::header {
+package antlr;
 import org.antlr.v4.runtime.*;
 import java.util.*;
 }
@@ -14,9 +15,12 @@ tokens { INDENT, DEDENT }
     private LinkedList<Token> pending = new LinkedList<>();
     private int opened = 0;
 
-    public pythonLexer(CharStream input) {
+
+    public pythonLexer(CharStream input, int i) {
         super(input);
         indents.push(0);
+        _interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
+
     }
 
     @Override

@@ -1,11 +1,13 @@
 parser grammar pythonParser;
 
+
 options { tokenVocab=pythonLexer; }
+
+@header{ package antlr; }
 
 prog
     : stmtList EOF
     ;
-
 
 stmtList
     : (stmt (NEWLINE | WS)*)+
@@ -21,16 +23,16 @@ simpleStmt
     | assignLine
     | returnLine
     | exprLine
-    | PASS
+    | pass
+    ;
+
+pass
+    : PASS
     ;
 
 importLine
-    : IMPORT name (AS NAME)?
-    | FROM name IMPORT importList
-    ;
-
-importList
-    : NAME (COMMA NAME)* (COMMA)? // يسمح بفاصلة أخيرة
+    : IMPORT name (AS NAME)?                             #singleImport
+    | FROM name IMPORT NAME (COMMA NAME)* (COMMA)?       #multiImport
     ;
 
 name
@@ -47,8 +49,19 @@ target
     ;
 
 value
-    : baseValue (DOT NAME | OPEND_SQUAR_BRAKET expr CLOSED_SQUAR_BRAKET | callArgs)*
+    : baseValue valueTrailer*
     ;
+
+valueTrailer
+    : dotTrailer
+    | squareTrailer
+    | callArgs
+    ;
+
+dotTrailer: DOT NAME;
+
+squareTrailer: OPEND_SQUAR_BRAKET expr CLOSED_SQUAR_BRAKET;
+
 
 baseValue
     : NAME

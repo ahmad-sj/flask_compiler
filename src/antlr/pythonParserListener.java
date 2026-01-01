@@ -1,5 +1,5 @@
-// Generated from D:/SDKs/Ahmad/flask_compiler/grammars/pythonParser.g4 by ANTLR 4.13.2
-package antlr;
+// Generated from C:/Users/Admin/Desktop/compiler project/flask_compiler/grammars/pythonParser.g4 by ANTLR 4.13.2
+ package antlr; 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -48,25 +48,39 @@ public interface pythonParserListener extends ParseTreeListener {
 	 */
 	void exitSimpleStmt(pythonParser.SimpleStmtContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link pythonParser#importLine}.
+	 * Enter a parse tree produced by {@link pythonParser#pass}.
 	 * @param ctx the parse tree
 	 */
-	void enterImportLine(pythonParser.ImportLineContext ctx);
+	void enterPass(pythonParser.PassContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link pythonParser#importLine}.
+	 * Exit a parse tree produced by {@link pythonParser#pass}.
 	 * @param ctx the parse tree
 	 */
-	void exitImportLine(pythonParser.ImportLineContext ctx);
+	void exitPass(pythonParser.PassContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link pythonParser#importList}.
+	 * Enter a parse tree produced by the {@code singleImport}
+	 * labeled alternative in {@link pythonParser#importLine}.
 	 * @param ctx the parse tree
 	 */
-	void enterImportList(pythonParser.ImportListContext ctx);
+	void enterSingleImport(pythonParser.SingleImportContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link pythonParser#importList}.
+	 * Exit a parse tree produced by the {@code singleImport}
+	 * labeled alternative in {@link pythonParser#importLine}.
 	 * @param ctx the parse tree
 	 */
-	void exitImportList(pythonParser.ImportListContext ctx);
+	void exitSingleImport(pythonParser.SingleImportContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code multiImport}
+	 * labeled alternative in {@link pythonParser#importLine}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiImport(pythonParser.MultiImportContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code multiImport}
+	 * labeled alternative in {@link pythonParser#importLine}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiImport(pythonParser.MultiImportContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link pythonParser#name}.
 	 * @param ctx the parse tree
@@ -107,6 +121,36 @@ public interface pythonParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitValue(pythonParser.ValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#valueTrailer}.
+	 * @param ctx the parse tree
+	 */
+	void enterValueTrailer(pythonParser.ValueTrailerContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#valueTrailer}.
+	 * @param ctx the parse tree
+	 */
+	void exitValueTrailer(pythonParser.ValueTrailerContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#dotTrailer}.
+	 * @param ctx the parse tree
+	 */
+	void enterDotTrailer(pythonParser.DotTrailerContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#dotTrailer}.
+	 * @param ctx the parse tree
+	 */
+	void exitDotTrailer(pythonParser.DotTrailerContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#squareTrailer}.
+	 * @param ctx the parse tree
+	 */
+	void enterSquareTrailer(pythonParser.SquareTrailerContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#squareTrailer}.
+	 * @param ctx the parse tree
+	 */
+	void exitSquareTrailer(pythonParser.SquareTrailerContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link pythonParser#baseValue}.
 	 * @param ctx the parse tree

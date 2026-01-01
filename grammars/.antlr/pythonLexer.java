@@ -1,4 +1,4 @@
-// Generated from C:/Users/Admin/Desktop/compiler project/flask_compiler/grammars/pythonLexer.g4 by ANTLR 4.13.2
+// Generated from c:/Users/Admin/Desktop/compiler project/flask_compiler/grammars/pythonLexer.g4 by ANTLR 4.13.1
 
 package antlr;
 import org.antlr.v4.runtime.*;
@@ -15,7 +15,7 @@ import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue", "this-escape"})
 public class pythonLexer extends Lexer {
-	static { RuntimeMetaData.checkVersion("4.13.2", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.13.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -116,12 +116,9 @@ public class pythonLexer extends Lexer {
 	    private LinkedList<Token> pending = new LinkedList<>();
 	    private int opened = 0;
 
-
-	    public pythonLexer(CharStream input, int i) {
+	    public pythonLexer(CharStream input) {
 	        super(input);
 	        indents.push(0);
-	        _interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
-
 	    }
 
 	    @Override

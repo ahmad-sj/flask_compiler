@@ -1,5 +1,6 @@
-// Generated from D:/SDKs/Ahmad/flask_compiler/grammars/pythonParser.g4 by ANTLR 4.13.2
-package antlr;
+// Generated from C:/Users/Admin/Desktop/compiler project/flask_compiler/grammars/pythonParser.g4 by ANTLR 4.13.2
+ package antlr; 
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -64,25 +65,37 @@ public class pythonParserBaseListener implements pythonParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterImportLine(pythonParser.ImportLineContext ctx) { }
+	@Override public void enterPass(pythonParser.PassContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitImportLine(pythonParser.ImportLineContext ctx) { }
+	@Override public void exitPass(pythonParser.PassContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterImportList(pythonParser.ImportListContext ctx) { }
+	@Override public void enterSingleImport(pythonParser.SingleImportContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitImportList(pythonParser.ImportListContext ctx) { }
+	@Override public void exitSingleImport(pythonParser.SingleImportContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMultiImport(pythonParser.MultiImportContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultiImport(pythonParser.MultiImportContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -131,6 +144,42 @@ public class pythonParserBaseListener implements pythonParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitValue(pythonParser.ValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterValueTrailer(pythonParser.ValueTrailerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitValueTrailer(pythonParser.ValueTrailerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDotTrailer(pythonParser.DotTrailerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDotTrailer(pythonParser.DotTrailerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSquareTrailer(pythonParser.SquareTrailerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSquareTrailer(pythonParser.SquareTrailerContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

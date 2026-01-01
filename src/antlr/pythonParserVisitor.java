@@ -1,5 +1,5 @@
-// Generated from D:/SDKs/Ahmad/flask_compiler/grammars/pythonParser.g4 by ANTLR 4.13.2
-package antlr;
+// Generated from C:/Users/Admin/Desktop/compiler project/flask_compiler/grammars/pythonParser.g4 by ANTLR 4.13.2
+ package antlr; 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -35,17 +35,25 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSimpleStmt(pythonParser.SimpleStmtContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link pythonParser#importLine}.
+	 * Visit a parse tree produced by {@link pythonParser#pass}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitImportLine(pythonParser.ImportLineContext ctx);
+	T visitPass(pythonParser.PassContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link pythonParser#importList}.
+	 * Visit a parse tree produced by the {@code singleImport}
+	 * labeled alternative in {@link pythonParser#importLine}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitImportList(pythonParser.ImportListContext ctx);
+	T visitSingleImport(pythonParser.SingleImportContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code multiImport}
+	 * labeled alternative in {@link pythonParser#importLine}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiImport(pythonParser.MultiImportContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link pythonParser#name}.
 	 * @param ctx the parse tree
@@ -70,6 +78,24 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitValue(pythonParser.ValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#valueTrailer}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValueTrailer(pythonParser.ValueTrailerContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#dotTrailer}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDotTrailer(pythonParser.DotTrailerContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#squareTrailer}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSquareTrailer(pythonParser.SquareTrailerContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link pythonParser#baseValue}.
 	 * @param ctx the parse tree

@@ -1,5 +1,6 @@
 package app;
 
+import models.App;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.Trees;
@@ -10,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import antlr.*;
+import visitors.AppVisitor;
 
 public class FlaskCompiler {
     public static void main(String[] args) {
@@ -20,17 +22,17 @@ public class FlaskCompiler {
 
             // إنشاء Lexer و Parser
             CharStream input = CharStreams.fromFileName(fullPath.toString());
-            pythonLexer lexer = new pythonLexer(input);
+            pythonLexer lexer = new pythonLexer(input, 0);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
 
             // طباعة جميع التوكنات للتأكد من INDENT و DEDENT
-            tokens.fill(); // اجلب كل التوكنات
-            List<Token> tokenList = tokens.getTokens();
-            System.out.println("Tokens (type : text) including INDENT/DEDENT:");
-            for (Token t : tokenList) {
-                String tokenName = pythonLexer.VOCABULARY.getSymbolicName(t.getType());
-                System.out.printf("%s : '%s'%n", tokenName, t.getText().replace("\r","\\r").replace("\n","\\n"));
-            }
+//            tokens.fill(); // اجلب كل التوكنات
+//            List<Token> tokenList = tokens.getTokens();
+//            System.out.println("Tokens (type : text) including INDENT/DEDENT:");
+//            for (Token t : tokenList) {
+//                String tokenName = pythonLexer.VOCABULARY.getSymbolicName(t.getType());
+//                System.out.printf("%s : '%s'%n", tokenName, t.getText().replace("\r","\\r").replace("\n","\\n"));
+//            }
 
             // تمرير التوكنات للـ parser
             pythonParser parser = new pythonParser(tokens);
@@ -39,12 +41,19 @@ public class FlaskCompiler {
             ParseTree tree = parser.prog();
 
             // طباعة Parse Tree بشكل نصي
-            System.out.println("\nParse Tree (text format):");
-            System.out.println(tree.toStringTree(parser));
+//            System.out.println("\nParse Tree (text format):");
+//            System.out.println(tree.toStringTree(parser));
+//
+//            // طباعة Parse Tree بشكل شجري (Hierarchy)
+//            System.out.println("\nParse Tree (hierarchy):");
+//            printTree(tree, parser, 0);
 
-            // طباعة Parse Tree بشكل شجري (Hierarchy)
-            System.out.println("\nParse Tree (hierarchy):");
-            printTree(tree, parser, 0);
+            AppVisitor appVisitor = new AppVisitor();
+            App app = appVisitor.visit(tree);
+
+            for (int i = 0; i < app.nodes.size(); i++) {
+                IO.println(app.nodes.get(i).toString());
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
