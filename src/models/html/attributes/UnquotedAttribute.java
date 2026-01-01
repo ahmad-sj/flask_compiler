@@ -1,18 +1,15 @@
 package models.html.attributes;
 
 public class UnquotedAttribute extends Attribute {
-    public String value;
+    public String attrValue;
 
-    public UnquotedAttribute() {
-    }
-
-    public UnquotedAttribute(String name, String value) {
-        this.name = name;
-        this.value = value;
+    public UnquotedAttribute(String name, String attrValue) {
+        this.attrName = name;
+        this.attrValue = attrValue;
     }
 
     @Override
     public String toString() {
-        return this.name + "=" + this.value;
+        return this.attrName + "=" + this.attrValue;
     }
 }

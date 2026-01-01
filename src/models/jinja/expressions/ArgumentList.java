@@ -1,0 +1,41 @@
+package models.jinja.expressions;
+
+import models.Node;
+
+import java.util.ArrayList;
+
+public class ArgumentList extends Expression {
+    public ArrayList<Node> argList;
+
+    public ArgumentList(ArrayList<Node> argList) {
+        this.argList = argList;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < argList.size(); i++) {
+            stringBuilder.append(argList.get(i));
+
+            if (i + 1 < argList.size())
+                stringBuilder.append(", ");
+        }
+
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public String print(int level) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < argList.size(); i++) {
+            stringBuilder.append(argList.get(i));
+
+            if (i + 1 < argList.size())
+                stringBuilder.append(", ");
+        }
+
+        return stringBuilder.toString() + "\n";
+    }
+}

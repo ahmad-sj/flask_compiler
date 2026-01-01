@@ -5,94 +5,119 @@ options {tokenVocab=templateLexer;}
 @header{ package antlr; }
 
 template
-    : extendsBlock? (htmlElement | jinjaBlock*) EOF
+    : extendsBlock? (htmlElement | jinjaElement*) EOF
     ;
 
-jinjaBlock
+jinjaElement
     : inheritBlock
     | ifBlock
     | forBlock
+    | jinjaExpression
+    | setStatement
     ;
 
-templateText: NORMAL_TEXT;
+templateText
+    : NORMAL_TEXT
+    ;
 
-// conditional rules
-ifBlock: ifStatmentStart ifBody? ifStatmentEnd;
+// ============================================================
 
-ifStatmentStart: J_STMNT_START J_STMNT_IF condition (J_ID_END | J_CONDITION_END);
+setStatement
+    : J_STMNT_START SET ID ASSIGN expression J_EXPR_STMNT_END;
+
+// ============================================================
+
+// conditional blocks
+ifBlock
+    : ifStatmentStart ifBody? ifStatmentEnd
+    ;
+
+ifStatmentStart
+    : J_STMNT_START IF expression J_EXPR_STMNT_END
+    ;
 
 ifBody
-    : (ifBlock | elifBlock | forBlock | jinjaExpression | htmlElement | templateText)+ elseBlock?
+    : ifBodyElem+ elseBlock?
     | elseBlock
     ;
 
-ifStatmentEnd: J_STMNT_START J_STMNT_ENDIF J_STMNT_END;
-
-elifBlock: J_STMNT_START J_STMNT_ELIF condition J_ID_END subconitionBody?;
-
-elseBlock: J_STMNT_START J_STMNT_ELSE J_CONDITION_ELSE_END subconitionBody?;
-
-// body for elif / else block
-subconitionBody
-    : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+
+ifBodyElem
+    : ifBlock
+    | elifBlock
+    | forBlock
+    | jinjaExpression
+    | htmlElement
+    | templateText
+    | setStatement
     ;
 
-condition
-    : multiClauseCondition
-    | singleClauseCondition
+ifStatmentEnd
+    : J_STMNT_START ENDIF J_STMNT_END
     ;
 
-singleClauseCondition: J_CONDITION_NOT? conditionOperand (conditionComparisionOperator conditionOperand | conditionOperandTest)?;
-multiClauseCondition: J_CONDITION_NOT? singleClauseCondition (binaryLogicalOperator singleClauseCondition)+;
-
-conditionOperand
-    : J_CONDITION_VAR_NAME (varMember | funcParamList)?
-    | J_CONDITION_PRIMITIVE
-    ;
-conditionOperandTest: J_COND_ID_IS J_TEST_VALUE;
-
-binaryLogicalOperator
-    : J_COND_ID_AND
-    | J_COND_ID_OR
-    | J_COND_PRIM_AND
-    | J_COND_PRIM_OR
+elifBlock
+    : J_STMNT_START ELIF expression J_EXPR_STMNT_END subBlock*
     ;
 
-conditionComparisionOperator
-    : J_COND_ID_COMP_OPTOR
-    | J_COND_PRIM_COMP_OPTOR
+elseBlock
+    : J_STMNT_START ELSE J_STMNT_END subBlock*
     ;
 
-// for loop rules
-forBlock: forStatementStart forBody? forStatementEnd;
+// body for: for loop, elif, else, inherit blocks.
+subBlock
+    : ifBlock
+    | forBlock
+    | jinjaExpression
+    | htmlElement
+    | templateText
+    | setStatement
+    ;
 
-forStatementStart: J_STMNT_START J_STMNT_FOR iterationStatement J_ID_END;
+// ============================================================
 
-iterationStatement: loopVariables J_LOOP_KEYWORD iterable;
+forBlock
+    : forStartStatement forBody? forEndStatement
+    ;
 
-loopVariables: J_LOOP_VARIABLE (J_VARIABLES_COMMA J_LOOP_VARIABLE)*;
+forStartStatement
+    : J_STMNT_START FOR ID (COMMA ID)* IN expression J_EXPR_STMNT_END
+    ;
 
-iterable: J_LOOP_ITERABLE (varMember | funcParamList)?;
-
-forStatementEnd: J_STMNT_START J_STMNT_ENDFOR J_STMNT_END;
+forEndStatement
+    : J_STMNT_START ENDFOR J_STMNT_END
+    ;
 
 forBody
-    : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+ elseBlock?
+    : subBlock+ elseBlock?
     ;
 
-extendsBlock: J_STMNT_START J_STMNT_EXTENDS J_EXTENDS_STRING J_EXTENDS_END;
+// ============================================================
 
-inheritBlock: inheritBlockStart inheritBlockBody? inheritBlockEnd;
-
-inheritBlockStart: J_STMNT_START J_STMNT_BLOCK J_INHERIT_BLOCK_NAME J_STMNT_END;
-
-inheritBlockEnd: J_STMNT_START J_STMNT_ENDBLOCK J_STMNT_END;
-
-inheritBlockBody
-    : (ifBlock | forBlock | jinjaExpression | htmlElement | templateText)+
+extendsBlock
+    : J_STMNT_START EXTENDS STRING J_EXPR_STMNT_END
     ;
 
-jinjaExpression: jinjaExprStart jinjaExprBody jinjaExprEnd;
+// ============================================================
+
+inheritBlock
+    : inheritBlockStart inheritBlockBody? inheritBlockEnd
+    ;
+
+inheritBlockBody: (subBlock | inheritBlock)+;
+
+inheritBlockStart
+    : J_STMNT_START BLOCK ID J_EXPR_STMNT_END
+    ;
+
+inheritBlockEnd
+    : J_STMNT_START ENDBLOCK J_STMNT_END
+    ;
+
+// ============================================================
+
+jinjaExpression
+    : jinjaExprStart expression jinjaExprEnd
+    ;
 
 jinjaExprStart
     : J_EXPR_START
@@ -100,29 +125,119 @@ jinjaExprStart
     ;
 
 jinjaExprEnd
-    : J_ID_EXPR_END
+    : J_EXPR_END
     ;
 
-jinjaExprBody: jinjaFilter? jinjaId;
-
-jinjaFilter: J_FORMAT_STRING J_EXPR_PIPELINE;
-
-jinjaId: J_EXPR_ID (varMember | funcParamList)?;
-
-varMember
-    : dictKey
-    | objAttr
+expression
+    : orExpr ternaryExt?  // ternary ?:
+    | defaultExpr
     ;
 
-dictKey: J_ID_LSB J_DICT_KEY J_DICT_VAR_RSB (objAttr | dictKey)?;
-objAttr: J_ID_DOT J_VAR_ATTR (objAttr | dictKey | funcParamList)?;
+ternaryExt
+    : QMARK expression COLON expression;
 
-funcParamList: J_FUNC_LPAREN (funcParam | (J_ID_COMMA funcParam))* (J_FUNC_RPAREN | J_FUNC_PARAMLESS_RPAREN);
-funcParamId: J_FUNC_PARAM_ALIAS? J_FUNC_PARAM_ID (objAttr | dictKey)?;
+defaultExpr
+    : orExpr ELVIS expression;
 
-funcParam
-    : funcParamId
-    | J_FUNC_PARAM_STRING
+orExpr
+    : andExpr (OR andExpr)*
+    ;
+
+andExpr
+    : notExpr (AND notExpr)*
+    ;
+
+notExpr
+    : NOT notExpr
+    | compareExpr
+    ;
+
+compareExpr
+    : concatExpr (IS (NOT)? ID)?                #isExpr
+    | pipeExpr comparisonOperator pipeExpr      #compExpr
+    | pipeExpr (IN pipeExpr)?                   #inExpr
+    ;
+
+comparisonOperator
+    : EQ        #equalOperator
+    | NEQ       #notEqualOperator
+    | LT        #lessThanOperator
+    | GT        #greaterThanOperator
+    | LE        #lessOrEqualOperator
+    | GE        #greaterOrEqualOperator
+    ;
+
+pipeExpr
+    : concatExpr filter*
+    ;
+
+filter
+    : PIPELINE ID (LPAREN argumentList? RPAREN)?;
+
+argumentList
+    : argument (COMMA argument)*
+    ;
+
+argument
+    : expression
+    | ID ASSIGN expression
+    ;
+
+concatExpr
+    : addExpr (TILDE addExpr)*
+    ;
+
+addExpr
+    : mulExpr (addExprOptor mulExpr)*
+    ;
+
+addExprOptor
+    : PLUS          #plusOperator
+    | MINUS         #minusOperator
+    ;
+
+mulExpr
+    : unaryExpr (mulExprOptor unaryExpr)*
+    ;
+
+mulExprOptor
+    : MUL           #mulOperator
+    | DIV           #divOperator
+    | FLOORDIV      #floorDivOperator
+    | MOD           #modOperator
+    ;
+
+unaryExpr
+    : (PLUS | MINUS) unaryExpr
+    | powExpr
+    ;
+
+powExpr
+    : primary (POW unaryExpr)?
+    ;
+
+atom
+     : ID                                               #id
+     | INT                                              #int
+     | FLOAT                                            #float
+     | STRING                                           #string
+     | LPAREN expression RPAREN                         #parenthedExpr
+     | LSB (expression (COMMA expression)*)? RSB        #list
+     | LBRACE (pair (COMMA pair)*)? RBRACE              #dict
+     ;
+
+pair
+    : expression COLON expression
+    ;
+
+ primary
+     : atom trailer*
+     ;
+
+trailer
+    : DOT ID                            #memberTrailer
+    | LSB expression RSB                #subTrailer
+    | LPAREN argumentList? RPAREN       #callTrailer
     ;
 
 // =====================================================================================
@@ -132,67 +247,90 @@ htmlElement
     | htmlSelfClosingElement
     ;
 
-htmlRegularElement: htmlStartTag htmlElementBody? htmlEndTag;
+htmlRegularElement
+    : htmlStartTag htmlElementBody? htmlEndTag;
 
-htmlStartTag: START_TAG_OPEN START_TAG_NAME (htmlTagAttr | jinjaExpression)* START_TAG_CLOSE;
+htmlStartTag
+    : START_TAG_OPEN START_TAG_NAME htmlTagAttr* START_TAG_CLOSE;
 
 htmlElementBody
-    : (htmlElement | htmlStyleElem | jinjaExpression | jinjaBlock | templateText)+
+    : (htmlElement | htmlStyleElem | jinjaElement | templateText)+
     ;
 
-htmlEndTag: CLOSE_TAG_START END_TAG_NAME END_TAG_CLOSE;
+htmlEndTag
+    : CLOSE_TAG_START END_TAG_NAME END_TAG_CLOSE;
 
-htmlSelfClosingElement: htmlSelfClosingTag;
+htmlSelfClosingElement
+    : htmlSelfClosingTag;
 
-htmlSelfClosingTag: START_TAG_OPEN START_TAG_NAME (htmlTagAttr | jinjaExpression)* SELF_CLOSING_TAG_CLOSE;
+htmlSelfClosingTag
+    : START_TAG_OPEN START_TAG_NAME htmlTagAttr* SELF_CLOSING_TAG_CLOSE;
 
 htmlTagAttr
     : styleAttr
     | booleanAttr
     | attrWithQuotedVal
     | attrWithUnquotedVal
+    | jinjaExpression
     ;
 
 booleanAttr
     : ATTR_NAME
     ;
 
-attrWithUnquotedVal: ATTR_NAME ATTR_EQ ATTR_VALUE_UNQUOTED;
+attrWithUnquotedVal
+    : ATTR_NAME ATTR_EQ ATTR_VALUE_UNQUOTED;
 
-attrWithQuotedVal: ATTR_NAME ATTR_EQ ATTR_DQUOTE_START (ATTR_VAL_TEXT | jinjaAttrVal)+ ATTR_DQUOTE_END;
+attrWithQuotedVal
+    : ATTR_NAME ATTR_EQ ATTR_DQUOTE_START quotedValElem* ATTR_DQUOTE_END;
 
-jinjaAttrVal: ATTR_VAL_J_EXPR_START jinjaExprBody J_ID_EXPR_END;
+quotedValElem
+    : ATTR_VAL_TEXT
+    | jinjaAttrVal
+    ;
 
-styleAttr: STYLE_ATTR CSS_INLINE_EQ CSS_INLINE_DQUOT_START inlineStyleProp* CSS_INLINE_PROP_DQUOT_END;
-inlineStyleProp: CSS_INLINE_PROP_NAME CSS_INLINE_PROP_COLON CSS_PROP_VAL+ CSS_PROP_SEMICOLON;
+jinjaAttrVal
+    : ATTR_VAL_J_EXPR_START expression J_EXPR_END;
 
-htmlStyleElem: htmlStyleElemOpenTag cssBlockDecl* htmlStyleElemCloseTag;
-htmlStyleElemOpenTag: START_TAG_OPEN STYLE_TAG_START_NAME STYLE_TAG_START_CLOSE;
-htmlStyleElemCloseTag: CLOSE_STYLE_START STYLE_END_TAG_NAME STYLE_END_TAG_CLOSE;
+styleAttr
+    : STYLE_ATTR CSS_INLINE_EQ CSS_INLINE_DQUOT_START inlineStyleProp* CSS_INLINE_PROP_DQUOT_END;
+
+inlineStyleProp
+    : CSS_INLINE_PROP_NAME CSS_INLINE_PROP_COLON CSS_PROP_VAL+ CSS_PROP_SEMICOLON;
+
+htmlStyleElem
+    : htmlStyleElemOpenTag cssBlock* htmlStyleElemCloseTag;
+
+htmlStyleElemOpenTag
+    : START_TAG_OPEN STYLE_TAG_START_NAME STYLE_TAG_START_CLOSE;
+
+htmlStyleElemCloseTag
+    : CLOSE_STYLE_START STYLE_END_TAG_NAME STYLE_END_TAG_CLOSE;
 
 // =====================================================================================
 
 // CSS rules
-cssBlockDecl: cssSelectors cssBlock;
+cssBlock
+    : selectorList CSS_LBRACE cssProp* BLK_RBRACE;
 
-cssSel
-    : CSS_SEL_ID         #CSS_SEL_ID
-    | CSS_SEL_CLASS      #CSS_SEL_CLASS
-    | CSS_SEL_ELEM       #CSS_SEL_ELEM
-    | cssSelWithState    #CSS_SEL_PSEUDO_CLASS
+selectorList
+    : selector                                #singleSelector
+    | selector+                               #descendentSelector
+    | selector (CSS_SEL_COMMA selector)+      #groupSelector
     ;
 
-cssSelWithState: (CSS_SEL_ID | CSS_SEL_CLASS | CSS_SEL_ELEM) CSS_SEL_STATE;
-
-cssSelectors
-    : cssSel                                #CSS_SEL_SINGLE
-    | cssSel+                               #CSS_SEL_DESCENDENT
-    | cssSel (CSS_SEL_COMMA cssSel)+        #CSS_SEL_GROUP
+selector
+    : simpleSelector
+    | pseudoClassSelector
     ;
 
-cssBlock: CSS_LBRACE cssPropDecl* BLK_RBRACE;
+simpleSelector
+    : CSS_SEL_ID        #idSelector
+    | CSS_SEL_CLASS     #classSelector
+    | CSS_SEL_ELEM      #elementSelector
+    ;
 
-cssPropDecl: BLK_PROP_NAME BLK_COLON cssBlockPropVal;
+pseudoClassSelector
+    : simpleSelector CSS_SEL_STATE;
 
-cssBlockPropVal: CSS_PROP_VAL+ CSS_PROP_SEMICOLON;
-
+cssProp: BLK_PROP_NAME BLK_COLON CSS_PROP_VAL+ CSS_PROP_SEMICOLON;

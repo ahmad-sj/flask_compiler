@@ -1,0 +1,70 @@
+
+{% extends "test.html" %}
+
+{% set filename = "sub_test" %}
+
+{% block main %}
+
+{% set username = "ahmad" %}
+
+{% for item in list %}
+
+{% set item_name = item.name %}
+
+{% if item.price > 100 %}
+
+{% set item_price = item.price %}
+<div> if in for loop </div>
+
+{% elif item.qty > 0 %}
+
+{% set item_qty = item.qty %}
+<div> elif in if in for loop </div>
+
+{% else %}
+{% set not_included = true %}
+<div> else in if in for loop </div>
+
+{% endif %}
+
+{% else %}
+{% set not_included = false %}
+<div> else in for loop </div>
+
+{% endfor %}
+
+{% block secondary %}
+
+{% set username = "alex" %}
+
+{% endblock %}
+
+{% set counter = 10 %}
+
+{% endblock %}
+
+
+{{ aaa + bbb * ccc and ddd > eee or fff is ggg }}
+
+{{ ttt ?? func1(bb, cc) }}
+
+{{ iii in jjj }}
+
+{{ not user.role == admin }}
+
+{{ asdsa ~ sdasda ~ kljl }}
+
+{{ (aaa + bbb) * ccc }}
+
+{{ a1 | a2 | filter1 }}
+
+{{ a1 ** a2 }}
+
+{{ item in [aa, bb, cc, dd] }}
+
+{{ object[key] }}
+
+{{ list.isEmpty() ? "" : list.length }}
+
+{{ -x * y }}
+

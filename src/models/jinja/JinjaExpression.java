@@ -3,33 +3,28 @@ package models.jinja;
 import models.Node;
 
 public class JinjaExpression extends Node {
-    JinjaFilter filter;
-    JinjaId id;
+    Node expression;
 
-    public JinjaExpression() {
-    }
-
-    public JinjaExpression(JinjaId id) {
-        this.id = id;
-    }
-
-    public JinjaExpression(JinjaFilter filter, JinjaId id) {
-        this.filter = filter;
-        this.id = id;
-    }
-
-    public String evaluate(){
-        if(this.filter != null){
-            return this.filter + " " + this.id;
-        }
-        return this.id.toString();
+    public JinjaExpression(Node expression) {
+        this.expression = expression;
     }
 
     @Override
     public String toString() {
-        if(this.filter != null){
-            return this.filter + " " + this.id;
-        }
-        return this.id.toString();
+        return "{{ " + this.expression.toString() + " }}";
+    }
+
+    public String evaluate(){
+        return "{{ " + this.expression.toString() + " }}";
+    }
+
+    @Override
+    public String print(int level) {
+        String indent = getIndent(level + 1);
+
+        return "jinja expression" + "\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "└─ expression: " + this.expression.print(level + 2)
+                ;
     }
 }
