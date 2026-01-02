@@ -1,4 +1,4 @@
-package models.python.importLines;
+package models.python.simpleStatements.importLines;
 
 import models.Node;
 

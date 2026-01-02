@@ -55,6 +55,12 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMultiImport(pythonParser.MultiImportContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link pythonParser#id}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitId(pythonParser.IdContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link pythonParser#name}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -102,6 +108,18 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBaseValue(pythonParser.BaseValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#parenthedGenExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParenthedGenExpr(pythonParser.ParenthedGenExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#parenthedExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParenthedExpr(pythonParser.ParenthedExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link pythonParser#tupleExpr}.
 	 * @param ctx the parse tree
@@ -180,6 +198,20 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAddExpr(pythonParser.AddExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code plusOperator}
+	 * labeled alternative in {@link pythonParser#addExprOptor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPlusOperator(pythonParser.PlusOperatorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code minusOperator}
+	 * labeled alternative in {@link pythonParser#addExprOptor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMinusOperator(pythonParser.MinusOperatorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link pythonParser#mulExpr}.
 	 * @param ctx the parse tree
@@ -288,4 +320,40 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLiteral(pythonParser.LiteralContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#int}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInt(pythonParser.IntContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#float}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFloat(pythonParser.FloatContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#string}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitString(pythonParser.StringContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#true}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTrue(pythonParser.TrueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#false}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFalse(pythonParser.FalseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#none}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNone(pythonParser.NoneContext ctx);
 }

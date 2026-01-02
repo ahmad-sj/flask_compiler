@@ -82,6 +82,16 @@ public interface pythonParserListener extends ParseTreeListener {
 	 */
 	void exitMultiImport(pythonParser.MultiImportContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link pythonParser#id}.
+	 * @param ctx the parse tree
+	 */
+	void enterId(pythonParser.IdContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#id}.
+	 * @param ctx the parse tree
+	 */
+	void exitId(pythonParser.IdContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link pythonParser#name}.
 	 * @param ctx the parse tree
 	 */
@@ -161,6 +171,26 @@ public interface pythonParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBaseValue(pythonParser.BaseValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#parenthedGenExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterParenthedGenExpr(pythonParser.ParenthedGenExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#parenthedGenExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitParenthedGenExpr(pythonParser.ParenthedGenExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#parenthedExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterParenthedExpr(pythonParser.ParenthedExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#parenthedExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitParenthedExpr(pythonParser.ParenthedExprContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link pythonParser#tupleExpr}.
 	 * @param ctx the parse tree
@@ -291,6 +321,30 @@ public interface pythonParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAddExpr(pythonParser.AddExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code plusOperator}
+	 * labeled alternative in {@link pythonParser#addExprOptor}.
+	 * @param ctx the parse tree
+	 */
+	void enterPlusOperator(pythonParser.PlusOperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code plusOperator}
+	 * labeled alternative in {@link pythonParser#addExprOptor}.
+	 * @param ctx the parse tree
+	 */
+	void exitPlusOperator(pythonParser.PlusOperatorContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code minusOperator}
+	 * labeled alternative in {@link pythonParser#addExprOptor}.
+	 * @param ctx the parse tree
+	 */
+	void enterMinusOperator(pythonParser.MinusOperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code minusOperator}
+	 * labeled alternative in {@link pythonParser#addExprOptor}.
+	 * @param ctx the parse tree
+	 */
+	void exitMinusOperator(pythonParser.MinusOperatorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link pythonParser#mulExpr}.
 	 * @param ctx the parse tree
@@ -471,4 +525,64 @@ public interface pythonParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLiteral(pythonParser.LiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#int}.
+	 * @param ctx the parse tree
+	 */
+	void enterInt(pythonParser.IntContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#int}.
+	 * @param ctx the parse tree
+	 */
+	void exitInt(pythonParser.IntContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#float}.
+	 * @param ctx the parse tree
+	 */
+	void enterFloat(pythonParser.FloatContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#float}.
+	 * @param ctx the parse tree
+	 */
+	void exitFloat(pythonParser.FloatContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#string}.
+	 * @param ctx the parse tree
+	 */
+	void enterString(pythonParser.StringContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#string}.
+	 * @param ctx the parse tree
+	 */
+	void exitString(pythonParser.StringContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#true}.
+	 * @param ctx the parse tree
+	 */
+	void enterTrue(pythonParser.TrueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#true}.
+	 * @param ctx the parse tree
+	 */
+	void exitTrue(pythonParser.TrueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#false}.
+	 * @param ctx the parse tree
+	 */
+	void enterFalse(pythonParser.FalseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#false}.
+	 * @param ctx the parse tree
+	 */
+	void exitFalse(pythonParser.FalseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#none}.
+	 * @param ctx the parse tree
+	 */
+	void enterNone(pythonParser.NoneContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#none}.
+	 * @param ctx the parse tree
+	 */
+	void exitNone(pythonParser.NoneContext ctx);
 }

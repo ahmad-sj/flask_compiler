@@ -4,7 +4,6 @@ import antlr.pythonParser;
 import antlr.pythonParserBaseVisitor;
 import models.App;
 import models.Node;
-import org.antlr.v4.runtime.tree.ParseTree;
 
 public class AppVisitor extends pythonParserBaseVisitor<App> {
     @Override

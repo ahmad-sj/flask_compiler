@@ -6,70 +6,73 @@ options { tokenVocab=pythonLexer; }
 @header{ package antlr; }
 
 prog
-    : stmtList EOF
+    : stmtList EOF              // done
     ;
 
 stmtList
-    : (stmt (NEWLINE | WS)*)+
+    : (stmt (NEWLINE | WS)*)+   // done
     ;
 
 stmt
-    : simpleStmt
+    : simpleStmt    // done
     | blockStmt
     ;
 
-simpleStmt
-    : importLine
-    | assignLine
-    | returnLine
-    | exprLine
-    | pass
+simpleStmt       // not necessary if all children visit methods are implemented
+    : importLine // done
+    | assignLine // done
+    | returnLine // done
+    | exprLine   // done
+    | pass       // done
     ;
 
-pass
-    : PASS
-    ;
+pass: PASS;     // done
 
 importLine
-    : IMPORT name (AS NAME)?                             #singleImport
-    | FROM name IMPORT NAME (COMMA NAME)* (COMMA)?       #multiImport
+    : IMPORT name (AS NAME)?                             #singleImport  // done
+    | FROM name IMPORT NAME (COMMA NAME)* (COMMA)?       #multiImport   // done
     ;
 
-name
-    : NAME (DOT NAME)*
+id: NAME;                  // done
+
+name                       // done
+    : id dotTrailer*
     ;
 
-assignLine
+assignLine                 // done
     : target EQUAL expr
     ;
 
-target
-    : NAME
-    | value
+target                  // not necessary if all children visit methods are implemented
+    : id                // done
+    | value             // done
     ;
 
-value
+value                   // done
     : baseValue valueTrailer*
     ;
 
-valueTrailer
-    : dotTrailer
-    | squareTrailer
-    | callArgs
+valueTrailer                // not necessary if all children visit methods are implemented
+    : dotTrailer            // done
+    | squareTrailer         // done
+    | callArgs              // done
     ;
 
-dotTrailer: DOT NAME;
+dotTrailer: DOT NAME;       // done
 
-squareTrailer: OPEND_SQUAR_BRAKET expr CLOSED_SQUAR_BRAKET;
+squareTrailer: OPEND_SQUAR_BRAKET expr CLOSED_SQUAR_BRAKET;     // done
 
-
-baseValue
-    : NAME
+baseValue                   // not necessary if all children visit methods are implemented
+    : id                    // done
     | literal
     | tupleExpr
-    | OPEND_NORMAL_BRAKET expr CLOSED_NORMAL_BRAKET
-    | OPEND_NORMAL_BRAKET genExpr CLOSED_NORMAL_BRAKET
+    | parenthedExpr
+    | parenthedGenExpr
     ;
+
+parenthedGenExpr: OPEND_NORMAL_BRAKET genExpr CLOSED_NORMAL_BRAKET;
+
+parenthedExpr: OPEND_NORMAL_BRAKET expr CLOSED_NORMAL_BRAKET;
 
 tupleExpr
     : OPEND_NORMAL_BRAKET expr COMMA expr (COMMA expr)* COMMA? CLOSED_NORMAL_BRAKET
@@ -79,24 +82,24 @@ genExpr
     : expr FOR NAME IN expr (IF expr)?
     ;
 
-callArgs
+callArgs                // done
     : OPEND_NORMAL_BRAKET callList CLOSED_NORMAL_BRAKET
     ;
 
-callList
+callList                // done
     : callArg (COMMA callArg)* COMMA?
     ;
 
-callArg
+callArg                 // done
     : NAME EQUAL expr   // keyword argument
     | expr              // positional
     ;
 
-returnLine
+returnLine              // done
     : RETURN expr?
     ;
 
-exprLine
+exprLine                // done
     : expr
     ;
 
@@ -104,11 +107,11 @@ expr
     : orExpr (IF orExpr ELSE expr)?
     ;
 
-orExpr
+orExpr                  // done
     : andExpr (OR andExpr)*
     ;
 
-andExpr
+andExpr                 // done
     : equalExpr (AND equalExpr)*
     ;
 
@@ -120,8 +123,13 @@ compareExpr
     : addExpr ((LESSTHAN | GREATERTHAN | LESSOREQUAL | GREATEROREQUAL) addExpr)*
     ;
 
-addExpr
-    : mulExpr ((PLUS | MINUS) mulExpr)*
+addExpr                                 // done
+    : mulExpr (addExprOptor mulExpr)*
+    ;
+
+addExprOptor
+    : PLUS          #plusOperator       // done
+    | MINUS         #minusOperator      // done
     ;
 
 mulExpr
@@ -176,7 +184,7 @@ whileBlock
     ;
 
 // Lists
-listVal
+listVal                 // done
     : OPEND_SQUAR_BRAKET
       (NEWLINE | WS)*
       listItem? (listItemSeparator listItem)* listItemSeparator?
@@ -184,16 +192,16 @@ listVal
       CLOSED_SQUAR_BRAKET
     ;
 
-listItem
+listItem                // not necessary
     : expr (NEWLINE | WS)*
     ;
 
-listItemSeparator
+listItemSeparator       // not necessary
     : COMMA (NEWLINE | WS)*
     ;
 
 // Dictionaries
-dictVal
+dictVal                 // done
     : OPEN_CURLY_BRAKET
       (NEWLINE | WS)*
       dictItem? (dictItemSeparator dictItem)* dictItemSeparator?
@@ -201,21 +209,28 @@ dictVal
       CLOSED_CURLY_BRAKET
     ;
 
-dictItem
+dictItem                // done
     : literal COLON expr (NEWLINE | WS)*
     ;
 
-dictItemSeparator
+dictItemSeparator       // not necessary
     : COMMA (NEWLINE | WS)*
     ;
 
 literal
-    : INT
-    | FLOAT
-    | STRING
-    | TRUE
-    | FALSE
-    | NONE
-    | listVal
-    | dictVal
+    : int           // done
+    | float         // done
+    | string        // done
+    | true          // done
+    | false         // done
+    | none          // done
+    | listVal       // done
+    | dictVal       // done
     ;
+
+int: INT;
+float: FLOAT;
+string: STRING;
+true: TRUE;
+false: FALSE;
+none: NONE;
