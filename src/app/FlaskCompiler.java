@@ -37,7 +37,7 @@ public class FlaskCompiler {
             System.out.println("Tokens (type : text) including INDENT/DEDENT:");
             for (Token t : tokenList) {
                 String tokenName = pythonLexer.VOCABULARY.getSymbolicName(t.getType());
-                System.out.printf("%s : '%s'%n", tokenName, t.getText().replace("\r","\\r").replace("\n","\\n"));
+                System.out.printf("%s : '%s'%n", tokenName, t.getText().replace("\r", "\\r").replace("\n", "\\n"));
             }
 
             // تمرير التوكنات للـ parser

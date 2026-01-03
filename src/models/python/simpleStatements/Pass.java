@@ -7,4 +7,11 @@ public class Pass extends Node {
     public String toString() {
         return "pass\n";
     }
+
+    @Override
+    public String print(int level) {
+        return "pass\n"
+                + getIndent(level) + "└─ line no: " + lineNumber + "\n"
+                ;
+    }
 }

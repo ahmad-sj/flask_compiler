@@ -17,12 +17,13 @@ import models.python.IFSTMT.ForNode;
 import models.python.IFSTMT.IfNode;
 import models.python.IFSTMT.WhileNode;
 import models.python.literals.*;
-import models.python.simpleStatements.ExprLineNode;
+import models.python.simpleStatements.ExprLine;
 import models.python.simpleStatements.Pass;
 import models.python.simpleStatements.ReturnLine;
 import models.python.simpleStatements.importLines.MultiImport;
 import models.python.simpleStatements.importLines.SingleImport;
 import models.python.simpleStatements.AssignLine;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +57,6 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
 
         return statementList;
     }
-
-
-
-
 
 
     // simple statements
@@ -108,8 +105,6 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
     }
 
 
-
-
     @Override
     public Node visitAssignLine(pythonParser.AssignLineContext ctx) {
         Node target = this.visit(ctx.target());
@@ -129,36 +124,17 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
 
     @Override
     public Node visitReturnLine(pythonParser.ReturnLineContext ctx) {
-
-        // إنشاء كائن ReturnLine مع lineNumber و nodeName
-        ReturnLine returnLine = new ReturnLine(ctx.getStart().getLine(), "return line");
+        Node expr = null;
 
         if (ctx.returnExpr() != null) {
-            // visit returnExpr
-            pythonParser.ReturnExprContext returnExprCtx = ctx.returnExpr();
-
-            // نتحقق إذا كان tuple return أو single return حسب labels
-            if (returnExprCtx instanceof pythonParser.TupleReturnWithoutParensContext) {
-                pythonParser.TupleReturnWithoutParensContext tupleCtx =
-                        (pythonParser.TupleReturnWithoutParensContext) returnExprCtx;
-
-                for (var exprCtx : tupleCtx.expr()) {
-                    Node exprNode = visit(exprCtx);        // زيارة كل expr
-                    exprNode.setNodeName("return expr");
-                    exprNode.setLineNumber(exprCtx.getStart().getLine());
-                    returnLine.addReturnValue(exprNode);
-                }
-
-            } else if (returnExprCtx instanceof pythonParser.SingleReturnContext) {
-                pythonParser.SingleReturnContext singleCtx =
-                        (pythonParser.SingleReturnContext) returnExprCtx;
-
-                Node exprNode = visit(singleCtx.expr());
-                exprNode.setNodeName("return expr");
-                exprNode.setLineNumber(singleCtx.expr().getStart().getLine());
-                returnLine.addReturnValue(exprNode);
-            }
+            expr = this.visit(ctx.returnExpr());
+            expr.setNodeName("return expr");
+            expr.setLineNumber(ctx.returnExpr().getStart().getLine());
         }
+
+        ReturnLine returnLine = new ReturnLine(expr);
+        returnLine.setNodeName("returnLine");
+        returnLine.setLineNumber(ctx.getStart().getLine());
 
         return returnLine;
     }
@@ -192,10 +168,15 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
     @Override
     public Node visitExprLine(pythonParser.ExprLineContext ctx) {
 
-        Node exprNode = visit(ctx.expr());
-        ExprLineNode node = new ExprLineNode(exprNode, ctx.getStart().getLine());
+        Node expr = visit(ctx.expr());
+        expr.setNodeName("expr");
+        expr.setLineNumber(ctx.expr().getStart().getLine());
 
-        return node;
+        ExprLine exprLine = new ExprLine(expr);
+        exprLine.setNodeName("expr line");
+        exprLine.setLineNumber(ctx.getStart().getLine());
+
+        return exprLine;
     }
 
     @Override
@@ -462,13 +443,12 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
         if (operators.isEmpty()) return exprList.get(0);
 
         // إنشاء MulExpression
-        models.python.Exprs.MulExpression  mulExpr = new MulExpression (exprList, operators);
+        models.python.Exprs.MulExpression mulExpr = new MulExpression(exprList, operators);
         mulExpr.setNodeName("mul expr");
         mulExpr.setLineNumber(ctx.getStart().getLine());
 
         return mulExpr;
     }
-
 
 
     @Override
@@ -516,9 +496,6 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
             return visit(ctx.compareExpr(0));
         }
     }
-
-
-
 
 
     // literals
@@ -625,81 +602,84 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
     }
 
 
-
-
     @Override
     public Node visitFunc(pythonParser.FuncContext ctx) {
 
-        int line = ctx.start.getLine();
-        String name = ctx.NAME().getText();
+        IdType funcName = new IdType(ctx.NAME().getText());
+        funcName.setNodeName("func name");
+        funcName.setLineNumber(ctx.NAME().getSymbol().getLine());
 
-        // ---------- parameters ----------
-        List<String> parameters = new ArrayList<>();
+        Node decorator = null;
+        if (ctx.decorator() != null) {
+            decorator = this.visit(ctx.decorator());
+            decorator.setNodeName("func decorator");
+            decorator.setLineNumber(ctx.decorator().getStart().getLine());
+        }
 
+        ArrayList<Node> funcArgs = null;
         if (ctx.funcArgs().argsNames() != null) {
-            for (var id : ctx.funcArgs().argsNames().NAME()) {
-                parameters.add(id.getText());
+            funcArgs = new ArrayList<>();
+
+            List<TerminalNode> argNameTerList = ctx.funcArgs().argsNames().NAME();
+            for (int i = 0; i < argNameTerList.size(); i++) {
+
+                IdType id = new IdType(argNameTerList.get(i).getText());
+                id.setNodeName("func arg");
+                id.setLineNumber(argNameTerList.get(i).getSymbol().getLine());
+
+                funcArgs.add(id);
             }
         }
 
-        // ---------- decorator ----------
-        List<Node> decorators = null;
+        Node funcBlock = null;
+        var aaa = ctx.block();
 
-        if (ctx.decorator() != null) {
-            decorators = new ArrayList<>();
-            decorators.add(visit(ctx.decorator()));
-        }
-
-        // ---------- block ----------
-        BlockNode body = null;
         if (ctx.block() != null) {
-            body = (BlockNode) visit(ctx.block());
+            funcBlock = this.visit(ctx.block());
+            funcBlock.setNodeName("func body");
         }
 
-        return new FuncNode(
-                line,
-                name,
-                parameters,
-                decorators,
-                body
-        );
+        Func func = new Func(decorator, funcName, funcArgs, funcBlock);
+        func.setNodeName("func");
+        func.setLineNumber(ctx.getStart().getLine());
+
+        return func;
     }
 
-//    @Override
-//    public Node visitDecorator(pythonParser.DecoratorContext ctx) {
-//
-//        int line = ctx.start.getLine();
-//        String name = ctx.name().getText();
-//
-//        List<Node> callArgs = null;
-//
-//        if (ctx.callArgs() != null) {
-//            callArgs = new ArrayList<>();
-//            for (var expr : ctx.callArgs().expr()) {
-//                callArgs.add(visit(expr)); // لاحقًا ExprNode
-//            }
-//        }
-//
-//        return new DecoratorNode(line, name, callArgs);
-//    }
+    @Override
+    public Node visitDecorator(pythonParser.DecoratorContext ctx) {
+
+        int line = ctx.start.getLine();
+        String name = ctx.name().getText();
+
+        List<Node> callArgs = null;
+
+        if (ctx.callArgs() != null) {
+            callArgs = new ArrayList<>();
+            for (var expr : ctx.callArgs().callList().callArg()) {
+                callArgs.add(visit(expr)); // لاحقًا ExprNode
+            }
+        }
+
+        return new Decorator(line, name, callArgs);
+    }
 
     @Override
     public Node visitBlock(pythonParser.BlockContext ctx) {
 
-        int line = ctx.start.getLine();
         List<Node> statements = new ArrayList<>();
 
         for (var stmt : ctx.stmtList().stmt()) {
             Node stmtNode = visit(stmt);
-            if (stmtNode != null) {
-                statements.add(stmtNode);
-            }
+            statements.add(stmtNode);
         }
 
-        return new BlockNode(line, statements);
+        BlockNode blockNode = new BlockNode(statements);
+        blockNode.setNodeName("block");
+        blockNode.setLineNumber(ctx.stmtList().getStart().getLine());
+
+        return blockNode;
     }
-
-
 
 
     //IfBLock
@@ -734,7 +714,6 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
     }
 
 
-
     //forBLock
     @Override
     public Node visitForBlock(pythonParser.ForBlockContext ctx) {
@@ -761,7 +740,6 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
 
         return new WhileNode(line, condition, body);
     }
-
 
 
 }

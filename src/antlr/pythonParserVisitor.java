@@ -1,4 +1,4 @@
-// Generated from C:/Users/Ahmad/OneDrive/Desktop/PROJECT/grammars/pythonParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/Admin/Desktop/compiler project/flask_compiler/grammars/pythonParser.g4 by ANTLR 4.13.2
  package antlr; 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -29,6 +29,12 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgTrivial(pythonParser.ProgTrivialContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link pythonParser#stmtList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStmtList(pythonParser.StmtListContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link pythonParser#commentLine}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -40,12 +46,6 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNl(pythonParser.NlContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link pythonParser#stmtList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStmtList(pythonParser.StmtListContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link pythonParser#stmt}.
 	 * @param ctx the parse tree

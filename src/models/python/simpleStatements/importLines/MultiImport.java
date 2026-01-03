@@ -5,25 +5,50 @@ import models.Node;
 import java.util.ArrayList;
 
 public class MultiImport extends Node {
-    Node importedNames; // of type NameList
-    ArrayList<Node> importList; // of type TypeName
+    Node fromName; // of type NameList
+    ArrayList<Node> importedNames; // of type TypeName
 
-    public MultiImport(Node importedNames, ArrayList<Node> importList) {
+    public MultiImport(Node fromName, ArrayList<Node> importedNames) {
+        this.fromName = fromName;
         this.importedNames = importedNames;
-        this.importList = importList;
+    }
+
+    @Override
+    public String print(int level) {
+
+        String indent = getIndent(level);
+
+        StringBuilder namesList = new StringBuilder();
+
+        for (int i = 0; i < importedNames.size(); i++) {
+            namesList.append(importedNames.get(i).toString());
+
+            if (i + 1 < importedNames.size())
+                namesList.append(", ");
+        }
+
+        return "multi import\n" +
+                indent + "├─ line no: " + lineNumber + "\n" +
+                indent + "├─ from name: " + fromName.print(level + 2) +
+                indent + "└─ imported names: " + namesList.toString() + "\n"
+                ;
+
     }
 
     @Override
     public String toString() {
         StringBuilder imports = new StringBuilder();
 
-        for (int i = 0; i < importList.size(); i++) {
-            imports.append(importList.get(i));
+        for (int i = 0; i < importedNames.size(); i++) {
+            imports.append(importedNames.get(i));
 
-            if (i + 1 < importList.size())
+            if (i + 1 < importedNames.size())
                 imports.append(", ");
         }
 
-        return "from " + importedNames.toString() + " import " + imports.toString() + "\n";
+        return "- multi import" +
+                "\nline no: " + lineNumber +
+                "\nfrom name: " + fromName.toString() +
+                "\nimport names: " + imports.toString() + "\n";
     }
 }

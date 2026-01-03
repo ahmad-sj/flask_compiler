@@ -1,4 +1,4 @@
-// Generated from C:/Users/Ahmad/OneDrive/Desktop/PROJECT/grammars/pythonParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/Admin/Desktop/compiler project/flask_compiler/grammars/pythonParser.g4 by ANTLR 4.13.2
  package antlr; 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -38,6 +38,16 @@ public interface pythonParserListener extends ParseTreeListener {
 	 */
 	void exitProgTrivial(pythonParser.ProgTrivialContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link pythonParser#stmtList}.
+	 * @param ctx the parse tree
+	 */
+	void enterStmtList(pythonParser.StmtListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#stmtList}.
+	 * @param ctx the parse tree
+	 */
+	void exitStmtList(pythonParser.StmtListContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link pythonParser#commentLine}.
 	 * @param ctx the parse tree
 	 */
@@ -57,16 +67,6 @@ public interface pythonParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNl(pythonParser.NlContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link pythonParser#stmtList}.
-	 * @param ctx the parse tree
-	 */
-	void enterStmtList(pythonParser.StmtListContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link pythonParser#stmtList}.
-	 * @param ctx the parse tree
-	 */
-	void exitStmtList(pythonParser.StmtListContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link pythonParser#stmt}.
 	 * @param ctx the parse tree

@@ -6,25 +6,17 @@ options { tokenVocab=pythonLexer; }
 
 @header{ package antlr; }
 
-//prog
-//    : ((NEWLINE*  INDENT?)   stmt  | NEWLINE | commentLine)* (NEWLINE)* EOF
-//    ;
-
-
-prog :  progSimple EOF
-    |  progTrivial EOF
-
+prog
+    : progSimple EOF
+    | progTrivial EOF
     ;
 
-
-progSimple :(NEWLINE* INDENT? stmt  DEDENT?   NEWLINE*  )* NEWLINE* ;  //finish
+progSimple :(NEWLINE* INDENT? stmt  DEDENT? NEWLINE* DEDENT? )* NEWLINE* ;  //finish
 
 progTrivial : commentLine NEWLINE* ;        //finish
 
-
 stmtList
     : (nl* stmt)+ nl* ;                 //finish
-
 
 commentLine
     : COMMENT        //finish
@@ -34,46 +26,35 @@ nl
     : (NEWLINE)+        //finish
     ;
 
-
-
-
-
-
-
 stmt
-    : simpleStmt        //done
+    : simpleStmt        //finish
     | blockStmt
-    | commentLine       //done
+    | commentLine       //finish
     ;
 
-
-
-
 simpleStmt       // not necessary if all children visit methods are implemented
-    : importLine   // done
-    | assignLine  // done
-    | returnLine // done
-    | exprLine   // done
-    | pass       // done
+    : importLine   // finish
+    | assignLine  // finish
+    | returnLine // finish
+    | exprLine   // finish
+    | pass       // finish
     ;
 
 importLine
     : IMPORT name (AS NAME)?                             #singleImport  //  finish
-    | FROM name IMPORT NAME (COMMA NAME)*                   #multiImport   // done
+    | FROM name IMPORT NAME (COMMA NAME)*                   #multiImport   // finish
     ;
 
 
+pass: PASS;     // finish
 
-pass: PASS;     // done
+id: NAME;                  // finish
 
-
-id: NAME;                  // done
-
-name                       // done
+name                       // finish
     : id dotTrailer*
     ;
 
-assignLine                 // done
+assignLine                 // finish
     : target EQUAL expr
     ;
 
@@ -117,21 +98,15 @@ genExpr
     ;
 
 
-callArgs                // done
+callArgs                // finish
     : OPEND_NORMAL_BRAKET callList CLOSED_NORMAL_BRAKET
     ;
 
-callList                // done
+callList                // finish
     : callArg (COMMA callArg)* COMMA?
     ;
 
-//callArg                   // done
-//    : NAME EQUAL expr     // keyword argument
-//    | expr               // positional
-//    ;
-
-
-callArg                     //done
+callArg                     //finish
     : NAME EQUAL expr
     | expr
     ;
@@ -143,22 +118,15 @@ singleExpr
     | id OPEND_NORMAL_BRAKET (callArg (COMMA callArg)*)? CLOSED_NORMAL_BRAKET
     ;
 
-
-//returnLine              // done
-//    : RETURN expr?
-//    ;
 returnLine
-    :     RETURN  returnExpr?   ;           //done
-
+    :     RETURN  returnExpr?   ;           //finish
 
 returnExpr
     : expr (COMMA expr)+    # tupleReturnWithoutParens      //done
     | expr                  # singleReturn                  //done
     ;
 
-
-
-exprLine                // done
+exprLine                // finish
     : expr
     ;
 
@@ -182,8 +150,6 @@ compareExpr
     : addExpr ((LESSTHAN | GREATERTHAN | LESSOREQUAL | GREATEROREQUAL) addExpr)*        //done
     ;
 
-
-
 addExpr                                 // done
     : mulExpr (addExprOptor mulExpr)*
     ;
@@ -193,8 +159,6 @@ addExprOptor
     | MINUS         #minusOperator      // done
     ;
 
-
-
 mulExpr
     : singleExpr (muiltoperator singleExpr)* //done
     ;
@@ -202,54 +166,40 @@ mulExpr
 muiltoperator:
 (STAR | SLASH | PERCENT);               //done
 
-
-
-
 // Block statements
 blockStmt
-    : func          //done
-    | ifBlock       //done
-    | forBlock      //done
+    : func          //finish
+    | ifBlock       //finish
+    | forBlock      //finish
     | whileBlock    //done
     ;
 
-
 decorator
-    : AT name callArgs?             //done
+    : AT name callArgs?             //finish
     ;
 
-
 funcArgs
-    : OPEND_NORMAL_BRAKET argsNames? CLOSED_NORMAL_BRAKET           //done
+    : OPEND_NORMAL_BRAKET argsNames? CLOSED_NORMAL_BRAKET           //finish
     ;
 
 argsNames
-    : NAME (COMMA NAME)*                        //done
+    : NAME (COMMA NAME)*                        //finish
     ;
 
 func
-    : (decorator  nl)? DEF NAME funcArgs COLON nl block?        //done
+    : (decorator  nl)? DEF NAME funcArgs COLON nl block?        //finish
 ;
 
-
-//func
-//    : decorator? nl DEF NAME funcArgs COLON nl block?
-//    | DEF NAME funcArgs COLON nl block?
-//    ;
-
-
 block
-    :    stmtList               //done
+    : INDENT stmtList DEDENT               //finish
     ;
 
 
-ifBlock                             //done
+ifBlock                             //finish
     : IF expr COLON nl* block
       (ELIF expr COLON nl* block)*
       (ELSE COLON nl* block)?
     ;
-
-
 
 forBlock
     : FOR NAME IN expr COLON nl block       //done
@@ -258,7 +208,6 @@ forBlock
 whileBlock
     : WHILE expr COLON nl block                 //done
     ;
-
 
 // Lists
 listVal                 // done

@@ -33,12 +33,14 @@ public class IfNode extends Node {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("If (line=").append(lineNumber).append(")\n");
+        sb.append("``````` if block start ```````");
         if (condition != null) sb.append(condition.toString()).append("\n");
         if (thenBlock != null) sb.append(thenBlock.toString()).append("\n");
         if (elifBlocks != null) {
             for (ElifNode elif : elifBlocks) sb.append(elif.toString()).append("\n");
         }
         if (elseBlock != null) sb.append("Else\n").append(elseBlock.toString());
+        sb.append("``````` if block end ```````");
         return sb.toString();
     }
 }

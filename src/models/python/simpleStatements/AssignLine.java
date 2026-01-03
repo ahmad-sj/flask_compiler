@@ -12,7 +12,23 @@ public class AssignLine extends Node {
     }
 
     @Override
+    public String print(int level) {
+
+        String indent = getIndent(level);
+
+        return "assign line\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "├─ target: " + target.print(level + 2)
+                + indent + "└─ expr: " + expr.print(level + 2)
+                ;
+
+    }
+
+    @Override
     public String toString() {
-        return target.toString() + " = " + expr.toString();
+        return "- assign line" +
+                "\nline no: " + lineNumber +
+                "\ntarget: " + target.toString() +
+                "\nassigned value: " + expr.toString();
     }
 }

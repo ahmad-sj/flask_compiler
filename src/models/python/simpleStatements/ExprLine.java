@@ -26,22 +26,12 @@ package models.python.simpleStatements;
 
 import models.Node;
 
-public class ReturnLine extends Node {
+public class ExprLine extends Node {
 
     Node returnExpr;
 
-    public ReturnLine(Node returnExpr) {
+    public ExprLine(Node returnExpr) {
         this.returnExpr = returnExpr;
-    }
-
-    @Override
-    public String toString() {
-        return "- return line" +
-                "\nline no: " + lineNumber +
-                (returnExpr == null
-                        ? ""
-                        : "\nreturn expr: " + returnExpr.toString()
-                );
     }
 
     @Override
@@ -49,12 +39,18 @@ public class ReturnLine extends Node {
 
         String indent = getIndent(level);
 
-        return "return line\n" +
-                (returnExpr == null
-                        ? indent + "└─ line no: " + lineNumber + "\n"
-                        : indent + "├─ line no: " + lineNumber + "\n"
-                        + indent + "└─ return expr: " + returnExpr.print(level + 2)
-                );
+        return "expr line\n"
+                + indent + "├─ line no: " + lineNumber + "\n"
+                + indent + "└─ expr: " + returnExpr.print(level + 2)
+                ;
+
+    }
+
+    @Override
+    public String toString() {
+        return "- expr line:" +
+                "\nline no: " + lineNumber +
+                "\nexpr: " + returnExpr.toString();
 
     }
 }

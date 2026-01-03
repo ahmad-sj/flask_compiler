@@ -20,19 +20,24 @@ public class SingleImport extends Statement {
 
         String indent = getIndent(level);
 
-        return "Single Import \n" +
-                indent + "line number: " + lineNumber + "\n"
-                + indent + "imported name: " + importedName.print(level + 1)+
-                ?importAlias
+        return "- single import\n" +
+                indent + "├─ line no: " + lineNumber + "\n" +
+                (importAlias == null
+                        ? indent + "└─ imported name: " + importedName.print(level + 2)
+                        : indent + "├─ imported name: " + importedName.print(level + 2)
+                        + indent + "└─ import alias: " + importAlias.print(level + 2)
+                );
 
     }
 
     @Override
     public String toString() {
 
-        return "import " + importedName.toString() +
+        return "single import" +
+                "\nline no: " + lineNumber +
+                "\nimported name: " + importedName.toString() +
                 (importAlias == null
-                        ? "\n"
+                        ? ""
                         : " as " + importAlias.toString() + "\n"
                 )
                 ;
