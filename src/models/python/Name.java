@@ -13,19 +13,38 @@ public class Name extends Node {
         this.trailerList = trailerList;
     }
 
+
     @Override
-    public String toString() {
+    public String print(int level) {
+        String indent = getIndent(level);
+
         StringBuilder trailers = new StringBuilder();
+
+
 
         if (trailerList != null) {
             for (int i = 0; i < trailerList.size(); i++) {
-                trailers.append(trailerList.get(i));
 
-                if (i + 1 < trailerList.size())
-                    trailers.append(".");
+                if (i + 1 < trailerList.size()) {
+                    trailers.append(getIndent(level + 1));
+                    trailers.append("├─ ").append(trailerList.get(i).print(level + 2));
+                    trailers.append("\n");
+                } else {
+                    trailers.append(getIndent(level + 1));
+                    trailers.append("└─ ").append(trailerList.get(i).print(level + 2));
+                }
             }
         }
-        
-        return id.toString() + trailers;
+
+        return "Name    \n" +
+                indent + "├─ line no: " + lineNumber + "\n" +
+                (trailers.isEmpty()
+                        ? indent + "└─ id: " + id.print(level + 2)
+                        : indent + "├─ id : " + id.print(level + 2)
+                        + indent + "└─ trailers:\n" + trailers
+                );
     }
+
+
+
 }

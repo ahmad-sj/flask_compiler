@@ -2,6 +2,6 @@ package models.python;
 
 import models.Node;
 
-public abstract class StmtNode extends Node {
+public abstract class Statement extends Node {
 
 }

@@ -33,11 +33,12 @@ import java.util.List;
 
 public class StatementListNode extends Node {
 
-    private final ArrayList<Node> statementList = new ArrayList<>();
+    private final ArrayList<Node> statementList ;
 
     public StatementListNode(String nodeName, int lineNumber) {
         this.nodeName = nodeName;   // مصدر نحوي مختلف
         this.lineNumber = lineNumber;
+        statementList= new ArrayList<>();
     }
 
     public void addStatement(Node stmt) {
@@ -50,31 +51,32 @@ public class StatementListNode extends Node {
         return statementList;
     }
 
-    /*@Override
+     @Override
     public String print(int level) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(getIndent(level))
+                .append("NodeName :")
                 .append(nodeName)
-                .append(" (line ")
+                .append("\n(line :")
                 .append(lineNumber)
                 .append(")\n");
 
-        for (Node stmt : statements) {
+        for (Node stmt : statementList) {
             sb.append(stmt.print(level + 1));
         }
 
         return sb.toString();
     }
-    */
 
-        @Override
-    public String toString() {
-        StringBuilder statements = new StringBuilder();
 
-        for (int i = 0; i < statementList.size(); i++)
-            statements.append(statementList.get(i).toString());
-
-        return statements.toString();
-    }
+//        @Override
+//    public String toString() {
+//        StringBuilder statements = new StringBuilder();
+//
+//        for (int i = 0; i < statementList.size(); i++)
+//            statements.append(statementList.get(i).toString());
+//
+//        return statements.toString();
+//    }
 }

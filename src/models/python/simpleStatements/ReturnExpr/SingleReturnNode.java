@@ -1,7 +1,6 @@
 package models.python.simpleStatements.ReturnExpr;
 
 import models.Node;
-import models.python.StmtNode;
 
 public class SingleReturnNode extends Node {
 

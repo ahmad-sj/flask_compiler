@@ -17,21 +17,21 @@ prog :  progSimple EOF
     ;
 
 
-progSimple :(NEWLINE* INDENT? stmt  DEDENT?   NEWLINE*  )* NEWLINE* ;  //done
+progSimple :(NEWLINE* INDENT? stmt  DEDENT?   NEWLINE*  )* NEWLINE* ;  //finish
 
-progTrivial : commentLine NEWLINE* ;        //done
+progTrivial : commentLine NEWLINE* ;        //finish
 
 
 stmtList
-    : (nl* stmt)+ nl* ;                 //done
+    : (nl* stmt)+ nl* ;                 //finish
 
 
 commentLine
-    : COMMENT        //done
+    : COMMENT        //finish
     ;
 
 nl
-    : (NEWLINE)+        //done
+    : (NEWLINE)+        //finish
     ;
 
 
@@ -58,8 +58,8 @@ simpleStmt       // not necessary if all children visit methods are implemented
     ;
 
 importLine
-    : IMPORT name (AS NAME)?                             #singleImport  // done
-    | FROM name IMPORT NAME (COMMA NAME)*        #multiImport   // done
+    : IMPORT name (AS NAME)?                             #singleImport  //  finish
+    | FROM name IMPORT NAME (COMMA NAME)*                   #multiImport   // done
     ;
 
 
