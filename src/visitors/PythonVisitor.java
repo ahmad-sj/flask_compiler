@@ -9,8 +9,15 @@ import models.jinja.trailers.CallTrailer;
 import models.jinja.trailers.MemberTrailer;
 import models.jinja.trailers.SubTrailer;
 import models.python.*;
+import models.python.Exprs.CompareExpression;
+import models.python.Exprs.EqualExpression;
+import models.python.Exprs.MulExpression;
+import models.python.IFSTMT.ElifNode;
+import models.python.IFSTMT.ForNode;
+import models.python.IFSTMT.IfNode;
+import models.python.IFSTMT.WhileNode;
 import models.python.literals.*;
-import models.python.simpleStatements.ExprLine;
+import models.python.simpleStatements.ExprLineNode;
 import models.python.simpleStatements.Pass;
 import models.python.simpleStatements.ReturnLine;
 import models.python.simpleStatements.importLines.MultiImport;
@@ -24,17 +31,35 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
 
     @Override
     public Node visitStmtList(pythonParser.StmtListContext ctx) {
-        ArrayList<Node> stmtList = new ArrayList<>();
+        StatementListNode statementList = new StatementListNode("StmtList", ctx.getStart().getLine());
 
-        for (int i = 0; i < ctx.stmt().size(); i++)
-            stmtList.add(this.visit(ctx.stmt(i)));
-
-        StatementList statementList = new StatementList(stmtList);
-        statementList.setNodeName("statement list");
-        statementList.setLineNumber(ctx.getStart().getLine());
+        for (var stmtCtx : ctx.stmt()) {
+            Node stmtNode = visit(stmtCtx);
+            if (stmtNode != null) {
+                statementList.addStatement(stmtNode);
+            }
+        }
 
         return statementList;
     }
+
+    @Override
+    public Node visitProgSimple(pythonParser.ProgSimpleContext ctx) {
+        StatementListNode statementList = new StatementListNode("ProgSimple", ctx.getStart().getLine());
+
+        for (var stmtCtx : ctx.stmt()) {
+            Node stmtNode = visit(stmtCtx);
+            if (stmtNode != null) {
+                statementList.addStatement(stmtNode);
+            }
+        }
+
+        return statementList;
+    }
+
+
+
+
 
 
     // simple statements
@@ -82,6 +107,9 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
         return multiImport;
     }
 
+
+
+
     @Override
     public Node visitAssignLine(pythonParser.AssignLineContext ctx) {
         Node target = this.visit(ctx.target());
@@ -101,34 +129,93 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
 
     @Override
     public Node visitReturnLine(pythonParser.ReturnLineContext ctx) {
-        Node expr = null;
 
-        if (ctx.expr() != null) {
-            expr = this.visit(ctx.expr());
-            expr.setNodeName("return expr");
-            expr.setLineNumber(ctx.expr().getStart().getLine());
+        // إنشاء كائن ReturnLine مع lineNumber و nodeName
+        ReturnLine returnLine = new ReturnLine(ctx.getStart().getLine(), "return line");
+
+        if (ctx.returnExpr() != null) {
+            // visit returnExpr
+            pythonParser.ReturnExprContext returnExprCtx = ctx.returnExpr();
+
+            // نتحقق إذا كان tuple return أو single return حسب labels
+            if (returnExprCtx instanceof pythonParser.TupleReturnWithoutParensContext) {
+                pythonParser.TupleReturnWithoutParensContext tupleCtx =
+                        (pythonParser.TupleReturnWithoutParensContext) returnExprCtx;
+
+                for (var exprCtx : tupleCtx.expr()) {
+                    Node exprNode = visit(exprCtx);        // زيارة كل expr
+                    exprNode.setNodeName("return expr");
+                    exprNode.setLineNumber(exprCtx.getStart().getLine());
+                    returnLine.addReturnValue(exprNode);
+                }
+
+            } else if (returnExprCtx instanceof pythonParser.SingleReturnContext) {
+                pythonParser.SingleReturnContext singleCtx =
+                        (pythonParser.SingleReturnContext) returnExprCtx;
+
+                Node exprNode = visit(singleCtx.expr());
+                exprNode.setNodeName("return expr");
+                exprNode.setLineNumber(singleCtx.expr().getStart().getLine());
+                returnLine.addReturnValue(exprNode);
+            }
         }
-
-        ReturnLine returnLine = new ReturnLine(expr);
-        returnLine.setNodeName("return line");
-        returnLine.setLineNumber(ctx.getStart().getLine());
 
         return returnLine;
     }
 
+
+    @Override
+    public Node visitTupleReturnWithoutParens(pythonParser.TupleReturnWithoutParensContext ctx) {
+        return visitChildren(ctx); // مجرد default behavior
+    }
+
+    @Override
+    public Node visitSingleReturn(pythonParser.SingleReturnContext ctx) {
+        return visitChildren(ctx); // مجرد default behavior
+    }
+
+
+//    @Override
+//    public Node visitExprLine(pythonParser.ExprLineContext ctx) {
+//
+//        Node expr = this.visit(ctx.expr());
+//        expr.setNodeName("expr");
+//        expr.setLineNumber(ctx.expr().getStart().getLine());
+//
+//        ExprLine exprLine = new ExprLine(expr);
+//        exprLine.setNodeName("expr line");
+//        exprLine.setLineNumber(ctx.getStart().getLine());
+//
+//        return exprLine;
+//    }
+
     @Override
     public Node visitExprLine(pythonParser.ExprLineContext ctx) {
 
-        Node expr = this.visit(ctx.expr());
-        expr.setNodeName("expr");
-        expr.setLineNumber(ctx.expr().getStart().getLine());
+        Node exprNode = visit(ctx.expr());
+        ExprLineNode node = new ExprLineNode(exprNode, ctx.getStart().getLine());
 
-        ExprLine exprLine = new ExprLine(expr);
-        exprLine.setNodeName("expr line");
-        exprLine.setLineNumber(ctx.getStart().getLine());
-
-        return exprLine;
+        return node;
     }
+
+    @Override
+    public Node visitExpr(pythonParser.ExprContext ctx) {
+        // زيارة الجزء الأول قبل IF
+        Node conditionNode = visit(ctx.orExpr(0));
+
+        // إنشاء AST node
+        models.python.expressions.ExprNode exprNode = new models.python.expressions.ExprNode(conditionNode, ctx.getStart().getLine());
+
+        // إذا كان ternary expression موجود
+        if (ctx.IF() != null) {
+            Node ifNode = visit(ctx.orExpr(1));  // الجزء بعد IF
+            Node elseNode = visit(ctx.expr());   // الجزء بعد ELSE (قد يكون expr كامل)
+            exprNode.setTernary(ifNode, elseNode);
+        }
+
+        return exprNode;
+    }
+
 
     @Override
     public Node visitPass(pythonParser.PassContext ctx) {
@@ -355,6 +442,85 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
     }
 
 
+    @Override
+    public Node visitMulExpr(pythonParser.MulExprContext ctx) {
+
+        List<Node> exprList = new ArrayList<>();
+        List<Operator> operators = new ArrayList<>();
+
+        // زيارة كل singleExpr
+        for (var singleCtx : ctx.singleExpr()) {
+            exprList.add(this.visit(singleCtx));
+        }
+
+        // زيارة كل muloperator
+        for (var opCtx : ctx.muiltoperator()) {
+            operators.add((Operator) this.visit(opCtx));
+        }
+
+        // إذا لم يوجد operator (single expr فقط)
+        if (operators.isEmpty()) return exprList.get(0);
+
+        // إنشاء MulExpression
+        models.python.Exprs.MulExpression  mulExpr = new MulExpression (exprList, operators);
+        mulExpr.setNodeName("mul expr");
+        mulExpr.setLineNumber(ctx.getStart().getLine());
+
+        return mulExpr;
+    }
+
+
+
+    @Override
+    public Node visitCompareExpr(pythonParser.CompareExprContext ctx) {
+        if (ctx.children.size() > 1) {
+            CompareExpression cmpExpr = new CompareExpression();
+            cmpExpr.setNodeName("compare expr");
+            cmpExpr.setLineNumber(ctx.getStart().getLine());
+
+            // visit addExpr
+            for (int i = 0; i < ctx.addExpr().size(); i++) {
+                cmpExpr.addExpr(visit(ctx.addExpr(i)));
+            }
+
+            // store operators
+            for (var opToken : ctx.getTokens(pythonParser.LESSTHAN)) cmpExpr.addOperator(opToken.getText());
+            for (var opToken : ctx.getTokens(pythonParser.GREATERTHAN)) cmpExpr.addOperator(opToken.getText());
+            for (var opToken : ctx.getTokens(pythonParser.LESSOREQUAL)) cmpExpr.addOperator(opToken.getText());
+            for (var opToken : ctx.getTokens(pythonParser.GREATEROREQUAL)) cmpExpr.addOperator(opToken.getText());
+
+            return cmpExpr;
+        } else {
+            return visit(ctx.addExpr(0));
+        }
+    }
+
+    @Override
+    public Node visitEqualExpr(pythonParser.EqualExprContext ctx) {
+        if (ctx.children.size() > 1) {
+            EqualExpression eqExpr = new EqualExpression();
+            eqExpr.setNodeName("equal expr");
+            eqExpr.setLineNumber(ctx.getStart().getLine());
+
+            // visit compareExpr
+            for (int i = 0; i < ctx.compareExpr().size(); i++) {
+                eqExpr.addExpr(visit(ctx.compareExpr(i)));
+            }
+
+            // store operators
+            for (var opToken : ctx.getTokens(pythonParser.EQUALEQUAL)) eqExpr.addOperator(opToken.getText());
+            for (var opToken : ctx.getTokens(pythonParser.NOTEQUAL)) eqExpr.addOperator(opToken.getText());
+
+            return eqExpr;
+        } else {
+            return visit(ctx.compareExpr(0));
+        }
+    }
+
+
+
+
+
     // literals
     @Override
     public Node visitInt(pythonParser.IntContext ctx) {
@@ -457,4 +623,145 @@ public class PythonVisitor extends pythonParserBaseVisitor<Node> {
 
         return dictItem;
     }
+
+
+
+
+    @Override
+    public Node visitFunc(pythonParser.FuncContext ctx) {
+
+        int line = ctx.start.getLine();
+        String name = ctx.NAME().getText();
+
+        // ---------- parameters ----------
+        List<String> parameters = new ArrayList<>();
+
+        if (ctx.funcArgs().argsNames() != null) {
+            for (var id : ctx.funcArgs().argsNames().NAME()) {
+                parameters.add(id.getText());
+            }
+        }
+
+        // ---------- decorator ----------
+        List<Node> decorators = null;
+
+        if (ctx.decorator() != null) {
+            decorators = new ArrayList<>();
+            decorators.add(visit(ctx.decorator()));
+        }
+
+        // ---------- block ----------
+        BlockNode body = null;
+        if (ctx.block() != null) {
+            body = (BlockNode) visit(ctx.block());
+        }
+
+        return new FuncNode(
+                line,
+                name,
+                parameters,
+                decorators,
+                body
+        );
+    }
+
+//    @Override
+//    public Node visitDecorator(pythonParser.DecoratorContext ctx) {
+//
+//        int line = ctx.start.getLine();
+//        String name = ctx.name().getText();
+//
+//        List<Node> callArgs = null;
+//
+//        if (ctx.callArgs() != null) {
+//            callArgs = new ArrayList<>();
+//            for (var expr : ctx.callArgs().expr()) {
+//                callArgs.add(visit(expr)); // لاحقًا ExprNode
+//            }
+//        }
+//
+//        return new DecoratorNode(line, name, callArgs);
+//    }
+
+    @Override
+    public Node visitBlock(pythonParser.BlockContext ctx) {
+
+        int line = ctx.start.getLine();
+        List<Node> statements = new ArrayList<>();
+
+        for (var stmt : ctx.stmtList().stmt()) {
+            Node stmtNode = visit(stmt);
+            if (stmtNode != null) {
+                statements.add(stmtNode);
+            }
+        }
+
+        return new BlockNode(line, statements);
+    }
+
+
+
+
+    //IfBLock
+
+
+    @Override
+    public Node visitIfBlock(pythonParser.IfBlockContext ctx) {
+
+        int line = ctx.start.getLine();
+
+        // ---------- IF condition ----------
+        Node ifCondition = visit(ctx.expr(0));
+        BlockNode thenBlock = (BlockNode) visit(ctx.block(0));
+
+        // ---------- ELIF blocks ----------
+        List<ElifNode> elifBlocks = new ArrayList<>();
+        int numElif = ctx.ELIF().size();
+        for (int i = 0; i < numElif; i++) {
+            Node elifCond = visit(ctx.expr(i + 1)); // expr بعد كل ELIF
+            BlockNode elifBlock = (BlockNode) visit(ctx.block(i + 1));
+            elifBlocks.add(new ElifNode(ctx.ELIF(i).getSymbol().getLine(), elifCond, elifBlock));
+        }
+
+        // ---------- ELSE block ----------
+        BlockNode elseBlock = null;
+        if (ctx.ELSE() != null) {
+            int totalBlocks = ctx.block().size();
+            elseBlock = (BlockNode) visit(ctx.block(totalBlocks - 1));
+        }
+
+        return new IfNode(line, ifCondition, thenBlock, elifBlocks, elseBlock);
+    }
+
+
+
+    //forBLock
+    @Override
+    public Node visitForBlock(pythonParser.ForBlockContext ctx) {
+
+        int line = ctx.start.getLine();
+
+        String iterator = ctx.NAME().getText();          // الاسم بعد FOR
+        Node iterable = visit(ctx.expr());               // expr بعد IN
+        BlockNode body = (BlockNode) visit(ctx.block()); // جسم الحلقة
+
+        return new ForNode(line, iterator, iterable, body);
+    }
+
+
+    //WhileBlock
+
+    @Override
+    public Node visitWhileBlock(pythonParser.WhileBlockContext ctx) {
+
+        int line = ctx.start.getLine();
+
+        Node condition = visit(ctx.expr());               // expr بعد WHILE
+        BlockNode body = (BlockNode) visit(ctx.block());  // جسم الحلقة
+
+        return new WhileNode(line, condition, body);
+    }
+
+
+
 }

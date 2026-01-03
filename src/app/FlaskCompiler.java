@@ -6,6 +6,7 @@ import models.App;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.Trees;
 import visitors.AppVisitor;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FlaskCompiler {
     public static void main(String[] args) {
@@ -30,13 +32,13 @@ public class FlaskCompiler {
             CommonTokenStream tokens = new CommonTokenStream(lexer);
 
             // طباعة جميع التوكنات للتأكد من INDENT و DEDENT
-//            tokens.fill(); // اجلب كل التوكنات
-//            List<Token> tokenList = tokens.getTokens();
-//            System.out.println("Tokens (type : text) including INDENT/DEDENT:");
-//            for (Token t : tokenList) {
-//                String tokenName = pythonLexer.VOCABULARY.getSymbolicName(t.getType());
-//                System.out.printf("%s : '%s'%n", tokenName, t.getText().replace("\r","\\r").replace("\n","\\n"));
-//            }
+            tokens.fill(); // اجلب كل التوكنات
+            List<Token> tokenList = tokens.getTokens();
+            System.out.println("Tokens (type : text) including INDENT/DEDENT:");
+            for (Token t : tokenList) {
+                String tokenName = pythonLexer.VOCABULARY.getSymbolicName(t.getType());
+                System.out.printf("%s : '%s'%n", tokenName, t.getText().replace("\r","\\r").replace("\n","\\n"));
+            }
 
             // تمرير التوكنات للـ parser
             pythonParser parser = new pythonParser(tokens);

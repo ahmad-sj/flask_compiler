@@ -1,4 +1,4 @@
-// Generated from C:/Users/Admin/Desktop/compiler project/flask_compiler/grammars/pythonLexer.g4 by ANTLR 4.13.2
+// Generated from C:/Users/Ahmad/OneDrive/Desktop/PROJECT/grammars/pythonLexer.g4 by ANTLR 4.13.2
 
 package antlr;
 import org.antlr.v4.runtime.*;
@@ -111,6 +111,7 @@ public class pythonLexer extends Lexer {
 
 
 	    private static final int TAB_LENGTH = 8;
+	    private boolean atStartOfLine = true;
 
 	    private Deque<Integer> indents = new ArrayDeque<>();
 	    private LinkedList<Token> pending = new LinkedList<>();
@@ -124,26 +125,50 @@ public class pythonLexer extends Lexer {
 
 	    }
 
-	    @Override
-	    public Token nextToken() {
-	        if (!pending.isEmpty()) {
-	            return pending.poll();
-	        }
+	  @Override
+	  public Token nextToken() {
 
-	        Token t = super.nextToken();
+	      // 1) إخراج أي توكنات معلقة أولًا
+	      if (!pending.isEmpty()) {
+	          Token p = pending.poll();
 
-	        if (t.getType() == EOF) {
+	          if (p.getType() == NEWLINE) {
+	              atStartOfLine = true;
+	          } else if (p.getType() != INDENT && p.getType() != DEDENT) {
+	              atStartOfLine = false;
+	          }
 
-	            while (indents.size() > 1) {
-	                indents.pop();
-	                pending.add(new CommonToken(DEDENT, ""));
-	            }
-	            pending.add(t);
-	            return pending.poll();
-	        }
+	          return p;
+	      }
 
-	        return t;
-	    }
+	      // 2) اقرأ توكن جديد
+	      Token t = super.nextToken();
+
+	      // 3) EOF
+	      if (t.getType() == EOF) {
+	          while (indents.size() > 1) {
+	              indents.pop();
+	              pending.add(new CommonToken(DEDENT, ""));
+	          }
+	          pending.add(t);
+	          return pending.poll();
+	      }
+
+	      // 4) تجاهل HIDDEN tokens في بداية السطر
+	      if (atStartOfLine && t.getChannel() == Token.HIDDEN_CHANNEL) {
+	          return nextToken();
+	      }
+
+	      // 5) تحديث حالة atStartOfLine
+	      if (t.getType() == NEWLINE) {
+	          atStartOfLine = true;
+	      } else {
+	          atStartOfLine = false;
+	      }
+
+	      return t;
+	  }
+
 
 	    private void emitIndentation(String spaces) {
 	        int indent = countIndent(spaces);
@@ -230,16 +255,19 @@ public class pythonLexer extends Lexer {
 		case 0:
 
 			        if (opened == 0) {
-			            String text = getText();
-			            String spaces = text.replaceAll("[^\t ]", "");
+			            String spaces = getText().replaceAll("[^\t ]", "");
 
-			            // 1) emit NEWLINE
+			            // 1) أضف NEWLINE أولًا
 			            pending.add(new CommonToken(NEWLINE, "\n"));
-			            // 2) then emit INDENT / DEDENT immediately after
+
+			            // 2) أضف INDENT/DEDENT مباشرة إلى pending
 			            emitIndentation(spaces);
-			        }
-			        else {
-			            pending.add(new CommonToken(NEWLINE, "\n"));
+
+			            // 3) في بداية السطر
+			            atStartOfLine = true;
+
+			            // 4) أخبر ANTLR بعدم إخراج هذا token مباشرة
+			            setChannel(HIDDEN);
 			        }
 			    
 			break;
@@ -497,10 +525,11 @@ public class pythonLexer extends Lexer {
 		"\b\u0006\u0000\u0000\u0150\u014f\u0001\u0000\u0000\u0000\u0151\u0154\u0001"+
 		"\u0000\u0000\u0000\u0152\u0150\u0001\u0000\u0000\u0000\u0152\u0153\u0001"+
 		"\u0000\u0000\u0000\u0153\u0155\u0001\u0000\u0000\u0000\u0154\u0152\u0001"+
-		"\u0000\u0000\u0000\u0155\u0156\u00063\u0001\u0000\u0156h\u0001\u0000\u0000"+
+		"\u0000\u0000\u0000\u0155\u0156\u00063\b\u0000\u0156h\u0001\u0000\u0000"+
 		"\u0000\u000e\u0000jpx\u0124\u012a\u0130\u0136\u013c\u013e\u0146\u0148"+
-		"\u014c\u0152\b\u0001\u0000\u0000\u0006\u0000\u0000\u0001)\u0001\u0001"+
-		"*\u0002\u0001+\u0003\u0001,\u0004\u0001-\u0005\u0001.\u0006";
+		"\u014c\u0152\t\u0001\u0000\u0000\u0000\u0001\u0000\u0001)\u0001\u0001"+
+		"*\u0002\u0001+\u0003\u0001,\u0004\u0001-\u0005\u0001.\u0006\u0006\u0000"+
+		"\u0000";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

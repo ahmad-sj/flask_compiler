@@ -6,10 +6,12 @@ import org.antlr.v4.runtime.*;
 import java.util.*;
 }
 
+
 tokens { INDENT, DEDENT }
 
 @members {
     private static final int TAB_LENGTH = 8;
+    private boolean atStartOfLine = true;
 
     private Deque<Integer> indents = new ArrayDeque<>();
     private LinkedList<Token> pending = new LinkedList<>();
@@ -23,26 +25,50 @@ tokens { INDENT, DEDENT }
 
     }
 
-    @Override
-    public Token nextToken() {
-        if (!pending.isEmpty()) {
-            return pending.poll();
-        }
+  @Override
+  public Token nextToken() {
 
-        Token t = super.nextToken();
+      // 1) إخراج أي توكنات معلقة أولًا
+      if (!pending.isEmpty()) {
+          Token p = pending.poll();
 
-        if (t.getType() == EOF) {
+          if (p.getType() == NEWLINE) {
+              atStartOfLine = true;
+          } else if (p.getType() != INDENT && p.getType() != DEDENT) {
+              atStartOfLine = false;
+          }
 
-            while (indents.size() > 1) {
-                indents.pop();
-                pending.add(new CommonToken(DEDENT, ""));
-            }
-            pending.add(t);
-            return pending.poll();
-        }
+          return p;
+      }
 
-        return t;
-    }
+      // 2) اقرأ توكن جديد
+      Token t = super.nextToken();
+
+      // 3) EOF
+      if (t.getType() == EOF) {
+          while (indents.size() > 1) {
+              indents.pop();
+              pending.add(new CommonToken(DEDENT, ""));
+          }
+          pending.add(t);
+          return pending.poll();
+      }
+
+      // 4) تجاهل HIDDEN tokens في بداية السطر
+      if (atStartOfLine && t.getChannel() == Token.HIDDEN_CHANNEL) {
+          return nextToken();
+      }
+
+      // 5) تحديث حالة atStartOfLine
+      if (t.getType() == NEWLINE) {
+          atStartOfLine = true;
+      } else {
+          atStartOfLine = false;
+      }
+
+      return t;
+  }
+
 
     private void emitIndentation(String spaces) {
         int indent = countIndent(spaces);
@@ -75,27 +101,36 @@ tokens { INDENT, DEDENT }
     private void closeBrace() { opened--; }
 }
 
-
 // NEWLINE
 
 NEWLINE
     : '\r'? '\n' [ \t]* {
         if (opened == 0) {
-            String text = getText();
-            String spaces = text.replaceAll("[^\t ]", "");
+            String spaces = getText().replaceAll("[^\t ]", "");
 
-            // 1) emit NEWLINE
+            // 1) أضف NEWLINE أولًا
             pending.add(new CommonToken(NEWLINE, "\n"));
-            // 2) then emit INDENT / DEDENT immediately after
+
+            // 2) أضف INDENT/DEDENT مباشرة إلى pending
             emitIndentation(spaces);
-        }
-        else {
-            pending.add(new CommonToken(NEWLINE, "\n"));
+
+            // 3) في بداية السطر
+            atStartOfLine = true;
+
+            // 4) أخبر ANTLR بعدم إخراج هذا token مباشرة
+            setChannel(HIDDEN);
         }
     }
 ;
 
-WS : [ \t]+ -> skip;
+
+
+WS
+    : [ \t]+ -> channel(HIDDEN)
+    ;
+
+
+
 
 
 
@@ -171,5 +206,6 @@ STRING
 
 // Comments
 
-COMMENT : '#' ~[\r\n]* -> skip;
+COMMENT : '#' ~[\r\n]* -> skip
+;
 

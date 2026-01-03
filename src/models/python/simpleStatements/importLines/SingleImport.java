@@ -1,8 +1,9 @@
 package models.python.simpleStatements.importLines;
 
 import models.Node;
+import models.python.StmtNode;
 
-public class SingleImport extends Node {
+public class SingleImport extends StmtNode {
     Node importedName; // of type DotTrailableName
     Node importAlias; // of type TypeName
 

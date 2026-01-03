@@ -1,4 +1,4 @@
-// Generated from C:/Users/Admin/Desktop/compiler project/flask_compiler/grammars/pythonParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/Ahmad/OneDrive/Desktop/PROJECT/grammars/pythonParser.g4 by ANTLR 4.13.2
  package antlr; 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -16,6 +16,30 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitProg(pythonParser.ProgContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#progSimple}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProgSimple(pythonParser.ProgSimpleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#progTrivial}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProgTrivial(pythonParser.ProgTrivialContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#commentLine}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCommentLine(pythonParser.CommentLineContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#nl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNl(pythonParser.NlContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link pythonParser#stmtList}.
 	 * @param ctx the parse tree
@@ -35,12 +59,6 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSimpleStmt(pythonParser.SimpleStmtContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link pythonParser#pass}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPass(pythonParser.PassContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code singleImport}
 	 * labeled alternative in {@link pythonParser#importLine}.
 	 * @param ctx the parse tree
@@ -54,6 +72,12 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMultiImport(pythonParser.MultiImportContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#pass}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPass(pythonParser.PassContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link pythonParser#id}.
 	 * @param ctx the parse tree
@@ -151,11 +175,31 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCallArg(pythonParser.CallArgContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link pythonParser#singleExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSingleExpr(pythonParser.SingleExprContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link pythonParser#returnLine}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitReturnLine(pythonParser.ReturnLineContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code tupleReturnWithoutParens}
+	 * labeled alternative in {@link pythonParser#returnExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTupleReturnWithoutParens(pythonParser.TupleReturnWithoutParensContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code singleReturn}
+	 * labeled alternative in {@link pythonParser#returnExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSingleReturn(pythonParser.SingleReturnContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link pythonParser#exprLine}.
 	 * @param ctx the parse tree
@@ -219,11 +263,11 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMulExpr(pythonParser.MulExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link pythonParser#singleExpr}.
+	 * Visit a parse tree produced by {@link pythonParser#muiltoperator}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSingleExpr(pythonParser.SingleExprContext ctx);
+	T visitMuiltoperator(pythonParser.MuiltoperatorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link pythonParser#blockStmt}.
 	 * @param ctx the parse tree
@@ -231,17 +275,11 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlockStmt(pythonParser.BlockStmtContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link pythonParser#func}.
+	 * Visit a parse tree produced by {@link pythonParser#decorator}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFunc(pythonParser.FuncContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link pythonParser#dec}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDec(pythonParser.DecContext ctx);
+	T visitDecorator(pythonParser.DecoratorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link pythonParser#funcArgs}.
 	 * @param ctx the parse tree
@@ -254,6 +292,12 @@ public interface pythonParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitArgsNames(pythonParser.ArgsNamesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link pythonParser#func}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunc(pythonParser.FuncContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link pythonParser#block}.
 	 * @param ctx the parse tree

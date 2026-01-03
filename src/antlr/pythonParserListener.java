@@ -1,4 +1,4 @@
-// Generated from C:/Users/Admin/Desktop/compiler project/flask_compiler/grammars/pythonParser.g4 by ANTLR 4.13.2
+// Generated from C:/Users/Ahmad/OneDrive/Desktop/PROJECT/grammars/pythonParser.g4 by ANTLR 4.13.2
  package antlr; 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -17,6 +17,46 @@ public interface pythonParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitProg(pythonParser.ProgContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#progSimple}.
+	 * @param ctx the parse tree
+	 */
+	void enterProgSimple(pythonParser.ProgSimpleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#progSimple}.
+	 * @param ctx the parse tree
+	 */
+	void exitProgSimple(pythonParser.ProgSimpleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#progTrivial}.
+	 * @param ctx the parse tree
+	 */
+	void enterProgTrivial(pythonParser.ProgTrivialContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#progTrivial}.
+	 * @param ctx the parse tree
+	 */
+	void exitProgTrivial(pythonParser.ProgTrivialContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#commentLine}.
+	 * @param ctx the parse tree
+	 */
+	void enterCommentLine(pythonParser.CommentLineContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#commentLine}.
+	 * @param ctx the parse tree
+	 */
+	void exitCommentLine(pythonParser.CommentLineContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#nl}.
+	 * @param ctx the parse tree
+	 */
+	void enterNl(pythonParser.NlContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#nl}.
+	 * @param ctx the parse tree
+	 */
+	void exitNl(pythonParser.NlContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link pythonParser#stmtList}.
 	 * @param ctx the parse tree
@@ -48,16 +88,6 @@ public interface pythonParserListener extends ParseTreeListener {
 	 */
 	void exitSimpleStmt(pythonParser.SimpleStmtContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link pythonParser#pass}.
-	 * @param ctx the parse tree
-	 */
-	void enterPass(pythonParser.PassContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link pythonParser#pass}.
-	 * @param ctx the parse tree
-	 */
-	void exitPass(pythonParser.PassContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code singleImport}
 	 * labeled alternative in {@link pythonParser#importLine}.
 	 * @param ctx the parse tree
@@ -81,6 +111,16 @@ public interface pythonParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMultiImport(pythonParser.MultiImportContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#pass}.
+	 * @param ctx the parse tree
+	 */
+	void enterPass(pythonParser.PassContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#pass}.
+	 * @param ctx the parse tree
+	 */
+	void exitPass(pythonParser.PassContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link pythonParser#id}.
 	 * @param ctx the parse tree
@@ -242,6 +282,16 @@ public interface pythonParserListener extends ParseTreeListener {
 	 */
 	void exitCallArg(pythonParser.CallArgContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link pythonParser#singleExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterSingleExpr(pythonParser.SingleExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#singleExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitSingleExpr(pythonParser.SingleExprContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link pythonParser#returnLine}.
 	 * @param ctx the parse tree
 	 */
@@ -251,6 +301,30 @@ public interface pythonParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReturnLine(pythonParser.ReturnLineContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code tupleReturnWithoutParens}
+	 * labeled alternative in {@link pythonParser#returnExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterTupleReturnWithoutParens(pythonParser.TupleReturnWithoutParensContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code tupleReturnWithoutParens}
+	 * labeled alternative in {@link pythonParser#returnExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitTupleReturnWithoutParens(pythonParser.TupleReturnWithoutParensContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code singleReturn}
+	 * labeled alternative in {@link pythonParser#returnExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterSingleReturn(pythonParser.SingleReturnContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code singleReturn}
+	 * labeled alternative in {@link pythonParser#returnExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitSingleReturn(pythonParser.SingleReturnContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link pythonParser#exprLine}.
 	 * @param ctx the parse tree
@@ -356,15 +430,15 @@ public interface pythonParserListener extends ParseTreeListener {
 	 */
 	void exitMulExpr(pythonParser.MulExprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link pythonParser#singleExpr}.
+	 * Enter a parse tree produced by {@link pythonParser#muiltoperator}.
 	 * @param ctx the parse tree
 	 */
-	void enterSingleExpr(pythonParser.SingleExprContext ctx);
+	void enterMuiltoperator(pythonParser.MuiltoperatorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link pythonParser#singleExpr}.
+	 * Exit a parse tree produced by {@link pythonParser#muiltoperator}.
 	 * @param ctx the parse tree
 	 */
-	void exitSingleExpr(pythonParser.SingleExprContext ctx);
+	void exitMuiltoperator(pythonParser.MuiltoperatorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link pythonParser#blockStmt}.
 	 * @param ctx the parse tree
@@ -376,25 +450,15 @@ public interface pythonParserListener extends ParseTreeListener {
 	 */
 	void exitBlockStmt(pythonParser.BlockStmtContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link pythonParser#func}.
+	 * Enter a parse tree produced by {@link pythonParser#decorator}.
 	 * @param ctx the parse tree
 	 */
-	void enterFunc(pythonParser.FuncContext ctx);
+	void enterDecorator(pythonParser.DecoratorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link pythonParser#func}.
+	 * Exit a parse tree produced by {@link pythonParser#decorator}.
 	 * @param ctx the parse tree
 	 */
-	void exitFunc(pythonParser.FuncContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link pythonParser#dec}.
-	 * @param ctx the parse tree
-	 */
-	void enterDec(pythonParser.DecContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link pythonParser#dec}.
-	 * @param ctx the parse tree
-	 */
-	void exitDec(pythonParser.DecContext ctx);
+	void exitDecorator(pythonParser.DecoratorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link pythonParser#funcArgs}.
 	 * @param ctx the parse tree
@@ -415,6 +479,16 @@ public interface pythonParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArgsNames(pythonParser.ArgsNamesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link pythonParser#func}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunc(pythonParser.FuncContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link pythonParser#func}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunc(pythonParser.FuncContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link pythonParser#block}.
 	 * @param ctx the parse tree
